@@ -6,10 +6,13 @@
 package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.entidade.CadSetor;
+import com.softbean.sindmepaOs.fachada.CadDetalheFacade;
 import com.softbean.sindmepaOs.fachada.CadSetorFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 /**
@@ -28,6 +31,8 @@ public class CadSetorControle implements Serializable {
 
     @Inject
     CadSetorFacade cadSetorFacade;
+    @Inject
+    CadDetalheFacade cadDetalheFacade;
 
     public Boolean salvarSetorControle(CadSetor obj) {
         try {
@@ -38,6 +43,29 @@ public class CadSetorControle implements Serializable {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Boolean alterarSetorControle(CadSetor obj) {
+        try {
+            cadSetorFacade.edit(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método salvarSetorControle");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public CadSetor buscarSetor(Integer cod) {
+        return cadSetorFacade.find(cod);
+    }
+
+    public List<Map<String, Object>> gridPrincipal(String desc, Integer cod, String sit) {
+        return cadSetorFacade.gridPrincipal(desc, cod, sit);
+    }
+
+    public List<Map<String, Object>> listarSituacaoSetor() {
+        return cadDetalheFacade.listarSituacaoSetor();
     }
 
 }
