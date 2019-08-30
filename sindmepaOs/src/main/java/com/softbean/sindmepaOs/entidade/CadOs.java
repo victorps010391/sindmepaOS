@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -24,46 +24,44 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Entity
 @Table(name = "cad_os")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CadOs.findAll", query = "SELECT c FROM CadOs c")
-    , @NamedQuery(name = "CadOs.findByIdOs", query = "SELECT c FROM CadOs c WHERE c.cadOsPK.idOs = :idOs")
-    , @NamedQuery(name = "CadOs.findByNrOs", query = "SELECT c FROM CadOs c WHERE c.cadOsPK.nrOs = :nrOs")
-    , @NamedQuery(name = "CadOs.findByCategOs", query = "SELECT c FROM CadOs c WHERE c.cadOsPK.categOs = :categOs")
-    , @NamedQuery(name = "CadOs.findByFuncAbertOs", query = "SELECT c FROM CadOs c WHERE c.funcAbertOs = :funcAbertOs")
-    , @NamedQuery(name = "CadOs.findByDtAbertOs", query = "SELECT c FROM CadOs c WHERE c.dtAbertOs = :dtAbertOs")
-    , @NamedQuery(name = "CadOs.findByFuncResponOs", query = "SELECT c FROM CadOs c WHERE c.funcResponOs = :funcResponOs")
-    , @NamedQuery(name = "CadOs.findByDtFechaOs", query = "SELECT c FROM CadOs c WHERE c.dtFechaOs = :dtFechaOs")
-    , @NamedQuery(name = "CadOs.findByHistOs", query = "SELECT c FROM CadOs c WHERE c.histOs = :histOs")
-    , @NamedQuery(name = "CadOs.findByObsOs", query = "SELECT c FROM CadOs c WHERE c.obsOs = :obsOs")
-    , @NamedQuery(name = "CadOs.findBySitOs", query = "SELECT c FROM CadOs c WHERE c.sitOs = :sitOs")
-    , @NamedQuery(name = "CadOs.findByDtUltAtuOs", query = "SELECT c FROM CadOs c WHERE c.dtUltAtuOs = :dtUltAtuOs")
-    , @NamedQuery(name = "CadOs.findByFuncUltAtuOs", query = "SELECT c FROM CadOs c WHERE c.funcUltAtuOs = :funcUltAtuOs")})
+    @NamedQuery(name = "CadOs.findAll", query = "SELECT c FROM CadOs c"),
+    @NamedQuery(name = "CadOs.findByNrOs", query = "SELECT c FROM CadOs c WHERE c.nrOs = :nrOs"),
+    @NamedQuery(name = "CadOs.findByCategOs", query = "SELECT c FROM CadOs c WHERE c.categOs = :categOs"),
+    @NamedQuery(name = "CadOs.findByFuncResponOs", query = "SELECT c FROM CadOs c WHERE c.funcResponOs = :funcResponOs"),
+    @NamedQuery(name = "CadOs.findByFuncAbertOs", query = "SELECT c FROM CadOs c WHERE c.funcAbertOs = :funcAbertOs"),
+    @NamedQuery(name = "CadOs.findByHistOs", query = "SELECT c FROM CadOs c WHERE c.histOs = :histOs"),
+    @NamedQuery(name = "CadOs.findByObsOs", query = "SELECT c FROM CadOs c WHERE c.obsOs = :obsOs"),
+    @NamedQuery(name = "CadOs.findBySitOs", query = "SELECT c FROM CadOs c WHERE c.sitOs = :sitOs"),
+    @NamedQuery(name = "CadOs.findByTipEnvioOs", query = "SELECT c FROM CadOs c WHERE c.tipEnvioOs = :tipEnvioOs"),
+    @NamedQuery(name = "CadOs.findByDtAbertOs", query = "SELECT c FROM CadOs c WHERE c.dtAbertOs = :dtAbertOs"),
+    @NamedQuery(name = "CadOs.findByDtFechaOs", query = "SELECT c FROM CadOs c WHERE c.dtFechaOs = :dtFechaOs"),
+    @NamedQuery(name = "CadOs.findByDtUltAtuOs", query = "SELECT c FROM CadOs c WHERE c.dtUltAtuOs = :dtUltAtuOs"),
+    @NamedQuery(name = "CadOs.findByFuncUltAtuOs", query = "SELECT c FROM CadOs c WHERE c.funcUltAtuOs = :funcUltAtuOs")})
 public class CadOs implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected CadOsPK cadOsPK;
+    @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "func_abert_os")
-    private int funcAbertOs;
+    @Column(name = "nr_os")
+    private Integer nrOs;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "dt_abert_os")
-    @Temporal(TemporalType.DATE)
-    private Date dtAbertOs;
+    @Size(min = 1, max = 3)
+    @Column(name = "categ_os")
+    private String categOs;
     @Column(name = "func_respon_os")
     private Integer funcResponOs;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "dt_fecha_os")
-    @Temporal(TemporalType.DATE)
-    private Date dtFechaOs;
+    @Column(name = "func_abert_os")
+    private int funcAbertOs;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 512)
@@ -72,62 +70,70 @@ public class CadOs implements Serializable {
     @Size(max = 512)
     @Column(name = "obs_os")
     private String obsOs;
-    @Size(max = 2)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
     @Column(name = "sit_os")
     private String sitOs;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
+    @Column(name = "tip_envio_os")
+    private String tipEnvioOs;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "dt_abert_os")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtAbertOs;
+    @Column(name = "dt_fecha_os")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtFechaOs;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "dt_ult_atu_os")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dtUltAtuOs;
     @Column(name = "func_ult_atu_os")
     private Integer funcUltAtuOs;
-    @JoinColumn(name = "setor_os", referencedColumnName = "cd_setor")
-    @ManyToOne(optional = false)
-    private CadSetor setorOs;
     @JoinColumn(name = "setor_respon_os", referencedColumnName = "cd_setor")
     @ManyToOne(optional = false)
     private CadSetor setorResponOs;
+    @JoinColumn(name = "setor_abert_os", referencedColumnName = "cd_setor")
+    @ManyToOne(optional = false)
+    private CadSetor setorAbertOs;
 
     public CadOs() {
     }
 
-    public CadOs(CadOsPK cadOsPK) {
-        this.cadOsPK = cadOsPK;
+    public CadOs(Integer nrOs) {
+        this.nrOs = nrOs;
     }
 
-    public CadOs(CadOsPK cadOsPK, int funcAbertOs, Date dtAbertOs, Date dtFechaOs, String histOs) {
-        this.cadOsPK = cadOsPK;
+    public CadOs(Integer nrOs, String categOs, int funcAbertOs, String histOs, String sitOs, String tipEnvioOs, Date dtAbertOs, Date dtUltAtuOs) {
+        this.nrOs = nrOs;
+        this.categOs = categOs;
         this.funcAbertOs = funcAbertOs;
-        this.dtAbertOs = dtAbertOs;
-        this.dtFechaOs = dtFechaOs;
         this.histOs = histOs;
-    }
-
-    public CadOs(int idOs, int nrOs, String categOs) {
-        this.cadOsPK = new CadOsPK(idOs, nrOs, categOs);
-    }
-
-    public CadOsPK getCadOsPK() {
-        return cadOsPK;
-    }
-
-    public void setCadOsPK(CadOsPK cadOsPK) {
-        this.cadOsPK = cadOsPK;
-    }
-
-    public int getFuncAbertOs() {
-        return funcAbertOs;
-    }
-
-    public void setFuncAbertOs(int funcAbertOs) {
-        this.funcAbertOs = funcAbertOs;
-    }
-
-    public Date getDtAbertOs() {
-        return dtAbertOs;
-    }
-
-    public void setDtAbertOs(Date dtAbertOs) {
+        this.sitOs = sitOs;
+        this.tipEnvioOs = tipEnvioOs;
         this.dtAbertOs = dtAbertOs;
+        this.dtUltAtuOs = dtUltAtuOs;
+    }
+
+    public Integer getNrOs() {
+        return nrOs;
+    }
+
+    public void setNrOs(Integer nrOs) {
+        this.nrOs = nrOs;
+    }
+
+    public String getCategOs() {
+        return categOs;
+    }
+
+    public void setCategOs(String categOs) {
+        this.categOs = categOs;
     }
 
     public Integer getFuncResponOs() {
@@ -138,12 +144,12 @@ public class CadOs implements Serializable {
         this.funcResponOs = funcResponOs;
     }
 
-    public Date getDtFechaOs() {
-        return dtFechaOs;
+    public int getFuncAbertOs() {
+        return funcAbertOs;
     }
 
-    public void setDtFechaOs(Date dtFechaOs) {
-        this.dtFechaOs = dtFechaOs;
+    public void setFuncAbertOs(int funcAbertOs) {
+        this.funcAbertOs = funcAbertOs;
     }
 
     public String getHistOs() {
@@ -170,6 +176,30 @@ public class CadOs implements Serializable {
         this.sitOs = sitOs;
     }
 
+    public String getTipEnvioOs() {
+        return tipEnvioOs;
+    }
+
+    public void setTipEnvioOs(String tipEnvioOs) {
+        this.tipEnvioOs = tipEnvioOs;
+    }
+
+    public Date getDtAbertOs() {
+        return dtAbertOs;
+    }
+
+    public void setDtAbertOs(Date dtAbertOs) {
+        this.dtAbertOs = dtAbertOs;
+    }
+
+    public Date getDtFechaOs() {
+        return dtFechaOs;
+    }
+
+    public void setDtFechaOs(Date dtFechaOs) {
+        this.dtFechaOs = dtFechaOs;
+    }
+
     public Date getDtUltAtuOs() {
         return dtUltAtuOs;
     }
@@ -186,14 +216,6 @@ public class CadOs implements Serializable {
         this.funcUltAtuOs = funcUltAtuOs;
     }
 
-    public CadSetor getSetorOs() {
-        return setorOs;
-    }
-
-    public void setSetorOs(CadSetor setorOs) {
-        this.setorOs = setorOs;
-    }
-
     public CadSetor getSetorResponOs() {
         return setorResponOs;
     }
@@ -202,10 +224,18 @@ public class CadOs implements Serializable {
         this.setorResponOs = setorResponOs;
     }
 
+    public CadSetor getSetorAbertOs() {
+        return setorAbertOs;
+    }
+
+    public void setSetorAbertOs(CadSetor setorAbertOs) {
+        this.setorAbertOs = setorAbertOs;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (cadOsPK != null ? cadOsPK.hashCode() : 0);
+        hash += (nrOs != null ? nrOs.hashCode() : 0);
         return hash;
     }
 
@@ -216,7 +246,7 @@ public class CadOs implements Serializable {
             return false;
         }
         CadOs other = (CadOs) object;
-        if ((this.cadOsPK == null && other.cadOsPK != null) || (this.cadOsPK != null && !this.cadOsPK.equals(other.cadOsPK))) {
+        if ((this.nrOs == null && other.nrOs != null) || (this.nrOs != null && !this.nrOs.equals(other.nrOs))) {
             return false;
         }
         return true;
@@ -224,7 +254,7 @@ public class CadOs implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softbean.sindmepaOs.entidade.CadOs[ cadOsPK=" + cadOsPK + " ]";
+        return "com.softbean.sindmepaOs.entidade.CadOs[ nrOs=" + nrOs + " ]";
     }
     
 }

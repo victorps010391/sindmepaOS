@@ -24,16 +24,16 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Entity
 @Table(name = "cad_setor")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CadSetor.findAll", query = "SELECT c FROM CadSetor c")
-    , @NamedQuery(name = "CadSetor.findByCdSetor", query = "SELECT c FROM CadSetor c WHERE c.cdSetor = :cdSetor")
-    , @NamedQuery(name = "CadSetor.findByNmSetor", query = "SELECT c FROM CadSetor c WHERE c.nmSetor = :nmSetor")
-    , @NamedQuery(name = "CadSetor.findBySitSetor", query = "SELECT c FROM CadSetor c WHERE c.sitSetor = :sitSetor")})
+    @NamedQuery(name = "CadSetor.findAll", query = "SELECT c FROM CadSetor c"),
+    @NamedQuery(name = "CadSetor.findByCdSetor", query = "SELECT c FROM CadSetor c WHERE c.cdSetor = :cdSetor"),
+    @NamedQuery(name = "CadSetor.findByNmSetor", query = "SELECT c FROM CadSetor c WHERE c.nmSetor = :nmSetor"),
+    @NamedQuery(name = "CadSetor.findBySitSetor", query = "SELECT c FROM CadSetor c WHERE c.sitSetor = :sitSetor")})
 public class CadSetor implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,12 +48,10 @@ public class CadSetor implements Serializable {
     @Size(max = 2)
     @Column(name = "sit_setor")
     private String sitSetor;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "setorOs")
-    private List<CadOs> cadOsList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "setorResponOs")
+    private List<CadOs> cadOsList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "setorAbertOs")
     private List<CadOs> cadOsList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "setorFunc")
-    private List<CadFuncionario> cadFuncionarioList;
 
     public CadSetor() {
     }
@@ -102,15 +100,6 @@ public class CadSetor implements Serializable {
 
     public void setCadOsList1(List<CadOs> cadOsList1) {
         this.cadOsList1 = cadOsList1;
-    }
-
-    @XmlTransient
-    public List<CadFuncionario> getCadFuncionarioList() {
-        return cadFuncionarioList;
-    }
-
-    public void setCadFuncionarioList(List<CadFuncionario> cadFuncionarioList) {
-        this.cadFuncionarioList = cadFuncionarioList;
     }
 
     @Override

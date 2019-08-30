@@ -10,9 +10,13 @@
     <ui:define name="centro"> 
         <h:form id="frmCadOs" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
             <p:messages id="messages" showDetail="true" closable="true"/>                                  
-            <p:panel header="Cadastro de Ordens de Serviço" >
+            <p:panel header="Cadastro de Protocolos" >
                 <h:panelGrid columns="2" >
 
+                    <h:outputLabel value="Número do Protocolo: "/>
+                    <p:inputText value="">
+                        <f:convertNumber type="number"/>
+                    </p:inputText>
                     <h:outputLabel value="Categoria:"/>
                     <p:selectOneMenu id="categDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />                       
@@ -23,6 +27,10 @@
                     </p:selectOneMenu>
                     <h:outputLabel value="Colaborador Responsável:"/>
                     <p:selectOneMenu id="colabDrop" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="........................................" />                       
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Situação:"/>
+                    <p:selectOneMenu id="sitDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />                       
                     </p:selectOneMenu>
 
@@ -37,12 +45,12 @@
 
             <p:dataTable id="gridPrincipal" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
                 <f:facet name="header">
-                    Ordens de Serviço
+                    Protocolos 
                 </f:facet>
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="Nr. da OS"/>
+                        <h:outputText value="Nr. do Protocolo"/>
                     </f:facet>
                     <h:outputText value=""/>
                 </p:column>
@@ -74,7 +82,14 @@
                     </f:facet>
                     <h:outputText value=""/>
                 </p:column>
-                
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Data e Hora de Fechamento"/>
+                    </f:facet>
+                    <h:outputText value=""/>
+                </p:column>
+
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Situação"/>
@@ -88,15 +103,16 @@
                     </f:facet>              
                     <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
                     <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
-                        <p:menuitem value="Detalhes"/>
-                        <p:menuitem value="Alterar"/>                        
+                        <p:menuitem value="Alterar"/>  
+                        <p:menuitem value="Detalhes"/>                                              
                         <p:menuitem value="Anexos" url="cadanexo.xhtml"/>
                         <p:menuitem value="Encaminhar"/>
                         <p:menuitem value="Cancelar"/>
+                        <p:menuitem value="Adicionar Nota"/>
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable>
-            <p:dialog widgetVar="dlCadOs" header="Cadastrar Ordem de serviço">
+            <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo">
                 <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
                     <p:panel>
                         <h:panelGrid columns="2" >
@@ -113,6 +129,19 @@
                             <p:selectOneMenu id="ColabCadDrop" filter="true" filterMatchMode="contains">
                                 <f:selectItem itemLabel="........................................" />                       
                             </p:selectOneMenu>
+
+                            <h:outputLabel value="Solicitação:"/>
+                            <p:inputTextarea rows="6" 
+                                             cols="33" 
+                                             counter="display" 
+                                             maxlength="512" 
+                                             counterTemplate="{0} Caracteres Restantes." 
+                                             autoResize="false" />
+                            <br />
+                            <h:outputText id="display" />
+
+                            <h:outputLabel value="Observações:"/>
+                            <p:inputTextarea rows="6" cols="33"/>
 
 
                         </h:panelGrid>
