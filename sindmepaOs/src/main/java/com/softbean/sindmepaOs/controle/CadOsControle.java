@@ -15,12 +15,12 @@ import java.io.Serializable;
  */
 @Named(value = "cadOsContorle")
 @SessionScoped
-public class CadOsContorle implements Serializable {
+public class CadOsControle implements Serializable {
 
     /**
      * Creates a new instance of CadOsContorle
      */
-    public CadOsContorle() {
+    public CadOsControle() {
     }
     
 }
