@@ -9,28 +9,28 @@
 
     <ui:define name="centro"> 
         <h:form id="frmCadOs" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-            <p:messages id="messages" showDetail="true" closable="true"/>                                  
+            <p:growl id="growl" showDetail="true"/>                                  
             <p:panel header="Cadastro de Protocolos" >
                 <h:panelGrid columns="2" >
 
                     <h:outputLabel value="Número do Protocolo: "/>
-                    <p:inputText value="">
+                    <p:inputText value="#{cadOsBean.nrOs}">
                         <f:convertNumber type="number"/>
                     </p:inputText>
                     <h:outputLabel value="Categoria:"/>
-                    <p:selectOneMenu id="categDrop" filter="true" filterMatchMode="contains">
+                    <p:selectOneMenu value="#{cadOsBean.categOs}" id="categDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />                       
                     </p:selectOneMenu>
                     <h:outputLabel value="Setor Responsável:"/>
-                    <p:selectOneMenu id="setorDrop" filter="true" filterMatchMode="contains">
+                    <p:selectOneMenu value="#{cadOsBean.setRespon}" id="setorDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />                       
                     </p:selectOneMenu>
                     <h:outputLabel value="Colaborador Responsável:"/>
-                    <p:selectOneMenu id="colabDrop" filter="true" filterMatchMode="contains">
+                    <p:selectOneMenu value="#{cadOsBean.colabRespon}" id="colabDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />                       
                     </p:selectOneMenu>
                     <h:outputLabel value="Situação:"/>
-                    <p:selectOneMenu id="sitDrop" filter="true" filterMatchMode="contains">
+                    <p:selectOneMenu value="#{cadOsBean.sitOs}" id="sitDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />                       
                     </p:selectOneMenu>
 
@@ -38,12 +38,12 @@
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" update="gridPrincipal"/>                    
                     <p:commandButton value="Limpar" update="frmCadOs"/>                              
-                    <p:commandButton value="Nova Ordem de Serviço" onclick="PF('dlCadOs').show()" update="frmDlCadOs"/>  
+                    <p:commandButton value="Novo Protocolo" actionListener="#{cadOsBean.novaOs()}" onclick="PF('dlCadOs').show()" update=":frmDlCadOs"/>  
                     <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
                 </f:facet>
             </p:panel>
 
-            <p:dataTable id="gridPrincipal" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+            <p:dataTable id="gridPrincipal" value="#{cadOsBean.gridPesquisa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
                 <f:facet name="header">
                     Protocolos 
                 </f:facet>
@@ -112,46 +112,63 @@
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable>
-            <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo">
-                <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
-                    <p:panel>
-                        <h:panelGrid columns="2" >
-
-                            <h:outputLabel value="Categoria:"/>
-                            <p:selectOneMenu id="categCadDrop" filter="true" filterMatchMode="contains">
-                                <f:selectItem itemLabel="........................................" />                       
-                            </p:selectOneMenu>
-                            <h:outputLabel value="Setor Responsável:"/>
-                            <p:selectOneMenu id="setorCadDrop" filter="true" filterMatchMode="contains">
-                                <f:selectItem itemLabel="........................................" />                       
-                            </p:selectOneMenu>
-                            <h:outputLabel value="Colaborador Responsável:"/>
-                            <p:selectOneMenu id="ColabCadDrop" filter="true" filterMatchMode="contains">
-                                <f:selectItem itemLabel="........................................" />                       
-                            </p:selectOneMenu>
-
-                            <h:outputLabel value="Solicitação:"/>
-                            <p:inputTextarea rows="6" 
-                                             cols="33" 
-                                             counter="display" 
-                                             maxlength="512" 
-                                             counterTemplate="{0} Caracteres Restantes." 
-                                             autoResize="false" />
-                            <br />
-                            <h:outputText id="display" />
-
-                            <h:outputLabel value="Observações:"/>
-                            <p:inputTextarea rows="6" cols="33"/>
-
-
-                        </h:panelGrid>
-                        <f:facet name="footer">
-                            <p:commandButton value="Salvar" update="@form :frmCadOs" />
-                            <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadOs').hide()" update="@form :frmCadOs" />
-                        </f:facet>
-                    </p:panel>
-                </h:form>
-            </p:dialog>
         </h:form>
+        <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo">
+            <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="2" style="margin: 0 auto;">
+
+                        <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
+                        <h:outputLabel value="#{cadOsBean.nrOsCad}" style="font-weight:bold ; font-size: medium"/>
+
+                        <h:outputLabel value="Prioridade: " style="font-weight:bold ; font-size: medium;"/>
+                        <h:outputLabel id="priorCad" value="#{cadOsBean.priorCad}" style="font-weight:bold ; font-size: medium;"/>
+
+                    </h:panelGrid><br/>
+                </p:panel><br/>
+                <p:panel>
+                    <h:panelGrid columns="2" >                                               
+                        <h:outputLabel value="Categoria:"/>
+                        <p:selectOneMenu value="#{cadOsBean.categCad}" id="categCadDrop" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="........................................" />   
+                            <f:selectItems value="#{cadOsBean.listarCategCad()}" var="categCad"  
+                                           itemLabel="#{categCad.get('nome')}" itemValue="#{categCad.get('codigo')}" />
+                            <p:ajax listener="#{cadOsBean.retornaPrioridade()}" update="priorCad"/>
+
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Setor Responsável:"/>
+                        <p:selectOneMenu value="#{cadOsBean.setResponCad}" id="setorCadDrop" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="........................................" /> 
+                            <f:selectItems value="#{cadOsBean.listarSetorCad()}" var="setorCad"  
+                                           itemLabel="#{setorCad.get('nome')}" itemValue="#{setorCad.get('codigo')}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Colaborador Responsável:"/>
+                        <p:selectOneMenu value="#{cadOsBean.colabResponCad}" id="ColabCadDrop" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="........................................" />                       
+                        </p:selectOneMenu>
+
+                        <h:outputLabel value="Solicitação:"/>
+                        <p:inputTextarea value="#{cadOsBean.hist}"
+                                         rows="6" 
+                                         cols="33" 
+                                         counter="display" 
+                                         maxlength="512" 
+                                         counterTemplate="{0} Caracteres Restantes." 
+                                         autoResize="false" />
+                        <br />
+                        <h:outputText id="display" />
+
+                        <h:outputLabel value="Observações:"/>
+                        <p:inputTextarea rows="6" cols="33" value="#{cadOsBean.obs}"/>
+
+
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar" actionListener="#{cadOsBean.salvar()}" update="@form :frmCadOs" />
+                        <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadOs').hide()" update="@form :frmCadOs" />
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

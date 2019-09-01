@@ -9,6 +9,7 @@ import com.softbean.sindmepaOs.entidade.CadOs;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +29,19 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
     public CadOsFacade() {
         super(CadOs.class);
     }
-    
+
+    public Integer retornaNrOs() {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(" select retorna_novo_nr_os() ");
+
+        try {
+            Query q = em.createNativeQuery(sql.toString());
+            return (Integer) q.getSingleResult();
+        } catch (Exception e) {
+            System.err.println("Erro no metodo retornaNrOs " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

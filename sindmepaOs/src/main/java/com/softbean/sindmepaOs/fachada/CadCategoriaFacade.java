@@ -74,4 +74,45 @@ public class CadCategoriaFacade extends AbstractFacade<CadCategoria> {
         return resultMaps;
     }
 
+    public List<Map<String, Object>> listarCategAll() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select id_categoria as codigo         ");
+        sql.append("        ,upper(desc_categoria) as nome ");
+        sql.append(" from cad_categoria                    ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("codigo", array[0]);
+                map.put("nome", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método listarCategAll");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public String retornaPrioridade(Integer cod) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(" select upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' and cod_valor_detalhe = cod_prior_categoria)) as prioridade "); 
+        sql.append(" from cad_categoria where id_categoria = ").append(cod);
+
+        try {
+            Query q = em.createNativeQuery(sql.toString());
+            return (String) q.getSingleResult();
+        } catch (Exception e) {
+            System.err.println("Erro no metodo retornaPrioridade " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

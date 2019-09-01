@@ -33,7 +33,7 @@ public class CadSetorFacade extends AbstractFacade<CadSetor> {
     public CadSetorFacade() {
         super(CadSetor.class);
     }
-     
+
     public List<Map<String, Object>> gridPrincipal(String desc, Integer cod, String sit) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
@@ -52,7 +52,7 @@ public class CadSetorFacade extends AbstractFacade<CadSetor> {
         if (sit != null) {
             sql.append(" and sit_setor = '").append(sit).append("'");
         }
-        sql.append(" order by nm_setor ");       
+        sql.append(" order by nm_setor ");
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();
@@ -67,6 +67,31 @@ public class CadSetorFacade extends AbstractFacade<CadSetor> {
             }
         } catch (Exception e) {
             System.out.println("ERRO no método gridPrincipal");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> listarSetorAll() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select cd_setor as codigo       ");
+        sql.append("        ,upper(nm_setor) as nome ");
+        sql.append(" from cad_setor                  ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("codigo", array[0]);
+                map.put("nome", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método listarCategAll");
             e.printStackTrace();
         }
         return resultMaps;

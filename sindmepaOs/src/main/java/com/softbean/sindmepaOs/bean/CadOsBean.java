@@ -7,12 +7,18 @@ package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.entidade.CadOs;
+import static com.softbean.sindmepaOs.entidade.CadOs_.setorAbertOs;
+import com.softbean.sindmepaOs.entidade.CadSetor;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -31,19 +37,119 @@ public class CadOsBean implements Serializable {
     @Inject
     CadOsControle osControle;
 
+//  VARIAVEIS DE CADASTRO
     CadOs obCadOs;
+    CadSetor cadSetorObj;
 
+    Integer nrOsCad;
+    String priorCad;
+    Integer categCad;
+    Integer setResponCad;
+    Integer colabResponCad;
+    String hist;
+    String obs;
+
+    List<Map<String, Object>> sitCategListaCad;
+    List<Map<String, Object>> setorResponsListaCad;
+    List<Map<String, Object>> colabResponsCad;
+
+//  VARIAVEIS DE PESQUISA
     Integer nrOs;
-    String categOs;
+    Integer categOs;
     Integer setRespon;
     Integer colabRespon;
     String sitOs;
 
     List<Map<String, Object>> gridPesquisa;
     List<Map<String, Object>> sitCategListaPesq;
-    List<Map<String, Object>> sitSetResponsListaOs;
-    List<Map<String, Object>> sitColabResponsOs;
-    List<Map<String, Object>> sitOsLista;
+    List<Map<String, Object>> setorResponsListaPesq;
+    List<Map<String, Object>> colabResponsPesq;
+    List<Map<String, Object>> sitOsListaPesq;
+
+    public void salvar() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setObCadOs(new CadOs());
+            getObCadOs().setCategOs(getCategCad());
+            getObCadOs().setDtAbertOs(new Date());
+            getObCadOs().setDtFechaOs(null);
+            getObCadOs().setDtUltAtuOs(new Date());
+            getObCadOs().setFuncAbertOs(999);
+            getObCadOs().setFuncResponOs(999);
+            getObCadOs().setFuncUltAtuOs(999);
+            getObCadOs().setHistOs(getHist());
+            getObCadOs().setNrOs(getNrOsCad());
+            getObCadOs().setObsOs(getObs());
+            setCadSetorObj(osControle.buscarSetor(getSetResponCad()));
+            getObCadOs().setSetorAbertOs(getCadSetorObj());
+            getObCadOs().setSetorResponOs(getCadSetorObj());
+            getObCadOs().setSitOs("01");
+            getObCadOs().setTipEnvioOs("I");
+
+            if (osControle.salvarOsControle(getObCadOs())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Protocolo: "+getNrOsCad()+" Realizado com Sucesso."));
+                context.execute("PF('dlCadOs').hide()");
+                limparCadastro();
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Protocolo: "+getNrOsCad()+"."));
+                limparCadastro();
+            }
+        } catch (Exception e) {
+            System.out.println("Erro o método salvar() (OS)");
+            e.printStackTrace();
+        }
+    }
+
+    public void novaOs() {
+        try {
+            limparCadastro();
+            setNrOsCad(osControle.retornaNrOs());
+        } catch (Exception e) {
+            System.err.println("Erro no metodo novaOs " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void retornaPrioridade() {
+        try {
+            setPriorCad(osControle.retornaPrioridade(getCategCad()));
+        } catch (Exception e) {
+            System.err.println("Erro no metodo novaOs " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void limparCadastro() {
+        setCategCad(null);
+        setColabResponCad(null);
+        setHist(null);
+        setNrOsCad(null);
+        setObs(null);
+        setPriorCad(null);
+        setSetResponCad(null);
+        setSetorResponsListaCad(null);
+        setSitCategListaCad(null);
+        setColabResponCad(null);
+    }
+
+    public List<Map<String, Object>> listarSetorCad() {
+        try {
+            setSetorResponsListaCad(osControle.listarSetorAll());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarSetorCad");
+        }
+        return getSetorResponsListaCad();
+    }
+
+    public List<Map<String, Object>> listarCategCad() {
+        try {
+            setSitCategListaCad(osControle.listarCategAll());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarCategCad");
+        }
+        return getSitCategListaCad();
+    }
 
     public CadOs getObCadOs() {
         if (obCadOs == null) {
@@ -56,6 +162,17 @@ public class CadOsBean implements Serializable {
         this.obCadOs = obCadOs;
     }
 
+    public CadSetor getCadSetorObj() {
+        if (cadSetorObj == null) {
+            cadSetorObj = new CadSetor();
+        }
+        return cadSetorObj;
+    }
+
+    public void setCadSetorObj(CadSetor cadSetorObj) {
+        this.cadSetorObj = cadSetorObj;
+    }
+
     public Integer getNrOs() {
         return nrOs;
     }
@@ -64,11 +181,11 @@ public class CadOsBean implements Serializable {
         this.nrOs = nrOs;
     }
 
-    public String getCategOs() {
+    public Integer getCategOs() {
         return categOs;
     }
 
-    public void setCategOs(String categOs) {
+    public void setCategOs(Integer categOs) {
         this.categOs = categOs;
     }
 
@@ -112,28 +229,108 @@ public class CadOsBean implements Serializable {
         this.sitCategListaPesq = sitCategListaPesq;
     }
 
-    public List<Map<String, Object>> getSitSetResponsListaOs() {
-        return sitSetResponsListaOs;
+    public List<Map<String, Object>> getSetorResponsListaPesq() {
+        return setorResponsListaPesq;
     }
 
-    public void setSitSetResponsListaOs(List<Map<String, Object>> sitSetResponsListaOs) {
-        this.sitSetResponsListaOs = sitSetResponsListaOs;
+    public void setSetorResponsListaPesq(List<Map<String, Object>> setorResponsListaPesq) {
+        this.setorResponsListaPesq = setorResponsListaPesq;
     }
 
-    public List<Map<String, Object>> getSitColabResponsOs() {
-        return sitColabResponsOs;
+    public List<Map<String, Object>> getColabResponsPesq() {
+        return colabResponsPesq;
     }
 
-    public void setSitColabResponsOs(List<Map<String, Object>> sitColabResponsOs) {
-        this.sitColabResponsOs = sitColabResponsOs;
+    public void setColabResponsPesq(List<Map<String, Object>> colabResponsPesq) {
+        this.colabResponsPesq = colabResponsPesq;
     }
 
-    public List<Map<String, Object>> getSitOsLista() {
-        return sitOsLista;
+    public List<Map<String, Object>> getSitOsListaPesq() {
+        return sitOsListaPesq;
     }
 
-    public void setSitOsLista(List<Map<String, Object>> sitOsLista) {
-        this.sitOsLista = sitOsLista;
+    public void setSitOsListaPesq(List<Map<String, Object>> sitOsListaPesq) {
+        this.sitOsListaPesq = sitOsListaPesq;
+    }
+
+    public Integer getNrOsCad() {
+        return nrOsCad;
+    }
+
+    public void setNrOsCad(Integer nrOsCad) {
+        this.nrOsCad = nrOsCad;
+    }
+
+    public String getPriorCad() {
+        return priorCad;
+    }
+
+    public void setPriorCad(String priorCad) {
+        this.priorCad = priorCad;
+    }
+
+    public Integer getCategCad() {
+        return categCad;
+    }
+
+    public void setCategCad(Integer categCad) {
+        this.categCad = categCad;
+    }
+
+    public Integer getSetResponCad() {
+        return setResponCad;
+    }
+
+    public void setSetResponCad(Integer setResponCad) {
+        this.setResponCad = setResponCad;
+    }
+
+    public Integer getColabResponCad() {
+        return colabResponCad;
+    }
+
+    public void setColabResponCad(Integer colabResponCad) {
+        this.colabResponCad = colabResponCad;
+    }
+
+    public List<Map<String, Object>> getSitCategListaCad() {
+        return sitCategListaCad;
+    }
+
+    public void setSitCategListaCad(List<Map<String, Object>> sitCategListaCad) {
+        this.sitCategListaCad = sitCategListaCad;
+    }
+
+    public List<Map<String, Object>> getSetorResponsListaCad() {
+        return setorResponsListaCad;
+    }
+
+    public void setSetorResponsListaCad(List<Map<String, Object>> setorResponsListaCad) {
+        this.setorResponsListaCad = setorResponsListaCad;
+    }
+
+    public List<Map<String, Object>> getColabResponsCad() {
+        return colabResponsCad;
+    }
+
+    public void setColabResponsCad(List<Map<String, Object>> colabResponsCad) {
+        this.colabResponsCad = colabResponsCad;
+    }
+
+    public String getHist() {
+        return hist;
+    }
+
+    public void setHist(String hist) {
+        this.hist = hist;
+    }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
     }
 
 }

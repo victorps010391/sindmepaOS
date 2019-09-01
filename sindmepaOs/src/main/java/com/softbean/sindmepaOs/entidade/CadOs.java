@@ -45,17 +45,22 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadOs.findByFuncUltAtuOs", query = "SELECT c FROM CadOs c WHERE c.funcUltAtuOs = :funcUltAtuOs")})
 public class CadOs implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "func_ult_atu_os")
+    private int funcUltAtuOs;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "categ_os")
+    private int categOs;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "nr_os")
     private Integer nrOs;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 3)
-    @Column(name = "categ_os")
-    private String categOs;
     @Column(name = "func_respon_os")
     private Integer funcResponOs;
     @Basic(optional = false)
@@ -78,7 +83,7 @@ public class CadOs implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2)
-    @Column(name = "tip_envio_os")
+    @Column(name = "tipo_envio_os")
     private String tipEnvioOs;
     @Basic(optional = false)
     @NotNull
@@ -93,8 +98,6 @@ public class CadOs implements Serializable {
     @Column(name = "dt_ult_atu_os")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dtUltAtuOs;
-    @Column(name = "func_ult_atu_os")
-    private Integer funcUltAtuOs;
     @JoinColumn(name = "setor_respon_os", referencedColumnName = "cd_setor")
     @ManyToOne(optional = false)
     private CadSetor setorResponOs;
@@ -109,7 +112,7 @@ public class CadOs implements Serializable {
         this.nrOs = nrOs;
     }
 
-    public CadOs(Integer nrOs, String categOs, int funcAbertOs, String histOs, String sitOs, String tipEnvioOs, Date dtAbertOs, Date dtUltAtuOs) {
+    public CadOs(Integer nrOs, int categOs, int funcAbertOs, String histOs, String sitOs, String tipEnvioOs, Date dtAbertOs, Date dtUltAtuOs) {
         this.nrOs = nrOs;
         this.categOs = categOs;
         this.funcAbertOs = funcAbertOs;
@@ -128,11 +131,11 @@ public class CadOs implements Serializable {
         this.nrOs = nrOs;
     }
 
-    public String getCategOs() {
+    public int getCategOs() {
         return categOs;
     }
 
-    public void setCategOs(String categOs) {
+    public void setCategOs(int categOs) {
         this.categOs = categOs;
     }
 
@@ -256,5 +259,4 @@ public class CadOs implements Serializable {
     public String toString() {
         return "com.softbean.sindmepaOs.entidade.CadOs[ nrOs=" + nrOs + " ]";
     }
-    
 }
