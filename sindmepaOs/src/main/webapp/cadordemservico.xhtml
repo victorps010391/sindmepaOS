@@ -12,32 +12,39 @@
             <p:growl id="growl" showDetail="true"/>                                  
             <p:panel header="Cadastro de Protocolos" >
                 <h:panelGrid columns="2" >
-
                     <h:outputLabel value="Número do Protocolo: "/>
                     <p:inputText value="#{cadOsBean.nrOs}">
                         <f:convertNumber type="number"/>
                     </p:inputText>
+                    
                     <h:outputLabel value="Categoria:"/>
                     <p:selectOneMenu value="#{cadOsBean.categOs}" id="categDrop" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="........................................" />                       
+                        <f:selectItem itemLabel="........................................" />
+                        <f:selectItems value="#{cadOsBean.listarCategPesq()}" var="categPesq"  
+                                       itemLabel="#{categPesq.get('nome')}" itemValue="#{categPesq.get('codigo')}" />
                     </p:selectOneMenu>
                     <h:outputLabel value="Setor Responsável:"/>
                     <p:selectOneMenu value="#{cadOsBean.setRespon}" id="setorDrop" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="........................................" />                       
-                    </p:selectOneMenu>
-                    <h:outputLabel value="Colaborador Responsável:"/>
-                    <p:selectOneMenu value="#{cadOsBean.colabRespon}" id="colabDrop" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="........................................" />                       
-                    </p:selectOneMenu>
-                    <h:outputLabel value="Situação:"/>
-                    <p:selectOneMenu value="#{cadOsBean.sitOs}" id="sitDrop" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="........................................" />                       
+                        <f:selectItem itemLabel="........................................" /> 
+                        <f:selectItems value="#{cadOsBean.listarSetorPesq()}" var="setorPesq"  
+                                       itemLabel="#{setorPesq.get('nome')}" itemValue="#{setorPesq.get('codigo')}" />                                              
                     </p:selectOneMenu>
 
+                    <h:outputLabel value="Colaborador Responsável:"/>
+                    <p:selectOneMenu value="#{cadOsBean.colabRespon}" id="colabDrop" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="........................................" />                         
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Situação:"/>
+                    <p:selectOneMenu value="#{cadOsBean.sitOs}" id="sitDrop" filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="........................................" />
+                        <f:selectItems value="#{cadOsBean.listarSituaPesq()}" var="sitPesq"  
+                                       itemLabel="#{sitPesq.get('nome')}" itemValue="#{sitPesq.get('codigo')}" />
+                    </p:selectOneMenu>
                 </h:panelGrid>
                 <f:facet name="footer">                    
-                    <p:commandButton value="Pesquisar" update="gridPrincipal"/>                    
-                    <p:commandButton value="Limpar" update="frmCadOs"/>                              
+                    <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisar()}" update="gridPrincipal"/>                    
+                    <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
                     <p:commandButton value="Novo Protocolo" actionListener="#{cadOsBean.novaOs()}" onclick="PF('dlCadOs').show()" update=":frmDlCadOs"/>  
                     <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
                 </f:facet>
@@ -52,49 +59,49 @@
                     <f:facet name="header">
                         <h:outputText value="Nr. do Protocolo"/>
                     </f:facet>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{item.get('os')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Prioridade"/>
                     </f:facet>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{item.get('prioridade')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Categoria"/>
                     </f:facet>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{item.get('categoria')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Setor Responsável"/>
                     </f:facet>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{item.get('setor')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Data e Hora de Abertura"/>
                     </f:facet>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{item.get('data_hora_abert')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Data e Hora de Fechamento"/>
                     </f:facet>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{item.get('data_hora_fecha')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="Situação"/>
                     </f:facet>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{item.get('sit')}"/>
                 </p:column>
 
                 <p:column style="text-align: center; width: 5%">

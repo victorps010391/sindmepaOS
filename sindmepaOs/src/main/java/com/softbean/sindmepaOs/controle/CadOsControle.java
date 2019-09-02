@@ -70,4 +70,19 @@ public class CadOsControle implements Serializable {
         return setorFacade.find(cod);
     }
 
+    public List<Map<String, Object>> listarCategPesq() {
+        return osFacade.listarCategPesq();
+    }
+
+    public List<Map<String, Object>> listarSetorPesq() {
+        return osFacade.listarSetorPesq();
+    }
+
+    public List<Map<String, Object>> listarSituaPesq() {
+        return osFacade.listarSituaPesq();
+    }
+
+    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit) {
+        return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit);
+    }
 }

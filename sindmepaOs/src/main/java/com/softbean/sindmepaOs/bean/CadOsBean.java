@@ -7,7 +7,6 @@ package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.entidade.CadOs;
-import static com.softbean.sindmepaOs.entidade.CadOs_.setorAbertOs;
 import com.softbean.sindmepaOs.entidade.CadSetor;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -66,6 +65,15 @@ public class CadOsBean implements Serializable {
     List<Map<String, Object>> colabResponsPesq;
     List<Map<String, Object>> sitOsListaPesq;
 
+    public void pesquisar() {
+        try {
+            setGridPesquisa(osControle.gridPrincipal(getNrOs(), getCategOs(), getSetRespon(), getColabRespon(), getSitOs()));
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisar (OS)");
+            e.printStackTrace();
+        }
+    }
+
     public void salvar() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
@@ -88,11 +96,11 @@ public class CadOsBean implements Serializable {
             getObCadOs().setTipEnvioOs("I");
 
             if (osControle.salvarOsControle(getObCadOs())) {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Protocolo: "+getNrOsCad()+" Realizado com Sucesso."));
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Protocolo: " + getNrOsCad() + " Realizado com Sucesso."));
                 context.execute("PF('dlCadOs').hide()");
                 limparCadastro();
             } else {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Protocolo: "+getNrOsCad()+"."));
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Protocolo: " + getNrOsCad() + "."));
                 limparCadastro();
             }
         } catch (Exception e) {
@@ -131,6 +139,41 @@ public class CadOsBean implements Serializable {
         setSetorResponsListaCad(null);
         setSitCategListaCad(null);
         setColabResponCad(null);
+    }
+
+    public void limparPesquisa() {
+        setSitOsListaPesq(null);
+        setSetorResponsListaPesq(null);
+        setSitCategListaPesq(null);
+        setGridPesquisa(null);
+        setNrOs(null);
+    }
+
+    public List<Map<String, Object>> listarSituaPesq() {
+        try {
+            setSitOsListaPesq(osControle.listarSituaPesq());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarSituaPesq");
+        }
+        return getSitOsListaPesq();
+    }
+
+    public List<Map<String, Object>> listarSetorPesq() {
+        try {
+            setSetorResponsListaPesq(osControle.listarSetorPesq());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarSetorPesq");
+        }
+        return getSetorResponsListaPesq();
+    }
+
+    public List<Map<String, Object>> listarCategPesq() {
+        try {
+            setSitCategListaPesq(osControle.listarCategPesq());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarSetorPesq");
+        }
+        return getSitCategListaPesq();
     }
 
     public List<Map<String, Object>> listarSetorCad() {
