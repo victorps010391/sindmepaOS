@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition template="/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">   
+
+    <style type="text/css">
+        .label {
+            width:20%;
+            padding:4px;
+        }
+
+        .value {
+            width:80%;
+            padding:4px;
+        }
+
+        .grid {
+            width:100%;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .outputLabel {
+            font-weight: bold;
+        }
+
+        .grid {
+            width:33%;
+            padding:4px;
+        }
+    </style>
+
+    <ui:define name="centro"> 
+        <h:form id="frmExterno" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+            <p:panel header="Abertura de Ordem de Serviço" >
+                <h:panelGrid columns="2" >
+                    <h:outputLabel value="Setor responsável: "/>
+                    <p:selectOneMenu id="comboSetor" value="#{cadExternoBean.setor}">                    
+                        <f:selectItem itemLabel="........................................" />    
+                        <f:selectItems value="#{cadExternoBean.comboSetorView()}" var="setor"  
+                                       itemLabel="#{setor.get('setor')}" itemValue="#{setor.get('codigo')}" />
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Categoria: "/>
+                    <p:selectOneMenu id="comboCategoria" value="#{cadExternoBean.categoria}">                    
+                        <f:selectItem itemLabel="........................" />    
+                        <f:selectItems value="#{cadExternoBean.comboCategoriaView()}" var="categoria"  
+                                       itemLabel="#{categoria.get('categoria')}" itemValue="#{categoria.get('codigo')}" />
+                        <p:ajax listener="#{cadExternoBean.validador()}" update="@form protocolo sindicaliza"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <br/>
+                <p:fieldset id="protocolo" legend="Protocolo" toggleable="true" toggleSpeed="500" rendered="#{cadExternoBean.abriOsExt}">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <p:graphicImage name="demo/images/godfather/godfather2.jpg" />
+                        <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream.
+                                      In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
+                                      killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows."></h:outputText>
+                    </h:panelGrid>
+                </p:fieldset>
+                <br />
+
+                <p:fieldset id="sindicaliza" legend="SINDICALIZE-SE" toggleable="true" toggleSpeed="500" rendered="#{cadExternoBean.sindicaliza}">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:form>
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                            <p:wizard flowListener="#{cadExternoBean.onFlowProcess}">
+                                <p:tab id="pagamento" title="Pagamento">
+                                    <p:panel header="Ficha de autorização em conta corrente, contra-cheque, boleto de anuidade e débito recorrente no cartão de crédito.">
+                                        <p:messages />
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:panelGrid columns="2" style="margin-bottom:50px" cellpadding="5">
+                                                <p:selectOneRadio id="console">
+                                                    <f:selectItem itemLabel="Débito em conta corrente" itemValue="Xbox One" />
+                                                    <f:selectItem itemLabel="Débito em contra-cheque" itemValue="PS4" />
+                                                    <f:selectItem itemLabel="Anuidade Residente" itemValue="Wii U" />
+                                                    <f:selectItem itemLabel="Débito mensal no cartão de crédito" itemValue="Wii U" />
+                                                </p:selectOneRadio>
+                                            </h:panelGrid>
+                                            <br/>
+                                            <h:outputText value="Autorizo o desconto da mensalidade em meu cartão de crédito, 
+                                                          no valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
+                                                          Estou ciente que este valor será reajustado anualmente no mês de janeiro.: " />
+                                            <h:selectBooleanCheckbox value="#{cadExternoBean.liAceito}" />
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="pessoal" title="Pessoal">
+                                    <p:panel header="Dados pessoais">
+                                        <p:messages />
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:outputText value="Nome: " />
+                                            <p:inputText/>
+
+                                            <h:outputText value="RG: " />
+                                            <p:inputText/>
+
+                                            <h:outputText value="CPF: " />
+                                            <p:inputText/>
+
+                                            <h:outputText value="Número CRM: " />
+                                            <p:inputText/>
+
+                                            <h:outputText value="Especialidade: " />
+                                            <p:inputText/>
+                                            
+                                            <h:outputText value="Data de Nascimento: " />
+                                            <p:calendar/>
+
+                                            <h:outputText value="Sexo" />
+                                            <p:selectOneButton >
+                                                <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                                <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                            </p:selectOneButton>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="endereco" title="Endereço">
+                                    <p:panel header="Informações do endereço">
+                                        <p:messages />
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:outputText value="Endereço: " />
+                                            <p:inputText />
+                                            
+                                            <h:outputText value="Complemento " />
+                                            <p:inputText />
+
+                                            <h:outputText value="CEP" />
+                                            <p:inputText />
+                                            
+                                            <h:outputText value="Número" />
+                                            <p:inputText />
+
+                                            <h:outputText value="Bairro: " />
+                                            <p:inputText />
+                                            
+                                            <h:outputText value="Cidade: " />
+                                            <p:inputText />
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+                                
+                                <p:tab id="contato" title="Contato">
+                                    <p:panel header="Informações de Contato">
+                                        <p:messages />
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:outputText value="Telefone comercial: " />
+                                            <p:inputText />
+                                            
+                                            <h:outputText value="Celular: " />
+                                            <p:inputText />
+
+                                            <h:outputText value="Whatsapp: " />
+                                            <p:inputText />
+                                            
+                                            <h:outputText value="E-mail: " />
+                                            <p:inputText type="email"/>
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+                                
+                                
+
+                                <p:tab id="confirmacao" title="Confirmação">
+                                    <p:panel header="Confirmation">
+                                        <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
+                                            <h:panelGrid columns="2" columnClasses="label, value">
+                                                <h:outputText value="Firstname: " />
+                                                <h:outputText styleClass="outputLabel"/>
+
+                                                <h:outputText value="Lastname: " />
+                                                <h:outputText styleClass="outputLabel"/>
+
+                                                <h:outputText value="Age: " />
+                                                <h:outputText  styleClass="outputLabel"/>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" columnClasses="label, value">
+                                                <h:outputText value="Street: " />
+                                                <h:outputText styleClass="outputLabel"/>
+
+                                                <h:outputText value="Postal: " />
+                                                <h:outputText  styleClass="outputLabel"/>
+
+                                                <h:outputText value="City: " />
+                                                <h:outputText styleClass="outputLabel"/>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" columnClasses="label, value">
+                                                <h:outputText value="Email: " />
+                                                <h:outputText styleClass="outputLabel"/>
+
+                                                <h:outputText value="Phone " />
+                                                <h:outputText styleClass="outputLabel"/>
+
+                                                <h:outputText value="Info: " />
+                                                <h:outputText styleClass="outputLabel"/>
+
+                                                <h:outputText />
+                                                <h:outputText />
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+
+                                        <p:commandButton value="Enviar" update="growl" process="@this"/>
+                                    </p:panel>
+                                </p:tab>
+                            </p:wizard>
+
+                        </h:form>
+                    </h:panelGrid>
+                </p:fieldset>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
