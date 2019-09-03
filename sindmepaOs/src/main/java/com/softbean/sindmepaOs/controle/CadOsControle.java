@@ -50,6 +50,21 @@ public class CadOsControle implements Serializable {
         }
     }
 
+    public CadOs buscarOsControle(Integer cod) {
+        return osFacade.find(cod);
+    }
+
+    public Boolean alterarOsControle(CadOs obj) {
+        try {
+            osFacade.edit(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método alterarOsControle " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public Integer retornaNrOs() {
         return osFacade.retornaNrOs();
     }

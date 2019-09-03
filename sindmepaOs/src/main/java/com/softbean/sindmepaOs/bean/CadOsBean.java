@@ -36,6 +36,8 @@ public class CadOsBean implements Serializable {
     @Inject
     CadOsControle osControle;
 
+    String priorAlt;
+    Integer setAlt;
 //  VARIAVEIS DE CADASTRO
     CadOs obCadOs;
     CadSetor cadSetorObj;
@@ -78,6 +80,7 @@ public class CadOsBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
+            setObCadOs(null);
             setObCadOs(new CadOs());
             getObCadOs().setCategOs(getCategCad());
             getObCadOs().setDtAbertOs(new Date());
@@ -89,6 +92,7 @@ public class CadOsBean implements Serializable {
             getObCadOs().setHistOs(getHist());
             getObCadOs().setNrOs(getNrOsCad());
             getObCadOs().setObsOs(getObs());
+            setCadSetorObj(null);
             setCadSetorObj(osControle.buscarSetor(getSetResponCad()));
             getObCadOs().setSetorAbertOs(getCadSetorObj());
             getObCadOs().setSetorResponOs(getCadSetorObj());
@@ -99,6 +103,7 @@ public class CadOsBean implements Serializable {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Protocolo: " + getNrOsCad() + " Realizado com Sucesso."));
                 context.execute("PF('dlCadOs').hide()");
                 limparCadastro();
+                setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(), getColabRespon(), getObCadOs().getSitOs()));
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Protocolo: " + getNrOsCad() + "."));
                 limparCadastro();
@@ -106,6 +111,37 @@ public class CadOsBean implements Serializable {
         } catch (Exception e) {
             System.out.println("Erro o método salvar() (OS)");
             e.printStackTrace();
+        }
+    }
+
+    public void buscar(Integer cod) {
+        try {
+            setObCadOs(null);
+            setObCadOs(osControle.buscarOsControle(cod));
+            setCadSetorObj(null);
+            setCadSetorObj(osControle.buscarSetor(getObCadOs().getSetorResponOs().getCdSetor()));
+            setSetAlt(getCadSetorObj().getCdSetor());
+            setPriorAlt(osControle.retornaPrioridade(getObCadOs().getCategOs()));
+        } catch (Exception e) {
+            System.out.println("Erro no método buscar (Os) " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void alterar() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setCadSetorObj(osControle.buscarSetor(getSetAlt()));
+            getObCadOs().setSetorResponOs(getCadSetorObj());
+            if (osControle.alterarOsControle(getObCadOs())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Alteração do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
+                context.execute("PF('dlAltOs').hide()");
+                setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(), getColabRespon(), getObCadOs().getSitOs()));
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Alterar Protocolo: " + getObCadOs().getNrOs() + "."));
+            }
+        } catch (Exception e) {
         }
     }
 
@@ -123,7 +159,16 @@ public class CadOsBean implements Serializable {
         try {
             setPriorCad(osControle.retornaPrioridade(getCategCad()));
         } catch (Exception e) {
-            System.err.println("Erro no metodo novaOs " + e.getMessage());
+            System.err.println("Erro no retornaPrioridade novaOs " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void retornaPrioridadeAlt() {
+        try {
+            setPriorAlt(osControle.retornaPrioridade(getObCadOs().getCategOs()));
+        } catch (Exception e) {
+            System.err.println("Erro no metodo retornaPrioridadeAlt " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -374,6 +419,22 @@ public class CadOsBean implements Serializable {
 
     public void setObs(String obs) {
         this.obs = obs;
+    }
+
+    public String getPriorAlt() {
+        return priorAlt;
+    }
+
+    public void setPriorAlt(String priorAlt) {
+        this.priorAlt = priorAlt;
+    }
+
+    public Integer getSetAlt() {
+        return setAlt;
+    }
+
+    public void setSetAlt(Integer setAlt) {
+        this.setAlt = setAlt;
     }
 
 }
