@@ -16,7 +16,7 @@
                     <p:inputText value="#{cadOsBean.nrOs}">
                         <f:convertNumber type="number"/>
                     </p:inputText>
-                    
+
                     <h:outputLabel value="Categoria:"/>
                     <p:selectOneMenu value="#{cadOsBean.categOs}" id="categDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />
@@ -45,7 +45,7 @@
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisar()}" update="gridPrincipal"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
-                    <p:commandButton value="Novo Protocolo" actionListener="#{cadOsBean.novaOs()}" onclick="PF('dlCadOs').show()" update=":frmDlCadOs"/>  
+                    <p:commandButton value="Novo Protocolo" actionListener="#{cadOsBean.novaOs()}" onclick="PF('dlCadOs').show()" update="@form :frmDlCadOs"/>  
                     <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
                 </f:facet>
             </p:panel>
@@ -110,16 +110,20 @@
                     </f:facet>              
                     <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
                     <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
-                        <p:menuitem value="Alterar"/>  
+                        <p:menuitem value="Alterar" 
+                                    actionListener="#{cadOsBean.buscar(item.get('os'))}"
+                                    onclick="PF('dlAltOs').show()" 
+                                    update=":frmDlAltOs"/>  
                         <p:menuitem value="Detalhes"/>                                              
                         <p:menuitem value="Anexos" url="cadanexo.xhtml"/>
-                        <p:menuitem value="Encaminhar"/>
+                        <p:menuitem value="Encaminhar para Atendimento"/>
                         <p:menuitem value="Cancelar"/>
                         <p:menuitem value="Adicionar Nota"/>
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable>
         </h:form>
+
         <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo">
             <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
                 <p:panel>
@@ -131,7 +135,7 @@
                         <h:outputLabel value="Prioridade: " style="font-weight:bold ; font-size: medium;"/>
                         <h:outputLabel id="priorCad" value="#{cadOsBean.priorCad}" style="font-weight:bold ; font-size: medium;"/>
 
-                    </h:panelGrid><br/>
+                    </h:panelGrid>
                 </p:panel><br/>
                 <p:panel>
                     <h:panelGrid columns="2" >                                               
@@ -141,14 +145,15 @@
                             <f:selectItems value="#{cadOsBean.listarCategCad()}" var="categCad"  
                                            itemLabel="#{categCad.get('nome')}" itemValue="#{categCad.get('codigo')}" />
                             <p:ajax listener="#{cadOsBean.retornaPrioridade()}" update="priorCad"/>
-
                         </p:selectOneMenu>
+
                         <h:outputLabel value="Setor Responsável:"/>
                         <p:selectOneMenu value="#{cadOsBean.setResponCad}" id="setorCadDrop" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="........................................" /> 
                             <f:selectItems value="#{cadOsBean.listarSetorCad()}" var="setorCad"  
                                            itemLabel="#{setorCad.get('nome')}" itemValue="#{setorCad.get('codigo')}" />
                         </p:selectOneMenu>
+
                         <h:outputLabel value="Colaborador Responsável:"/>
                         <p:selectOneMenu value="#{cadOsBean.colabResponCad}" id="ColabCadDrop" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="........................................" />                       
@@ -168,7 +173,6 @@
                         <h:outputLabel value="Observações:"/>
                         <p:inputTextarea rows="6" cols="33" value="#{cadOsBean.obs}"/>
 
-
                     </h:panelGrid>
                     <f:facet name="footer">
                         <p:commandButton value="Salvar" actionListener="#{cadOsBean.salvar()}" update="@form :frmCadOs" />
@@ -177,5 +181,70 @@
                 </p:panel>
             </h:form>
         </p:dialog>
+
+        <p:dialog widgetVar="dlAltOs" header="Alterar Protocolo">
+            <h:form id="frmDlAltOs" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="2" style="margin: 0 auto;">
+
+                        <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
+                        <h:outputLabel value="#{cadOsBean.obCadOs.nrOs}" style="font-weight:bold ; font-size: medium"/>
+
+                        <h:outputLabel value="Prioridade: " style="font-weight:bold ; font-size: medium;"/>
+                        <h:outputLabel id="priorCad" value="#{cadOsBean.priorAlt}" style="font-weight:bold ; font-size: medium;"/>
+
+                    </h:panelGrid>
+                </p:panel><br/>
+
+                <p:panel>
+                    <h:panelGrid columns="2" >                                               
+                        <h:outputLabel value="Categoria:"/>
+                        <p:selectOneMenu value="#{cadOsBean.obCadOs.categOs}" id="categAltDrop" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="........................................" />   
+                            <f:selectItems value="#{cadOsBean.listarCategCad()}" var="categAlt"  
+                                           itemLabel="#{categAlt.get('nome')}" itemValue="#{categAlt.get('codigo')}" />
+                            <p:ajax listener="#{cadOsBean.retornaPrioridadeAlt()}" update="priorCad"/>
+                        </p:selectOneMenu>
+
+                        <h:outputLabel value="Setor Responsável:"/>
+                        <p:selectOneMenu value="#{cadOsBean.setAlt}" id="setorAltDrop" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="........................................" /> 
+                            <f:selectItems value="#{cadOsBean.listarSetorCad()}" var="setorAlt"  
+                                           itemLabel="#{setorAlt.get('nome')}" itemValue="#{setorAlt.get('codigo')}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel value="Colaborador Responsável:"/>
+                        <p:selectOneMenu value="#{cadOsBean.obCadOs.funcResponOs}" id="ColabCadDrop" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="........................................" />                       
+                        </p:selectOneMenu>
+
+                        <h:outputLabel value="Solicitação:"/>
+                        <p:inputTextarea value="#{cadOsBean.obCadOs.histOs}"
+                                         rows="6" 
+                                         cols="33" 
+                                         counter="display" 
+                                         maxlength="512" 
+                                         counterTemplate="{0} Caracteres Restantes." 
+                                         autoResize="false" />
+                        <br />
+                        <h:outputText id="display" />
+
+                        <h:outputLabel value="Observações:"/>
+                        <p:inputTextarea rows="6" cols="33" value="#{cadOsBean.obCadOs.obsOs}"/>
+
+
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar" actionListener="#{cadOsBean.alterar()}" update="@form :frmCadOs" />
+                        <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltOs').hide()" update="@form :frmDlAltOs" />
+                    </f:facet>
+                </p:panel>
+
+
+            </h:form>
+        </p:dialog>
+
+
+
     </ui:define>
 </ui:composition>
