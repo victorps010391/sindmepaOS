@@ -38,6 +38,7 @@ public class CadOsBean implements Serializable {
 
     String priorAlt;
     Integer setAlt;
+
 //  VARIAVEIS DE CADASTRO
     CadOs obCadOs;
     CadSetor cadSetorObj;
@@ -172,19 +173,20 @@ public class CadOsBean implements Serializable {
     public void encaminhar() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
-        try {            
+        try {
             getObCadOs().setDtUltAtuOs(new Date());
             getObCadOs().setFuncUltAtuOs(999);
             getObCadOs().setSitOs("02");
             if (osControle.alterarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Encaminhado Para Atendimento com Sucesso."));
                 context.execute("PF('dlConfirm').hide()");
-                setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(), getColabRespon(), getObCadOs().getSitOs()));
+                setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getObCadOs().getSetorResponOs().getCdSetor(), getColabRespon(), getObCadOs().getSitOs()));
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Protocolo: " + getObCadOs().getNrOs() + " Para Atendimento."));
             }
-
         } catch (Exception e) {
+            System.out.println("Erro no método encaminhar (OS) "+e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -8,7 +8,6 @@ package com.softbean.sindmepaOs.controle;
 import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.CadSetor;
 import com.softbean.sindmepaOs.fachada.CadCategoriaFacade;
-import com.softbean.sindmepaOs.fachada.CadDetalheFacade;
 import com.softbean.sindmepaOs.fachada.CadOsFacade;
 import com.softbean.sindmepaOs.fachada.CadSetorFacade;
 import javax.inject.Named;

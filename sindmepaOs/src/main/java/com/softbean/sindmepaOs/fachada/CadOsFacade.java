@@ -46,6 +46,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert ");
         sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha ");
         sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as sit ");
+        sql.append("        ,sit_os as cd_sit ");
         sql.append(" from cad_os ");
         sql.append(" where 1=1 ");
 
@@ -79,6 +80,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 map.put("data_hora_abert", array[4]);
                 map.put("data_hora_fecha", array[5]);
                 map.put("sit", array[6]);
+                map.put("cd_sit", array[7]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {

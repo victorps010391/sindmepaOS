@@ -1,0 +1,109 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.softbean.sindmepaOs.bean;
+
+import com.softbean.sindmepaOs.controle.CadNotaControle;
+import com.softbean.sindmepaOs.entidade.CadNota;
+import com.softbean.sindmepaOs.entidade.CadNotaPK;
+import java.util.Date;
+import javax.inject.Named;
+import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import org.primefaces.context.RequestContext;
+
+/**
+ *
+ * @author Victor
+ */
+@Named(value = "cadNotaBean")
+@Dependent
+public class CadNotaBean {
+
+    /**
+     * Creates a new instance of CadNotaBean
+     */
+    public CadNotaBean() {
+    }
+
+    @Inject
+    CadNotaControle notaControle;
+
+    CadNota cadNotaObj;
+    CadNotaPK cadNotaObjPK;
+
+    String hisCad;
+    Integer osCad;
+
+    public void buscaNrOS(Integer cod) {
+        setOsCad(cod);
+    }
+
+    public void salvar() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            if (getCadNotaObj().getCadNotaPK() == null) {
+                setCadNotaObjPK(new CadNotaPK());
+                getCadNotaObjPK().setNrOsNota(getOsCad());
+
+                setCadNotaObj(new CadNota());
+                getCadNotaObj().setHistNota(getHisCad());
+                getCadNotaObj().setDtRegiNota(new Date());
+                getCadNotaObj().setFuncRegiNota(999);
+                getCadNotaObj().setDtUltAtuNota(new Date());
+                getCadNotaObj().setFuncUltAtuNota(999);
+
+                if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
+                    context.execute("PF('dlCadNota').hide()");
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public CadNota getCadNotaObj() {
+        if (cadNotaObj == null) {
+            cadNotaObj = new CadNota();
+        }
+        return cadNotaObj;
+    }
+
+    public void setCadNotaObj(CadNota cadNotaObj) {
+        this.cadNotaObj = cadNotaObj;
+    }
+
+    public CadNotaPK getCadNotaObjPK() {
+        if (cadNotaObjPK == null) {
+            cadNotaObjPK = new CadNotaPK();
+        }
+        return cadNotaObjPK;
+    }
+
+    public void setCadNotaObjPK(CadNotaPK cadNotaObjPK) {
+        this.cadNotaObjPK = cadNotaObjPK;
+    }
+
+    public String getHisCad() {
+        return hisCad;
+    }
+
+    public void setHisCad(String hisCad) {
+        this.hisCad = hisCad;
+    }
+
+    public Integer getOsCad() {
+        return osCad;
+    }
+
+    public void setOsCad(Integer osCad) {
+        this.osCad = osCad;
+    }
+}
