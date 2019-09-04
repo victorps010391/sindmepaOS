@@ -38,4 +38,12 @@ public class CadExternoControle implements Serializable {
     public List<Map<String, Object>> listarCategoria() {
         return cadExternoFacade.listarCategoria();
     }
+    
+    public List<Map<String, Object>> tipoPag() {
+        return cadExternoFacade.tipoPag();
+    }
+    
+    public List<Map<String, Object>> pagInstituicao() {
+        return cadExternoFacade.pagInstituicao();
+    }
 }

@@ -81,4 +81,53 @@ public class CadExternoFacade extends AbstractFacade<CadExterno> {
         }
         return resultMaps;
     }
+    
+    public List<Map<String, Object>> tipoPag() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select id_detalhe as codigo, desc_detalhe as detalhe from cad_detalhe\n" +
+                   " where cod_item_detalhe = 'TIPAG' ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("codigo", array[0]);
+                map.put("detalhe", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método tipoPag()");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+    
+    public List<Map<String, Object>> pagInstituicao() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select id_detalhe as codigo, desc_detalhe as detalhe from cad_detalhe\n" +
+                   " where cod_item_detalhe = 'PAGIN' ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("codigo", array[0]);
+                map.put("detalhe", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método tipoPag()");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+    
 }
