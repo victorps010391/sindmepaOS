@@ -5,6 +5,7 @@
  */
 package com.softbean.sindmepaOs.bean;
 
+import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.CadSetor;
@@ -35,6 +36,8 @@ public class CadOsBean implements Serializable {
 
     @Inject
     CadOsControle osControle;
+    @Inject
+    CadNotaControle notaControle;
 
     String priorAlt;
     Integer setAlt;
@@ -63,6 +66,7 @@ public class CadOsBean implements Serializable {
     String sitOs;
 
     List<Map<String, Object>> gridPesquisa;
+    List<Map<String, Object>> gridSecundario;
     List<Map<String, Object>> sitCategListaPesq;
     List<Map<String, Object>> setorResponsListaPesq;
     List<Map<String, Object>> colabResponsPesq;
@@ -73,6 +77,15 @@ public class CadOsBean implements Serializable {
             setGridPesquisa(osControle.gridPrincipal(getNrOs(), getCategOs(), getSetRespon(), getColabRespon(), getSitOs()));
         } catch (Exception e) {
             System.out.println("Erro no método pesquisar (OS)");
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarNota(Integer os) {
+        try {
+            setGridSecundario(notaControle.gridSecundario(os));
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarNota " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -185,7 +198,7 @@ public class CadOsBean implements Serializable {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Protocolo: " + getObCadOs().getNrOs() + " Para Atendimento."));
             }
         } catch (Exception e) {
-            System.out.println("Erro no método encaminhar (OS) "+e.getMessage());
+            System.out.println("Erro no método encaminhar (OS) " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -352,6 +365,14 @@ public class CadOsBean implements Serializable {
 
     public void setGridPesquisa(List<Map<String, Object>> gridPesquisa) {
         this.gridPesquisa = gridPesquisa;
+    }
+
+    public List<Map<String, Object>> getGridSecundario() {
+        return gridSecundario;
+    }
+
+    public void setGridSecundario(List<Map<String, Object>> gridSecundario) {
+        this.gridSecundario = gridSecundario;
     }
 
     public List<Map<String, Object>> getSitCategListaPesq() {

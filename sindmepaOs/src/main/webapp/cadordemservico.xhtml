@@ -104,6 +104,13 @@
                     <h:outputText value="#{item.get('sit')}"/>
                 </p:column>
 
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Notas"/>
+                    </f:facet>
+                    <p:commandButton value="Visualizar" actionListener="#{cadOsBean.pesquisarNota(item.get('os'))}" update="gridSecundario" />
+                </p:column>
+
                 <p:column style="text-align: center; width: 5%">
                     <f:facet name="header">
                         <h:outputText value="Ações"/>
@@ -137,6 +144,52 @@
                                     actionListener="#{cadNotaBean.buscaNrOS(item.get('os'))}"
                                     onclick="PF('dlCadNota').show()" 
                                     update=":frmDlCadNota"/> 
+                    </p:tieredMenu>
+                </p:column>
+            </p:dataTable>
+
+            <p:dataTable id="gridSecundario" value="#{cadOsBean.gridSecundario}" var="nota" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+                <f:facet name="header">
+                    Notas Cadastradas 
+                </f:facet>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nr. do Protocolo"/>
+                    </f:facet>
+                    <h:outputText value="#{nota.get('os')}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nota"/>
+                    </f:facet>
+                    <h:outputText value="#{item.get('historico')}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Data e Hora de Cadastro"/>
+                    </f:facet>
+                    <h:outputText value="#{item.get('data_hora_regi')}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Data e Hora da Ultima Atualização"/>
+                    </f:facet>
+                    <h:outputText value="#{item.get('data_ultima_atualizacao')}"/>
+                </p:column>
+
+                <p:column style="text-align: center; width: 5%">
+                    <f:facet name="header">
+                        <h:outputText value="Ações"/>
+                    </f:facet>              
+                    <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
+                    <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
+                        <p:menuitem value="Alterar" />
+
+                        <p:menuitem value="Excluir"/>
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable>
@@ -330,7 +383,5 @@
                 </p:panel>
             </h:form>
         </p:dialog>
-
-
     </ui:define>
 </ui:composition>

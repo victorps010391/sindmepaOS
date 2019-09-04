@@ -8,9 +8,12 @@ package com.softbean.sindmepaOs.bean;
 import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.entidade.CadNota;
 import com.softbean.sindmepaOs.entidade.CadNotaPK;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -21,8 +24,8 @@ import org.primefaces.context.RequestContext;
  * @author Victor
  */
 @Named(value = "cadNotaBean")
-@Dependent
-public class CadNotaBean {
+@SessionScoped
+public class CadNotaBean implements Serializable {
 
     /**
      * Creates a new instance of CadNotaBean
@@ -50,6 +53,7 @@ public class CadNotaBean {
             if (getCadNotaObj().getCadNotaPK() == null) {
                 setCadNotaObjPK(new CadNotaPK());
                 getCadNotaObjPK().setNrOsNota(getOsCad());
+                getCadNotaObjPK().setSerialNota(notaControle.retornaSeqNota(getOsCad()));
 
                 setCadNotaObj(new CadNota());
                 getCadNotaObj().setHistNota(getHisCad());
@@ -61,12 +65,20 @@ public class CadNotaBean {
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
                     context.execute("PF('dlCadNota').hide()");
+                    limparCadastro();
                 } else {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));
                 }
             }
         } catch (Exception e) {
         }
+    }
+
+    public void limparCadastro() {
+        setCadNotaObj(null);
+        setCadNotaObjPK(null);
+        setHisCad(null);
+        setOsCad(null);
     }
 
     public CadNota getCadNotaObj() {
@@ -106,4 +118,5 @@ public class CadNotaBean {
     public void setOsCad(Integer osCad) {
         this.osCad = osCad;
     }
+
 }

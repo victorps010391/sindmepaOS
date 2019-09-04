@@ -22,7 +22,9 @@ public class CadNotaPK implements Serializable {
     @NotNull
     @Column(name = "nr_os_nota")
     private int nrOsNota;
+
     @Basic(optional = false)
+    @NotNull
     @Column(name = "serial_nota")
     private int serialNota;
 
@@ -78,5 +80,5 @@ public class CadNotaPK implements Serializable {
     public String toString() {
         return "com.softbean.sindmepaOs.entidade.CadNotaPK[ nrOsNota=" + nrOsNota + ", serialNota=" + serialNota + " ]";
     }
-    
+
 }

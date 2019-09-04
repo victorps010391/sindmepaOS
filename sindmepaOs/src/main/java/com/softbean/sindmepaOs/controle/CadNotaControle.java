@@ -8,8 +8,11 @@ package com.softbean.sindmepaOs.controle;
 import com.softbean.sindmepaOs.entidade.CadNota;
 import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import com.softbean.sindmepaOs.fachada.CadNotaFacade;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 
 /**
@@ -17,8 +20,8 @@ import javax.inject.Inject;
  * @author Victor
  */
 @Named(value = "cadNotaControle")
-@Dependent
-public class CadNotaControle {
+@SessionScoped
+public class CadNotaControle implements Serializable {
 
     /**
      * Creates a new instance of CadNotaControle
@@ -37,10 +40,18 @@ public class CadNotaControle {
             }
             return true;
         } catch (Exception e) {
-            System.out.println("Erro no método salvarNotaControle "+e.getMessage());
+            System.out.println("Erro no método salvarNotaControle " + e.getMessage());
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Integer retornaSeqNota(Integer os) {
+        return notaFacade.retornaSeqNota(os);
+    }
+    
+    public List<Map<String, Object>> gridSecundario(Integer nrOs){
+        return notaFacade.gridSecundario(nrOs);
     }
 
 }
