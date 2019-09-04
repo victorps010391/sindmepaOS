@@ -113,16 +113,48 @@
                         <p:menuitem value="Alterar" 
                                     actionListener="#{cadOsBean.buscar(item.get('os'))}"
                                     onclick="PF('dlAltOs').show()" 
-                                    update=":frmDlAltOs"/>  
-                        <p:menuitem value="Detalhes"/>                                              
-                        <p:menuitem value="Anexos" url="cadanexo.xhtml"/>
-                        <p:menuitem value="Encaminhar para Atendimento"/>
+                                    update=":frmDlAltOs"/>
+                        
+                        <p:menuitem value="Detalhes"
+                                    actionListener="#{cadOsBean.visualizar(item.get('os'))}"
+                                    onclick="PF('dlVerOs').show()" 
+                                    update=":frmDlVerOs"/>
+
+                        <p:menuitem value="Anexos" 
+                                    url="cadanexo.xhtml"/>
+
+                        <p:menuitem value="Encaminhar para Atendimento"
+                                    actionListener="#{cadOsBean.buscarEncaminhar(item.get('os'))}"
+                                    onclick="PF('dlConfirm').show()" 
+                                    update=":frmDlConfirm"/>
+
                         <p:menuitem value="Cancelar"/>
                         <p:menuitem value="Adicionar Nota"/>
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+            </p:confirmDialog>      
         </h:form>
+
+        <p:dialog widgetVar="dlConfirm" header="Confirmação">
+            <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="1" > 
+                        <h:outputLabel value="Encaminhar Protocolo para Atendimento? " style="font-weight:bold ; font-size: medium;"/><br/>
+                        <h:outputLabel value="IMPORTANTE: Informamos que após execução deste procedimento algumas ações não estarão mais disponiveis."
+                                       style="font-size: small; color: red; font-weight:bold"/>                       
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton actionListener="#{cadOsBean.encaminhar()}" value="Sim" update="@form :frmCadOs" icon="ui-icon ui-icon-check" />
+                        <p:commandButton onclick="PF('dlCadOs').hide()" type="button" value="Não" update="@form :frmCadOs" icon="ui-icon ui-icon-closethick"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
 
         <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo">
             <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
@@ -243,6 +275,25 @@
 
             </h:form>
         </p:dialog>
+
+        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado">
+            <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
+                <p:panel>                    
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Protocolo: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.obCadOs.nrOs}" style="font-weight:bold; "/>
+
+                        <h:outputLabel value="Prioridade: " style="font-weight:bold; "/>
+                        <h:outputLabel id="priorCad" value="#{cadOsBean.priorAlt}" style="font-weight:bold; "/>                                       </h:panelGrid>
+                </p:panel><br/>  
+                <p:panel>
+                    <h:panelGrid columns="2" >    
+
+                    </h:panelGrid>
+                </p:panel>
+
+            </h:form>
+        </p:dialog>        
 
 
 
