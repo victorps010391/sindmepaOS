@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Raphael
+ * @author Desenv
  */
 @Entity
 @Table(name = "cad_externo")
@@ -33,14 +33,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "CadExterno.findAll", query = "SELECT c FROM CadExterno c"),
     @NamedQuery(name = "CadExterno.findByIdExt", query = "SELECT c FROM CadExterno c WHERE c.idExt = :idExt"),
-    @NamedQuery(name = "CadExterno.findByNmExt", query = "SELECT c FROM CadExterno c WHERE c.nmExt = :nmExt"),
+    @NamedQuery(name = "CadExterno.findByNomeExt", query = "SELECT c FROM CadExterno c WHERE c.nomeExt = :nomeExt"),
     @NamedQuery(name = "CadExterno.findByRgExt", query = "SELECT c FROM CadExterno c WHERE c.rgExt = :rgExt"),
     @NamedQuery(name = "CadExterno.findByCpfExt", query = "SELECT c FROM CadExterno c WHERE c.cpfExt = :cpfExt"),
     @NamedQuery(name = "CadExterno.findBySexoExt", query = "SELECT c FROM CadExterno c WHERE c.sexoExt = :sexoExt"),
-    @NamedQuery(name = "CadExterno.findByDtNascExt", query = "SELECT c FROM CadExterno c WHERE c.dtNascExt = :dtNascExt"),
-    @NamedQuery(name = "CadExterno.findByEmailExt", query = "SELECT c FROM CadExterno c WHERE c.emailExt = :emailExt"),
-    @NamedQuery(name = "CadExterno.findByNumCrm", query = "SELECT c FROM CadExterno c WHERE c.numCrm = :numCrm"),
-    @NamedQuery(name = "CadExterno.findByEspExt", query = "SELECT c FROM CadExterno c WHERE c.espExt = :espExt")})
+    @NamedQuery(name = "CadExterno.findByDataNascExt", query = "SELECT c FROM CadExterno c WHERE c.dataNascExt = :dataNascExt"),
+    @NamedQuery(name = "CadExterno.findByCrmExt", query = "SELECT c FROM CadExterno c WHERE c.crmExt = :crmExt"),
+    @NamedQuery(name = "CadExterno.findByEspExt", query = "SELECT c FROM CadExterno c WHERE c.espExt = :espExt"),
+    @NamedQuery(name = "CadExterno.findByTipoPesExt", query = "SELECT c FROM CadExterno c WHERE c.tipoPesExt = :tipoPesExt"),
+    @NamedQuery(name = "CadExterno.findByEmail", query = "SELECT c FROM CadExterno c WHERE c.email = :email"),
+    @NamedQuery(name = "CadExterno.findByAgExt", query = "SELECT c FROM CadExterno c WHERE c.agExt = :agExt"),
+    @NamedQuery(name = "CadExterno.findByBcExt", query = "SELECT c FROM CadExterno c WHERE c.bcExt = :bcExt"),
+    @NamedQuery(name = "CadExterno.findByCcExt", query = "SELECT c FROM CadExterno c WHERE c.ccExt = :ccExt"),
+    @NamedQuery(name = "CadExterno.findByNrMatExt", query = "SELECT c FROM CadExterno c WHERE c.nrMatExt = :nrMatExt"),
+    @NamedQuery(name = "CadExterno.findByCdInstExt", query = "SELECT c FROM CadExterno c WHERE c.cdInstExt = :cdInstExt"),
+    @NamedQuery(name = "CadExterno.findByCdTipPagExt", query = "SELECT c FROM CadExterno c WHERE c.cdTipPagExt = :cdTipPagExt")})
 public class CadExterno implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,9 +56,9 @@ public class CadExterno implements Serializable {
     @Column(name = "id_ext")
     private Integer idExt;
     @Size(max = 512)
-    @Column(name = "nm_ext")
-    private String nmExt;
-    @Size(max = 11)
+    @Column(name = "nome_ext")
+    private String nomeExt;
+    @Size(max = 12)
     @Column(name = "rg_ext")
     private String rgExt;
     @Size(max = 11)
@@ -59,21 +66,40 @@ public class CadExterno implements Serializable {
     private String cpfExt;
     @Column(name = "sexo_ext")
     private Character sexoExt;
-    @Column(name = "dt_nasc_ext")
+    @Column(name = "data_nasc_ext")
     @Temporal(TemporalType.DATE)
-    private Date dtNascExt;
-    @Size(max = 512)
-    @Column(name = "email_ext")
-    private String emailExt;
-    @Size(max = 11)
-    @Column(name = "num_crm")
-    private String numCrm;
+    private Date dataNascExt;
+    @Size(max = 10)
+    @Column(name = "crm_ext")
+    private String crmExt;
     @Size(max = 512)
     @Column(name = "esp_ext")
     private String espExt;
-    @JoinColumn(name = "id_end", referencedColumnName = "id_end")
+    @Column(name = "tipo_pes_ext")
+    private Character tipoPesExt;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 512)
+    @Column(name = "email")
+    private String email;
+    @Size(max = 2147483647)
+    @Column(name = "ag_ext")
+    private String agExt;
+    @Size(max = 2147483647)
+    @Column(name = "bc_ext")
+    private String bcExt;
+    @Size(max = 2147483647)
+    @Column(name = "cc_ext")
+    private String ccExt;
+    @Size(max = 2147483647)
+    @Column(name = "nr_mat_ext")
+    private String nrMatExt;
+    @Column(name = "cd_inst_ext")
+    private Integer cdInstExt;
+    @Column(name = "cd_tip_pag_ext")
+    private Integer cdTipPagExt;
+    @JoinColumn(name = "id_end_ext", referencedColumnName = "id_end")
     @ManyToOne
-    private Endereco idEnd;
+    private Endereco idEndExt;
 
     public CadExterno() {
     }
@@ -90,12 +116,12 @@ public class CadExterno implements Serializable {
         this.idExt = idExt;
     }
 
-    public String getNmExt() {
-        return nmExt;
+    public String getNomeExt() {
+        return nomeExt;
     }
 
-    public void setNmExt(String nmExt) {
-        this.nmExt = nmExt;
+    public void setNomeExt(String nomeExt) {
+        this.nomeExt = nomeExt;
     }
 
     public String getRgExt() {
@@ -122,28 +148,20 @@ public class CadExterno implements Serializable {
         this.sexoExt = sexoExt;
     }
 
-    public Date getDtNascExt() {
-        return dtNascExt;
+    public Date getDataNascExt() {
+        return dataNascExt;
     }
 
-    public void setDtNascExt(Date dtNascExt) {
-        this.dtNascExt = dtNascExt;
+    public void setDataNascExt(Date dataNascExt) {
+        this.dataNascExt = dataNascExt;
     }
 
-    public String getEmailExt() {
-        return emailExt;
+    public String getCrmExt() {
+        return crmExt;
     }
 
-    public void setEmailExt(String emailExt) {
-        this.emailExt = emailExt;
-    }
-
-    public String getNumCrm() {
-        return numCrm;
-    }
-
-    public void setNumCrm(String numCrm) {
-        this.numCrm = numCrm;
+    public void setCrmExt(String crmExt) {
+        this.crmExt = crmExt;
     }
 
     public String getEspExt() {
@@ -154,12 +172,76 @@ public class CadExterno implements Serializable {
         this.espExt = espExt;
     }
 
-    public Endereco getIdEnd() {
-        return idEnd;
+    public Character getTipoPesExt() {
+        return tipoPesExt;
     }
 
-    public void setIdEnd(Endereco idEnd) {
-        this.idEnd = idEnd;
+    public void setTipoPesExt(Character tipoPesExt) {
+        this.tipoPesExt = tipoPesExt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAgExt() {
+        return agExt;
+    }
+
+    public void setAgExt(String agExt) {
+        this.agExt = agExt;
+    }
+
+    public String getBcExt() {
+        return bcExt;
+    }
+
+    public void setBcExt(String bcExt) {
+        this.bcExt = bcExt;
+    }
+
+    public String getCcExt() {
+        return ccExt;
+    }
+
+    public void setCcExt(String ccExt) {
+        this.ccExt = ccExt;
+    }
+
+    public String getNrMatExt() {
+        return nrMatExt;
+    }
+
+    public void setNrMatExt(String nrMatExt) {
+        this.nrMatExt = nrMatExt;
+    }
+
+    public Integer getCdInstExt() {
+        return cdInstExt;
+    }
+
+    public void setCdInstExt(Integer cdInstExt) {
+        this.cdInstExt = cdInstExt;
+    }
+
+    public Integer getCdTipPagExt() {
+        return cdTipPagExt;
+    }
+
+    public void setCdTipPagExt(Integer cdTipPagExt) {
+        this.cdTipPagExt = cdTipPagExt;
+    }
+
+    public Endereco getIdEndExt() {
+        return idEndExt;
+    }
+
+    public void setIdEndExt(Endereco idEndExt) {
+        this.idEndExt = idEndExt;
     }
 
     @Override

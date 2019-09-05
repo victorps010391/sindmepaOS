@@ -6,12 +6,19 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadExternoControle;
+import com.softbean.sindmepaOs.entidade.CadExterno;
+import com.softbean.sindmepaOs.entidade.Endereco;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 
 /**
@@ -33,8 +40,20 @@ public class CadExternoBean implements Serializable {
     List<Map<String, Object>> comboTipoPag;
     List<Map<String, Object>> comboPagInstituicao;
 
-    //VARIÁVEIS DE ARMAZENAMENTO
-    Integer categoria, setor, pagamento, instituicao;
+    //Objeto
+    CadExterno cadExterno;
+    Endereco enderecoObj;
+
+    //VARIÁVEIS DE ARMAZENAMENTO PESSOAL
+    Integer categoria, setor, pagamento, instituicao, idEndereco;
+    String nomeExt, rg, cpf, crm, espec, email, agencia, banco, cc, numMatricula;
+    char sexo;
+    Date dtNascimento;
+
+    //VARIAVEIS DE ENDEREÇO
+    String endereco, complemento, cep, numeroEnd, bairro, cidade, estado;
+    //VARIAVEIS DE CONTATO
+    String telComerc, celular, whatsapp;
     boolean liAceito;
 
     //variáveis view
@@ -44,6 +63,67 @@ public class CadExternoBean implements Serializable {
     String tipoPag, anuidadeResidente, debMenCartCred, debCCorrente, debCCheque;
 
     public CadExternoBean() {
+    }
+
+    public void salvarExterno() {
+        if (getPagamento() == 13) {
+            System.out.println("Entrou no If salvarExterno() ");
+            salvaPagDebMenCartCred();
+        }
+    }
+
+    public void salvaPagAnuidade() {
+        //precisa de anexo
+    }
+
+    public void salvaPagDebMenCartCred() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setCadExterno(null); //limpa variável
+            setCadExterno(new CadExterno());
+            getCadExterno().setCdTipPagExt(getPagamento());
+            //Dados pessoais
+            getCadExterno().setTipoPesExt('E'); //tipoPessoaExterna
+            getCadExterno().setRgExt(getRg());
+            getCadExterno().setCpfExt(getCpf());
+            getCadExterno().setCrmExt(getCrm());
+            getCadExterno().setEspExt(getEspec());
+            getCadExterno().setDataNascExt(getDtNascimento());
+            getCadExterno().setSexoExt(getSexo());
+            getCadExterno().setEmail(getEmail());
+
+            //Informações de Endereço
+            setEnderecoObj(null);
+            setEnderecoObj(new Endereco());
+            getEnderecoObj().setEndereco(getEndereco());
+            //FALTA O COMPLEMENTO AQUI
+            getEnderecoObj().setCepEnd(getCep());
+            getEnderecoObj().setNmEnd(getNumeroEnd());
+            getEnderecoObj().setBairroEnd(getBairro());
+            getEnderecoObj().setCidEnd(getCidade());
+            getEnderecoObj().setEstEnd("PARA");
+            //INFORMAÇÕES DE CONTATO
+            getEnderecoObj().setTelComEnd(getTelComerc());
+            getEnderecoObj().setCelEnd(getCelular());
+            getEnderecoObj().setWtpEnd(getWhatsapp());
+            //getCadExterno().setIdEndExt(getEnderecoObj().getIdEnd()); //tem que ser o último
+            System.out.println(" ========= ANTES DO IF ========");
+            if (cadExternoControle.salvarUsuarioExt(getCadExterno(), getEnderecoObj())) {
+                System.out.println("== Entrou no If salvaPagDebMenCartCred() ==");
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: NUMERO_DA_OS Realizado com Sucesso."));
+                System.out.println("== SALVOU, FDP!");
+            } 
+        } catch (Exception e) {
+            System.out.println("Erro o método salvaPagDebMenCartCred()");
+            e.printStackTrace();
+        }
+    }
+
+    public void salvaPagDebCCorrente() {
+    }
+
+    public void salvaPagDebCCheque() {
     }
 
     public void validador() {
@@ -69,10 +149,10 @@ public class CadExternoBean implements Serializable {
         } else if (getPagamento() == 13) {
             //"13 - DÉBITO MENSAL NO CARTÃO DE CRÉDITO"
             setDebMenCartCred("true");
-        } else if(getPagamento() == 10 ){
+        } else if (getPagamento() == 10) {
             //"10 - DÉBITO EM CONTA CORRENTE"
             setDebCCorrente("true");
-        } else if(getPagamento() == 11){
+        } else if (getPagamento() == 11) {
             //"11 - DÉBITO EM CONTRA-CHEQUE"
             setDebCCheque("true");
         }
@@ -108,7 +188,7 @@ public class CadExternoBean implements Serializable {
 
         return getComboTipoPag();
     }
-    
+
     public List<Map<String, Object>> comboPagInstituicaoView() {
         try {
             setComboPagInstituicao(cadExternoControle.pagInstituicao());
@@ -266,5 +346,204 @@ public class CadExternoBean implements Serializable {
         this.instituicao = instituicao;
     }
 
-    
+    public CadExterno getCadExterno() {
+        return cadExterno;
+    }
+
+    public void setCadExterno(CadExterno cadExterno) {
+        this.cadExterno = cadExterno;
+    }
+
+    public Integer getIdEndereco() {
+        return idEndereco;
+    }
+
+    public void setIdEndereco(Integer idEndereco) {
+        this.idEndereco = idEndereco;
+    }
+
+    public String getNomeExt() {
+        return nomeExt;
+    }
+
+    public void setNomeExt(String nomeExt) {
+        this.nomeExt = nomeExt;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public char getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(char sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getCrm() {
+        return crm;
+    }
+
+    public void setCrm(String crm) {
+        this.crm = crm;
+    }
+
+    public String getEspec() {
+        return espec;
+    }
+
+    public void setEspec(String espec) {
+        this.espec = espec;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAgencia() {
+        return agencia;
+    }
+
+    public void setAgencia(String agencia) {
+        this.agencia = agencia;
+    }
+
+    public String getBanco() {
+        return banco;
+    }
+
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
+
+    public String getCc() {
+        return cc;
+    }
+
+    public void setCc(String cc) {
+        this.cc = cc;
+    }
+
+    public String getNumMatricula() {
+        return numMatricula;
+    }
+
+    public void setNumMatricula(String numMatricula) {
+        this.numMatricula = numMatricula;
+    }
+
+    public Date getDtNascimento() {
+        return dtNascimento;
+    }
+
+    public void setDtNascimento(Date dtNascimento) {
+        this.dtNascimento = dtNascimento;
+    }
+
+    public Endereco getEnderecoObj() {
+        return enderecoObj;
+    }
+
+    public void setEnderecoObj(Endereco enderecoObj) {
+        this.enderecoObj = enderecoObj;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getNumeroEnd() {
+        return numeroEnd;
+    }
+
+    public void setNumeroEnd(String numeroEnd) {
+        this.numeroEnd = numeroEnd;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getTelComerc() {
+        return telComerc;
+    }
+
+    public void setTelComerc(String telComerc) {
+        this.telComerc = telComerc;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
+    }
+
 }

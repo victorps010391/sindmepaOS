@@ -38,6 +38,7 @@
 
     <ui:define name="centro"> 
         <h:form id="frmExterno" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+            <p:growl id="growlFrmExterno" showDetail="true"/>    
             <p:panel header="Abertura de Ordem de Serviço" >
                 <h:panelGrid columns="2" >
                     <h:outputLabel value="Setor responsável: "/>
@@ -151,25 +152,25 @@
                                     <p:messages />
                                     <h:panelGrid columns="2" columnClasses="label, value">
                                         <h:outputText value="Nome: " />
-                                        <p:inputText/>
+                                        <p:inputText value="#{cadExternoBean.nomeExt}"/>
 
                                         <h:outputText value="RG: " />
-                                        <p:inputText/>
+                                        <p:inputText value="#{cadExternoBean.rg}"/>
 
                                         <h:outputText value="CPF: " />
-                                        <p:inputText/>
+                                        <p:inputText value="#{cadExternoBean.cpf}"/>
 
                                         <h:outputText value="Número CRM: " />
-                                        <p:inputText/>
+                                        <p:inputText value="#{cadExternoBean.crm}"/>
 
                                         <h:outputText value="Especialidade: " />
-                                        <p:inputText/>
+                                        <p:inputText value="#{cadExternoBean.espec}"/>
 
                                         <h:outputText value="Data de Nascimento: " />
-                                        <p:calendar/>
+                                        <p:calendar value="#{cadExternoBean.dtNascimento}"/>
 
                                         <h:outputText value="Sexo" />
-                                        <p:selectOneButton >
+                                        <p:selectOneButton value="#{cadExternoBean.sexo}">
                                             <f:selectItem itemLabel="Masculino" itemValue="M" />
                                             <f:selectItem itemLabel="Feminino" itemValue="F" />
                                         </p:selectOneButton>
@@ -182,22 +183,22 @@
                                     <p:messages />
                                     <h:panelGrid columns="2" columnClasses="label, value">
                                         <h:outputText value="Endereço: " />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.endereco}"/>
 
                                         <h:outputText value="Complemento: " />
                                         <p:inputText />
 
                                         <h:outputText value="CEP :" />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.cep}"/>
 
                                         <h:outputText value="Número: " />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.numeroEnd}"/>
 
                                         <h:outputText value="Bairro: " />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.bairro}"/>
 
                                         <h:outputText value="Cidade: " />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.cidade}"/>
                                     </h:panelGrid>
                                 </p:panel>
 
@@ -207,16 +208,16 @@
                                     <p:messages />
                                     <h:panelGrid columns="2" columnClasses="label, value">
                                         <h:outputText value="Telefone comercial: " />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.telComerc}"/>
 
                                         <h:outputText value="Celular: " />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.celular}"/>
 
                                         <h:outputText value="Whatsapp: " />
-                                        <p:inputText />
+                                        <p:inputText value="#{cadExternoBean.whatsapp}"/>
 
                                         <h:outputText value="E-mail: " />
-                                        <p:inputText type="email"/>
+                                        <p:inputText value="#{cadExternoBean.email}" type="email"/>
 
                                     </h:panelGrid>
                                 </p:panel>
@@ -228,43 +229,62 @@
                                 <p:panel header="Confirmaçao">
                                     <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
                                         <h:panelGrid columns="2" columnClasses="label, value">
-                                            <h:outputText value="Firstname: " />
+                                            <h:outputText value="Nome: " />
+                                            <h:outputText value="#{cadExternoBean.nomeExt}" styleClass="outputLabel"/>
+
+                                            <h:outputText value="RG: " />
+                                            <h:outputText value="#{cadExternoBean.rg}" styleClass="outputLabel"/>
+
+                                            <h:outputText value="CPF: " />
+                                            <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
+                                            
+                                            <h:outputText value="Número CRM: " />
+                                            <h:outputText value="#{cadExternoBean.crm}" styleClass="outputLabel"/>
+                                            
+                                            <h:outputText value="Especialidade: " />
+                                            <h:outputText value="#{cadExternoBean.espec}" styleClass="outputLabel"/>
+                                            
+                                            <h:outputText value="Data de Nascimento: " />
+                                            <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
+                                            
+                                            <h:outputText value="Sexo: " />
+                                            <h:outputText value="#{cadExternoBean.sexo}" styleClass="outputLabel"/>
+                                        
+
+                                        
+                                            <h:outputText value="Endereço: " />
+                                            <h:outputText value="#{cadExternoBean.endereco}" styleClass="outputLabel"/>
+
+                                            <h:outputText value="Complemento: " />
                                             <h:outputText styleClass="outputLabel"/>
 
-                                            <h:outputText value="Lastname: " />
-                                            <h:outputText styleClass="outputLabel"/>
+                                            <h:outputText value="CEP: " />
+                                            <h:outputText value="#{cadExternoBean.cep}" styleClass="outputLabel"/>
+                                            
+                                            <h:outputText value="Número: " />
+                                            <h:outputText value="#{cadExternoBean.numeroEnd}" styleClass="outputLabel"/>
+                                            
+                                            <h:outputText value="Bairro: " />
+                                            <h:outputText value="#{cadExternoBean.bairro}" styleClass="outputLabel"/>
+                                            
+                                            <h:outputText value="Cidade: " />
+                                            <h:outputText value="#{cadExternoBean.cidade}" styleClass="outputLabel"/>
+                                       
+                                            <h:outputText value="Telefone Comercial: " />
+                                            <h:outputText value="#{cadExternoBean.telComerc}" styleClass="outputLabel"/>
 
-                                            <h:outputText value="Age: " />
-                                            <h:outputText  styleClass="outputLabel"/>
-                                        </h:panelGrid>
+                                            <h:outputText value="Celular: " />
+                                            <h:outputText value="#{cadExternoBean.celular}" styleClass="outputLabel"/>
 
-                                        <h:panelGrid columns="2" columnClasses="label, value">
-                                            <h:outputText value="Street: " />
-                                            <h:outputText styleClass="outputLabel"/>
+                                            <h:outputText value="Whatsapp: " />
+                                            <h:outputText value="#{cadExternoBean.whatsapp}" styleClass="outputLabel"/>
 
-                                            <h:outputText value="Postal: " />
-                                            <h:outputText  styleClass="outputLabel"/>
-
-                                            <h:outputText value="City: " />
-                                            <h:outputText styleClass="outputLabel"/>
-                                        </h:panelGrid>
-
-                                        <h:panelGrid columns="2" columnClasses="label, value">
-                                            <h:outputText value="Email: " />
-                                            <h:outputText styleClass="outputLabel"/>
-
-                                            <h:outputText value="Phone " />
-                                            <h:outputText styleClass="outputLabel"/>
-
-                                            <h:outputText value="Info: " />
-                                            <h:outputText styleClass="outputLabel"/>
-
-                                            <h:outputText />
-                                            <h:outputText />
+                                            <h:outputText value="E-mail: " />
+                                            <h:outputText value="#{cadExternoBean.email}" styleClass="outputLabel"/>
                                         </h:panelGrid>
                                     </h:panelGrid>
 
-                                    <p:commandButton value="Enviar" update="growl" process="@this"/>
+                                    <p:commandButton value="Enviar" actionListener="#{cadExternoBean.salvarExterno()}" update="growl" process="@this"/>
                                 </p:panel>
                             </p:tab>
                         </p:wizard>

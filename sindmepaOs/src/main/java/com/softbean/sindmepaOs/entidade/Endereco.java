@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Raphael
+ * @author Desenv
  */
 @Entity
 @Table(name = "endereco")
@@ -31,16 +31,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Endereco.findAll", query = "SELECT e FROM Endereco e"),
     @NamedQuery(name = "Endereco.findByIdEnd", query = "SELECT e FROM Endereco e WHERE e.idEnd = :idEnd"),
+    @NamedQuery(name = "Endereco.findByEndereco", query = "SELECT e FROM Endereco e WHERE e.endereco = :endereco"),
     @NamedQuery(name = "Endereco.findByCepEnd", query = "SELECT e FROM Endereco e WHERE e.cepEnd = :cepEnd"),
-    @NamedQuery(name = "Endereco.findByNumEnd", query = "SELECT e FROM Endereco e WHERE e.numEnd = :numEnd"),
-    @NamedQuery(name = "Endereco.findByEndEnd", query = "SELECT e FROM Endereco e WHERE e.endEnd = :endEnd"),
-    @NamedQuery(name = "Endereco.findByCompEnd", query = "SELECT e FROM Endereco e WHERE e.compEnd = :compEnd"),
-    @NamedQuery(name = "Endereco.findByBairroExt", query = "SELECT e FROM Endereco e WHERE e.bairroExt = :bairroExt"),
-    @NamedQuery(name = "Endereco.findByCidExt", query = "SELECT e FROM Endereco e WHERE e.cidExt = :cidExt"),
-    @NamedQuery(name = "Endereco.findByEstExt", query = "SELECT e FROM Endereco e WHERE e.estExt = :estExt"),
-    @NamedQuery(name = "Endereco.findByTelComExt", query = "SELECT e FROM Endereco e WHERE e.telComExt = :telComExt"),
-    @NamedQuery(name = "Endereco.findByCelExt", query = "SELECT e FROM Endereco e WHERE e.celExt = :celExt"),
-    @NamedQuery(name = "Endereco.findByWspExt", query = "SELECT e FROM Endereco e WHERE e.wspExt = :wspExt")})
+    @NamedQuery(name = "Endereco.findByNmEnd", query = "SELECT e FROM Endereco e WHERE e.nmEnd = :nmEnd"),
+    @NamedQuery(name = "Endereco.findByBairroEnd", query = "SELECT e FROM Endereco e WHERE e.bairroEnd = :bairroEnd"),
+    @NamedQuery(name = "Endereco.findByCidEnd", query = "SELECT e FROM Endereco e WHERE e.cidEnd = :cidEnd"),
+    @NamedQuery(name = "Endereco.findByEstEnd", query = "SELECT e FROM Endereco e WHERE e.estEnd = :estEnd"),
+    @NamedQuery(name = "Endereco.findByTelComEnd", query = "SELECT e FROM Endereco e WHERE e.telComEnd = :telComEnd"),
+    @NamedQuery(name = "Endereco.findByCelEnd", query = "SELECT e FROM Endereco e WHERE e.celEnd = :celEnd"),
+    @NamedQuery(name = "Endereco.findByWtpEnd", query = "SELECT e FROM Endereco e WHERE e.wtpEnd = :wtpEnd")})
 public class Endereco implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,37 +47,34 @@ public class Endereco implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_end")
     private Integer idEnd;
+    @Size(max = 512)
+    @Column(name = "endereco")
+    private String endereco;
     @Size(max = 8)
     @Column(name = "cep_end")
     private String cepEnd;
-    @Size(max = 5)
-    @Column(name = "num_end")
-    private String numEnd;
-    @Size(max = 512)
-    @Column(name = "end_end")
-    private String endEnd;
-    @Size(max = 512)
-    @Column(name = "comp_end")
-    private String compEnd;
-    @Size(max = 512)
-    @Column(name = "bairro_ext")
-    private String bairroExt;
-    @Size(max = 512)
-    @Column(name = "cid_ext")
-    private String cidExt;
     @Size(max = 10)
-    @Column(name = "est_ext")
-    private String estExt;
+    @Column(name = "nm_end")
+    private String nmEnd;
+    @Size(max = 512)
+    @Column(name = "bairro_end")
+    private String bairroEnd;
+    @Size(max = 512)
+    @Column(name = "cid_end")
+    private String cidEnd;
+    @Size(max = 512)
+    @Column(name = "est_end")
+    private String estEnd;
+    @Size(max = 15)
+    @Column(name = "tel_com_end")
+    private String telComEnd;
     @Size(max = 11)
-    @Column(name = "tel_com_ext")
-    private String telComExt;
+    @Column(name = "cel_end")
+    private String celEnd;
     @Size(max = 11)
-    @Column(name = "cel_ext")
-    private String celExt;
-    @Size(max = 11)
-    @Column(name = "wsp_ext")
-    private String wspExt;
-    @OneToMany(mappedBy = "idEnd")
+    @Column(name = "wtp_end")
+    private String wtpEnd;
+    @OneToMany(mappedBy = "idEndExt")
     private List<CadExterno> cadExternoList;
 
     public Endereco() {
@@ -96,6 +92,14 @@ public class Endereco implements Serializable {
         this.idEnd = idEnd;
     }
 
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
     public String getCepEnd() {
         return cepEnd;
     }
@@ -104,76 +108,60 @@ public class Endereco implements Serializable {
         this.cepEnd = cepEnd;
     }
 
-    public String getNumEnd() {
-        return numEnd;
+    public String getNmEnd() {
+        return nmEnd;
     }
 
-    public void setNumEnd(String numEnd) {
-        this.numEnd = numEnd;
+    public void setNmEnd(String nmEnd) {
+        this.nmEnd = nmEnd;
     }
 
-    public String getEndEnd() {
-        return endEnd;
+    public String getBairroEnd() {
+        return bairroEnd;
     }
 
-    public void setEndEnd(String endEnd) {
-        this.endEnd = endEnd;
+    public void setBairroEnd(String bairroEnd) {
+        this.bairroEnd = bairroEnd;
     }
 
-    public String getCompEnd() {
-        return compEnd;
+    public String getCidEnd() {
+        return cidEnd;
     }
 
-    public void setCompEnd(String compEnd) {
-        this.compEnd = compEnd;
+    public void setCidEnd(String cidEnd) {
+        this.cidEnd = cidEnd;
     }
 
-    public String getBairroExt() {
-        return bairroExt;
+    public String getEstEnd() {
+        return estEnd;
     }
 
-    public void setBairroExt(String bairroExt) {
-        this.bairroExt = bairroExt;
+    public void setEstEnd(String estEnd) {
+        this.estEnd = estEnd;
     }
 
-    public String getCidExt() {
-        return cidExt;
+    public String getTelComEnd() {
+        return telComEnd;
     }
 
-    public void setCidExt(String cidExt) {
-        this.cidExt = cidExt;
+    public void setTelComEnd(String telComEnd) {
+        this.telComEnd = telComEnd;
     }
 
-    public String getEstExt() {
-        return estExt;
+    public String getCelEnd() {
+        return celEnd;
     }
 
-    public void setEstExt(String estExt) {
-        this.estExt = estExt;
+    public void setCelEnd(String celEnd) {
+        this.celEnd = celEnd;
     }
 
-    public String getTelComExt() {
-        return telComExt;
+    public String getWtpEnd() {
+        return wtpEnd;
     }
 
-    public void setTelComExt(String telComExt) {
-        this.telComExt = telComExt;
-    }
-
-    public String getCelExt() {
-        return celExt;
-    }
-
-    public void setCelExt(String celExt) {
-        this.celExt = celExt;
-    }
-
-    public String getWspExt() {
-        return wspExt;
-    }
-
-    public void setWspExt(String wspExt) {
-        this.wspExt = wspExt;
+    public void setWtpEnd(String wtpEnd) {
+        this.wtpEnd = wtpEnd;
     }
 
     @XmlTransient
