@@ -52,11 +52,12 @@ public class CadExternoControle implements Serializable {
         return cadExternoFacade.pagInstituicao();
     }
 
-    public Boolean salvarUsuarioExt(CadExterno cadExtObj, Endereco enderecoObj) {
+    public Boolean salvarUsuarioExt(CadExterno cadExtObj) {
         try {
+            
             cadExternoFacade.create(cadExtObj);
-            enderecoFacade.create(enderecoObj);
             return true;
+            
         } catch (Exception e) {
             System.out.println("ERRO no método salvarUsuarioExt-Controle");
             e.printStackTrace();

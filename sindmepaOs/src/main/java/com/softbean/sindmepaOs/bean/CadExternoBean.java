@@ -80,19 +80,6 @@ public class CadExternoBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
-            setCadExterno(null); //limpa variável
-            setCadExterno(new CadExterno());
-            getCadExterno().setCdTipPagExt(getPagamento());
-            //Dados pessoais
-            getCadExterno().setTipoPesExt('E'); //tipoPessoaExterna
-            getCadExterno().setRgExt(getRg());
-            getCadExterno().setCpfExt(getCpf());
-            getCadExterno().setCrmExt(getCrm());
-            getCadExterno().setEspExt(getEspec());
-            getCadExterno().setDataNascExt(getDtNascimento());
-            getCadExterno().setSexoExt(getSexo());
-            getCadExterno().setEmail(getEmail());
-
             //Informações de Endereço
             setEnderecoObj(null);
             setEnderecoObj(new Endereco());
@@ -107,13 +94,29 @@ public class CadExternoBean implements Serializable {
             getEnderecoObj().setTelComEnd(getTelComerc());
             getEnderecoObj().setCelEnd(getCelular());
             getEnderecoObj().setWtpEnd(getWhatsapp());
-            //getCadExterno().setIdEndExt(getEnderecoObj().getIdEnd()); //tem que ser o último
-            System.out.println(" ========= ANTES DO IF ========");
-            if (cadExternoControle.salvarUsuarioExt(getCadExterno(), getEnderecoObj())) {
-                System.out.println("== Entrou no If salvaPagDebMenCartCred() ==");
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: NUMERO_DA_OS Realizado com Sucesso."));
-                System.out.println("== SALVOU, FDP!");
-            } 
+
+            if (cadExternoControle.salvarEnderecoExt(getEnderecoObj())) {
+                setCadExterno(null); //limpa variável
+                setCadExterno(new CadExterno());
+                getCadExterno().setIdEndExt(getEnderecoObj());
+                getCadExterno().setCdTipPagExt(getPagamento());
+                //Dados pessoais
+                getCadExterno().setTipoPesExt('E'); //tipoPessoaExterna
+                getCadExterno().setRgExt(getRg());
+                getCadExterno().setCpfExt(getCpf());
+                getCadExterno().setCrmExt(getCrm());
+                getCadExterno().setEspExt(getEspec());
+                getCadExterno().setDataNascExt(getDtNascimento());
+                getCadExterno().setSexoExt(getSexo());
+                getCadExterno().setEmail(getEmail());
+                System.out.println(" ========= ANTES DO IF ========");
+                if (cadExternoControle.salvarUsuarioExt(getCadExterno())) {
+                    System.out.println("== Entrou no If salvaPagDebMenCartCred() ==");
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: NUMERO_DA_OS Realizado com Sucesso."));
+                    System.out.println("== SALVOU, FDP!");
+                }
+            }
+
         } catch (Exception e) {
             System.out.println("Erro o método salvaPagDebMenCartCred()");
             e.printStackTrace();
