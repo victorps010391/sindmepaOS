@@ -104,11 +104,13 @@
                     <h:outputText value="#{item.get('sit')}"/>
                 </p:column>
 
-                <p:column>
+                <p:column style="text-align: center;">
                     <f:facet name="header">
                         <h:outputText value="Notas"/>
                     </f:facet>
-                    <p:commandButton value="Visualizar" actionListener="#{cadOsBean.pesquisarNota(item.get('os'))}" update="gridSecundario" />
+                    <p:commandButton value="Visualizar" 
+                                     actionListener="#{cadOsBean.pesquisarNota(item.get('os'))}" 
+                                     update="@form"/>
                 </p:column>
 
                 <p:column style="text-align: center; width: 5%">
@@ -146,7 +148,7 @@
                                     update=":frmDlCadNota"/> 
                     </p:tieredMenu>
                 </p:column>
-            </p:dataTable>
+            </p:dataTable><br/>
 
             <p:dataTable id="gridSecundario" value="#{cadOsBean.gridSecundario}" var="nota" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
                 <f:facet name="header">
@@ -164,23 +166,23 @@
                     <f:facet name="header">
                         <h:outputText value="Nota"/>
                     </f:facet>
-                    <h:outputText value="#{item.get('historico')}"/>
+                    <h:outputText value="#{nota.get('historico')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="Data e Hora de Cadastro"/>
+                        <h:outputText value="Data e Hora de Registro"/>
                     </f:facet>
-                    <h:outputText value="#{item.get('data_hora_regi')}"/>
+                    <h:outputText value="#{nota.get('data_hora_regi')}"/>
                 </p:column>
 
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="Data e Hora da Ultima Atualização"/>
+                        <h:outputText value="Data e Hora da Última Atualização"/>
                     </f:facet>
-                    <h:outputText value="#{item.get('data_ultima_atualizacao')}"/>
+                    <h:outputText value="#{nota.get('data_ultima_atualizacao')}"/>
                 </p:column>
-
+s
                 <p:column style="text-align: center; width: 5%">
                     <f:facet name="header">
                         <h:outputText value="Ações"/>
@@ -189,10 +191,11 @@
                     <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
                         <p:menuitem value="Alterar" />
 
-                        <p:menuitem value="Excluir"/>
+                        <p:menuitem value="Excluir"/>                       
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable>
+
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
@@ -364,7 +367,7 @@
                     </h:panelGrid>
                 </p:panel><br/>
                 <p:panel>
-                    <h:panelGrid columns="2">                    
+                    <h:panelGrid columns="1">                    
                         <h:outputLabel value="Nota:"/>
                         <p:inputTextarea value="#{cadNotaBean.hisCad}"
                                          rows="6" 

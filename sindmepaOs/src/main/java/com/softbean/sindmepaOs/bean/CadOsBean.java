@@ -75,6 +75,7 @@ public class CadOsBean implements Serializable {
     public void pesquisar() {
         try {
             setGridPesquisa(osControle.gridPrincipal(getNrOs(), getCategOs(), getSetRespon(), getColabRespon(), getSitOs()));
+            setGridSecundario(null);
         } catch (Exception e) {
             System.out.println("Erro no método pesquisar (OS)");
             e.printStackTrace();
@@ -83,7 +84,7 @@ public class CadOsBean implements Serializable {
 
     public void pesquisarNota(Integer os) {
         try {
-            setGridSecundario(notaControle.gridSecundario(os));
+            setGridSecundario(notaControle.gridSecundario(os));           
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarNota " + e.getMessage());
             e.printStackTrace();
@@ -249,6 +250,7 @@ public class CadOsBean implements Serializable {
         setSetorResponsListaPesq(null);
         setSitCategListaPesq(null);
         setGridPesquisa(null);
+        setGridSecundario(null);
         setNrOs(null);
     }
 
