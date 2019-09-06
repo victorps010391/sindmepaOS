@@ -66,9 +66,15 @@ public class CadExternoBean implements Serializable {
     }
 
     public void salvarExterno() {
-        if (getPagamento() == 13) {
-            System.out.println("Entrou no If salvarExterno() ");
+        if (getPagamento() == 13) {//"13 - DÉBITO MENSAL NO CARTÃO DE CRÉDITO"
+            System.out.println("Entrou no If salvarExterno() - 13 ");
             salvaPagDebMenCartCred();
+        } else if (getPagamento() == 10){//"10 - DÉBITO EM CONTA CORRENTE"
+            System.out.println("Entrou no If salvarExterno() - 10 ");
+            salvaPagDebCCorrente();
+        } else if(getPagamento() == 11){//"11 - DÉBITO EM CONTRA-CHEQUE"
+            System.out.println("Entrou no If salvarExterno() - 11 ");
+            salvaPagDebCCheque();
         }
     }
 
@@ -124,11 +130,110 @@ public class CadExternoBean implements Serializable {
     }
 
     public void salvaPagDebCCorrente() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            //Informações de Endereço
+            setEnderecoObj(null);
+            setEnderecoObj(new Endereco());
+            getEnderecoObj().setEndereco(getEndereco());
+            //FALTA O COMPLEMENTO AQUI
+            getEnderecoObj().setCepEnd(getCep());
+            getEnderecoObj().setNmEnd(getNumeroEnd());
+            getEnderecoObj().setBairroEnd(getBairro());
+            getEnderecoObj().setCidEnd(getCidade());
+            getEnderecoObj().setEstEnd("PARA");
+            //INFORMAÇÕES DE CONTATO
+            getEnderecoObj().setTelComEnd(getTelComerc());
+            getEnderecoObj().setCelEnd(getCelular());
+            getEnderecoObj().setWtpEnd(getWhatsapp());
+
+            if (cadExternoControle.salvarEnderecoExt(getEnderecoObj())) {
+                setCadExterno(null); //limpa variável
+                setCadExterno(new CadExterno());
+                getCadExterno().setIdEndExt(getEnderecoObj());
+                getCadExterno().setCdTipPagExt(getPagamento());
+                //Dados pessoais
+                getCadExterno().setTipoPesExt('E'); //tipoPessoaExterna
+                getCadExterno().setRgExt(getRg());
+                getCadExterno().setCpfExt(getCpf());
+                getCadExterno().setCrmExt(getCrm());
+                getCadExterno().setEspExt(getEspec());
+                getCadExterno().setDataNascExt(getDtNascimento());
+                getCadExterno().setSexoExt(getSexo());
+                getCadExterno().setEmail(getEmail());
+                //DADOS BANCÁRIOS
+                getCadExterno().setAgExt(getAgencia());
+                getCadExterno().setBcExt(getBanco());
+                getCadExterno().setCcExt(getCc());
+                System.out.println(" ========= ANTES DO IF salvaPagDebCCorrente() ========");
+                if (cadExternoControle.salvarUsuarioExt(getCadExterno())) {
+                    System.out.println("== Entrou no If salvaPagDebCCorrente() ==");
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: NUMERO_DA_OS Realizado com Sucesso."));
+                    System.out.println("== SALVOU, FDP!");
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro o método salvaPagDebMenCartCred()");
+            e.printStackTrace();
+        }
     }
 
     public void salvaPagDebCCheque() {
-    }
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            //Informações de Endereço
+            setEnderecoObj(null);
+            setEnderecoObj(new Endereco());
+            getEnderecoObj().setEndereco(getEndereco());
+            //FALTA O COMPLEMENTO AQUI
+            getEnderecoObj().setCepEnd(getCep());
+            getEnderecoObj().setNmEnd(getNumeroEnd());
+            getEnderecoObj().setBairroEnd(getBairro());
+            getEnderecoObj().setCidEnd(getCidade());
+            getEnderecoObj().setEstEnd("PARA");
+            //INFORMAÇÕES DE CONTATO
+            getEnderecoObj().setTelComEnd(getTelComerc());
+            getEnderecoObj().setCelEnd(getCelular());
+            getEnderecoObj().setWtpEnd(getWhatsapp());
 
+            if (cadExternoControle.salvarEnderecoExt(getEnderecoObj())) {
+                setCadExterno(null); //limpa variável
+                setCadExterno(new CadExterno());
+                getCadExterno().setIdEndExt(getEnderecoObj());
+                getCadExterno().setCdTipPagExt(getPagamento());
+                //Dados pessoais
+                getCadExterno().setTipoPesExt('E'); //tipoPessoaExterna
+                getCadExterno().setRgExt(getRg());
+                getCadExterno().setCpfExt(getCpf());
+                getCadExterno().setCrmExt(getCrm());
+                getCadExterno().setEspExt(getEspec());
+                getCadExterno().setDataNascExt(getDtNascimento());
+                getCadExterno().setSexoExt(getSexo());
+                getCadExterno().setEmail(getEmail());
+                //DADOS BANCÁRIOS CONTRA-CHEQUE
+                getCadExterno().setNrMatExt(getNumMatricula());
+                getCadExterno().setCdInstExt(getInstituicao());
+                System.out.println(" ========= ANTES DO IF ========");
+                if (cadExternoControle.salvarUsuarioExt(getCadExterno())) {
+                    System.out.println("== Entrou no If salvaPagDebCCheque() ==");
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: NUMERO_DA_OS Realizado com Sucesso."));
+                    System.out.println("== SALVOU, FDP!");
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro o método salvaPagDebCCheque()");
+            e.printStackTrace();
+        }
+    }
+    
+    public void salvaOsExterna(){
+        
+    }
+    
     public void validador() {
         setAbriOsExt("false");
         setSindicaliza("false");
