@@ -45,9 +45,9 @@
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisar()}" update="gridPrincipal"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
-                    <p:commandButton value="Novo Protocolo" actionListener="#{cadOsBean.novaOs()}" onclick="PF('dlCadOs').show()" update="@form :frmDlCadOs"/>  
+                    <p:commandButton value="Novo Protocolo" onclick="PF('dlCadOs').show()" update="@form :frmDlCadOs"/>  
                     <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
-                    <p:commandButton value="Enviar" actionListener="#{cadOsBean.enviarEmail()}" update="@form"/>                    
+                    <!--                    <p:commandButton value="Enviar" actionListener="# {cadOsBean.enviarEmail()}" update="@form"/>                    -->
                 </f:facet>
             </p:panel>
 
@@ -141,6 +141,7 @@
                                     disabled="#{'02'.equals(item.get('cd_sit'))}"/>
 
                         <p:menuitem value="Cancelar"
+
                                     disabled="#{'02'.equals(item.get('cd_sit'))}"/>
 
                         <p:menuitem value="Adicionar Nota"
@@ -184,36 +185,43 @@
                     <h:outputText value="#{nota.get('data_ultima_atualizacao')}"/>
                 </p:column>
 
-                <p:column style="text-align: center; width: 5%">
+                <p:column>
                     <f:facet name="header">
-                        <h:outputText value="Ações"/>
-                    </f:facet>              
-                    <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
-                    <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
-
-                        <p:menuitem value="Alterar" actionListener="#{cadNotaBean.buscarNota(nota.get('os'), nota.get('serial'))}"
-                                    onclick="PF('dlAltNota').show()" update="@form :frmDlAltNota"/>
-
-                        <p:menuitem value="Excluir" actionListener="#{cadNotaBean.buscarNota(nota.get('os'), nota.get('serial'))}"
-                                    onclick="PF('dlExcNota').show()" update="@form :frmDlExcNota"/>                       
-                    </p:tieredMenu>
+                        <h:outputText value="Situação"/>
+                    </f:facet>
+                    <h:outputText value="#{nota.get('situacao_nota')}"/>
                 </p:column>
+
+                <!--                <p:column style="text-align: center; width: 5%">
+                                    <f:facet name="header">
+                                        <h:outputText value="Ações"/>
+                                    </f:facet>              
+                                    <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
+                                    <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
+                
+                                        <p:menuitem value="Alterar" actionListener="# {cadNotaBean.buscarNota(nota.get('os'), nota.get('serial'))}"
+                                                    onclick="PF('dlAltNota').show()" update="@form :frmDlAltNota"/>
+                
+                                        <p:menuitem value="Excluir" actionListener="# {cadNotaBean.buscarNota(nota.get('os'), nota.get('serial'))}"
+                                                    onclick="PF('dlExcNota').show()" update="@form :frmDlExcNota"/>                       
+                                    </p:tieredMenu>
+                                </p:column>-->
             </p:dataTable>           
         </h:form>
 
-        <p:dialog widgetVar="dlExcNota" header="Confirmação">
-            <h:form id="frmDlExcNota" acceptcharset="ISO-8859-1">
-                <p:panel>
-                    <h:panelGrid columns="1" > 
-                        <h:outputLabel value="Deseja Realmente Excluir a Nota? " style="font-weight:bold ; font-size: small;"/><br/>                                            
-                    </h:panelGrid>
-                    <f:facet name="footer">
-                        <p:commandButton actionListener="#{cadNotaBean.excluir()}" value="Sim" update="@form :frmCadOs" icon="ui-icon ui-icon-check" />
-                        <p:commandButton onclick="PF('dlExcNota').hide()" type="button" value="Não" update="@form :frmCadOs" icon="ui-icon ui-icon-closethick"/>
-                    </f:facet>
-                </p:panel>
-            </h:form>
-        </p:dialog>
+        <!--        <p:dialog widgetVar="dlExcNota" header="Confirmação">
+                    <h:form id="frmDlExcNota" acceptcharset="ISO-8859-1">
+                        <p:panel>
+                            <h:panelGrid columns="1" > 
+                                <h:outputLabel value="Deseja Realmente Excluir a Nota? " style="font-weight:bold ; font-size: small;"/><br/>                                            
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton actionListener="# {cadNotaBean.excluir()}" value="Sim" update="@form :frmCadOs" icon="ui-icon ui-icon-check" />
+                                <p:commandButton onclick="PF('dlExcNota').hide()" type="button" value="Não" update="@form :frmCadOs" icon="ui-icon ui-icon-closethick"/>
+                            </f:facet>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>-->
 
         <p:dialog widgetVar="dlConfirm" header="Confirmação">
             <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
@@ -235,9 +243,6 @@
             <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="2" style="margin: 0 auto;">
-
-                        <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
-                        <h:outputLabel value="#{cadOsBean.nrOsCad}" style="font-weight:bold ; font-size: medium"/>
 
                         <h:outputLabel value="Prioridade: " style="font-weight:bold ; font-size: medium;"/>
                         <h:outputLabel id="priorCad" value="#{cadOsBean.priorCad}" style="font-weight:bold ; font-size: medium;"/>
@@ -379,27 +384,27 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlAltNota" header="Alterar Nota">
-            <h:form id="frmDlAltNota" acceptcharset="ISO-8859-1">
-                <p:panel>
-                    <h:panelGrid columns="2">
-                        <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
-                        <h:outputLabel value="#{cadNotaBean.cadNotaObj.cadNotaPK.nrOsNota}" style="font-weight:bold ; font-size: medium"/>
-                    </h:panelGrid>
-                </p:panel><br/>
-                <p:panel>
-                    <h:panelGrid columns="1">                    
-                        <h:outputLabel value="Nota:" style="font-weight:bold ; font-size: small;"/>
-                        <p:inputTextarea value="#{cadNotaBean.cadNotaObj.histNota}" rows="6" cols="33" counter="display" 
-                                         maxlength="512" counterTemplate="{0} Caracteres Restantes." autoResize="false" /><br/>
-                        <h:outputText id="display" />                       
-                    </h:panelGrid>
-                    <f:facet name="footer">
-                        <p:commandButton value="Salvar" actionListener="#{cadNotaBean.alterar()}" update="@form :frmCadOs" />
-                        <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltNota').hide()" update="@form :frmCadOs" />
-                    </f:facet>
-                </p:panel>
-            </h:form>
-        </p:dialog>
+        <!--        <p:dialog widgetVar="dlAltNota" header="Alterar Nota">
+                    <h:form id="frmDlAltNota" acceptcharset="ISO-8859-1">
+                        <p:panel>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel value="# {cadNotaBean.cadNotaObj.cadNotaPK.nrOsNota}" style="font-weight:bold ; font-size: medium"/>
+                            </h:panelGrid>
+                        </p:panel><br/>
+                        <p:panel>
+                            <h:panelGrid columns="1">                    
+                                <h:outputLabel value="Nota:" style="font-weight:bold ; font-size: small;"/>
+                                <p:inputTextarea value="# {cadNotaBean.cadNotaObj.histNota}" rows="6" cols="33" counter="display" 
+                                                 maxlength="512" counterTemplate="{0} Caracteres Restantes." autoResize="false" /><br/>
+                                <h:outputText id="display" />                       
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Salvar" actionListener="# {cadNotaBean.alterar()}" update="@form :frmCadOs" />
+                                <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltNota').hide()" update="@form :frmCadOs" />
+                            </f:facet>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>-->
     </ui:define>
 </ui:composition>

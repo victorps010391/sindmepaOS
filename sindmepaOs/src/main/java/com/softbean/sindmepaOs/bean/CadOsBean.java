@@ -117,7 +117,7 @@ public class CadOsBean implements Serializable {
             getObCadOs().setFuncResponOs(999);
             getObCadOs().setFuncUltAtuOs(999);
             getObCadOs().setHistOs(getHist());
-            getObCadOs().setNrOs(getNrOsCad());
+            getObCadOs().setNrOs(osControle.retornaNrOs());
             getObCadOs().setObsOs(getObs());
             setCadSetorObj(null)/*limpar variavel*/;
             setCadSetorObj(osControle.buscarSetor(getSetResponCad()));
@@ -127,12 +127,12 @@ public class CadOsBean implements Serializable {
             getObCadOs().setTipEnvioOs("I");
 
             if (osControle.salvarOsControle(getObCadOs())) {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro do Protocolo: " + getNrOsCad() + " Realizado com Sucesso."));
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
                 context.execute("PF('dlCadOs').hide()");
                 limparCadastro();
                 setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(), getColabRespon(), getObCadOs().getSitOs()));
             } else {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Cadastrar Protocolo: " + getNrOsCad() + "."));
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Cadastrar Protocolo: " + getObCadOs().getNrOs() + "."));
                 limparCadastro();
             }
         } catch (Exception e) {
@@ -216,15 +216,15 @@ public class CadOsBean implements Serializable {
         }
     }
 
-    public void novaOs() {
-        try {
-            limparCadastro();
-            setNrOsCad(osControle.retornaNrOs());
-        } catch (Exception e) {
-            System.err.println("Erro no metodo novaOs " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+//    public void novaOs() {
+//        try {
+//            limparCadastro();
+//            setNrOsCad(osControle.retornaNrOs());
+//        } catch (Exception e) {
+//            System.err.println("Erro no metodo novaOs " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
 
     public void retornaPrioridade() {
         try {

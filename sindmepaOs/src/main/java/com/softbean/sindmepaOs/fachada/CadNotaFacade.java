@@ -44,7 +44,8 @@ public class CadNotaFacade extends AbstractFacade<CadNota> {
         sql.append("        ,TO_CHAR(dt_ult_atu_nota, 'DD/MM/YYYY')||' '||TO_CHAR(dt_ult_atu_nota, 'HH24:MI:SS') as data_ultima_atualizacao ");
         sql.append("        ,serial_nota as serial ");
         sql.append("        ,cast(nr_os_nota as character varying)||' / '||cast(serial_nota as character varying) as os_nota ");
-        sql.append(" from cad_nota where invalida_nota is null ");
+        sql.append("        ,case when invalida_nota = 'S' then 'CANCELADA' else 'ATIVA' end as situacao_nota ");
+        sql.append(" from cad_nota ");
         sql.append(" and nr_os_nota = ").append(nrOs);
         sql.append(" order by dt_ult_atu_nota desc ");
         try {
@@ -60,6 +61,7 @@ public class CadNotaFacade extends AbstractFacade<CadNota> {
                 map.put("data_ultima_atualizacao", array[3]);
                 map.put("serial", array[4]);
                 map.put("os_nota", array[5]);
+                map.put("situacao_nota", array[6]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {
