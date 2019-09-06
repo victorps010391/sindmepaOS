@@ -6,8 +6,10 @@
 package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.entidade.CadExterno;
+import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.Endereco;
 import com.softbean.sindmepaOs.fachada.CadExternoFacade;
+import com.softbean.sindmepaOs.fachada.CadOsFacade;
 import com.softbean.sindmepaOs.fachada.EnderecoFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -32,6 +34,9 @@ public class CadExternoControle implements Serializable {
 
     @Inject
     EnderecoFacade enderecoFacade;
+    
+    @Inject
+    CadOsFacade cadOsFacade;
 
     public CadExternoControle() {
     }
@@ -75,5 +80,17 @@ public class CadExternoControle implements Serializable {
             return false;
         }
     }
+    
+    public Boolean salvarOsExt(CadOs cadOs) {
+        try {
+            cadOsFacade.create(cadOs);
+            return true;
+        } catch (Exception e) {
+            System.out.println("ERRO no método salvarOsExt-ControleUsuario Ext");
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 
 }

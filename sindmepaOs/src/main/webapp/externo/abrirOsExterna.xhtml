@@ -109,13 +109,13 @@
 
 
                                                 <h:outputText value="Agência: " />
-                                                <p:inputText/>
+                                                <p:inputText value="#{cadExternoBean.agencia}"/>
 
                                                 <h:outputText value="Banco: " />
-                                                <p:inputText/>
+                                                <p:inputText value="#{cadExternoBean.banco}"/>
 
                                                 <h:outputText value="Conta Corrente: " />
-                                                <p:inputText/>
+                                                <p:inputText value="#{cadExternoBean.cc}"/>
                                             </h:panelGrid>
                                         </p:panel>
 
@@ -128,7 +128,7 @@
                                                               Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
                                                 </h:selectBooleanCheckbox>
                                                 <h:outputText value="Número de matrícula: " />
-                                                <p:inputText/>
+                                                <p:inputText value="#{cadExternoBean.numMatricula}"/>
                                                 <h:outputLabel value="Instituição a ser debitada: "/>
                                                 <p:selectOneMenu id="comboInst" value="#{cadExternoBean.instituicao}">                    
                                                 <f:selectItem itemLabel="........................................" />    
