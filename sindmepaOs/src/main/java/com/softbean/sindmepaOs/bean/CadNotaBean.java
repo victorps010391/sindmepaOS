@@ -10,8 +10,6 @@ import com.softbean.sindmepaOs.entidade.CadNota;
 import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -35,12 +33,63 @@ public class CadNotaBean implements Serializable {
 
     @Inject
     CadNotaControle notaControle;
+    @Inject
+    CadOsBean osBean;
 
     CadNota cadNotaObj;
     CadNotaPK cadNotaObjPK;
 
     String hisCad;
     Integer osCad;
+
+    public void buscarNota(Integer os, Integer serial) {
+        try {
+            setCadNotaObj(null);
+            setCadNotaObj(notaControle.buscar(os, serial));
+        } catch (Exception e) {
+            System.out.println("Erro no método buscarNota " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void alterar() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+
+        try {
+            getCadNotaObj().setDtUltAtuNota(new Date());
+            getCadNotaObj().setFuncUltAtuNota(111);
+            if (notaControle.alterarNotaControle(getCadNotaObj())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Nota Alterada com Sucesso."));
+                context.execute("PF('dlAltNota').hide()");
+                osBean.pesquisarNota(getCadNotaObj().getCadNotaPK().getNrOsNota());
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Alterar Nota."));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no Método alterar " + e.getMessage());
+        }
+    }
+
+    public void excluir() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+
+        try {
+            getCadNotaObj().setDtUltAtuNota(new Date());
+            getCadNotaObj().setFuncUltAtuNota(111);
+            getCadNotaObj().setInvalidaNota("S");
+            if (notaControle.excluirNotaControle(getCadNotaObj())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Nota Excluida com Sucesso."));
+                context.execute("PF('dlExcNota').hide()");
+                osBean.pesquisarNota(getCadNotaObj().getCadNotaPK().getNrOsNota());
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Excluir Nota."));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no Método excluir " + e.getMessage());
+        }
+    }
 
     public void buscaNrOS(Integer cod) {
         setOsCad(cod);
@@ -65,6 +114,7 @@ public class CadNotaBean implements Serializable {
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
                     context.execute("PF('dlCadNota').hide()");
+                    osBean.pesquisarNota(getOsCad());
                     limparCadastro();
                 } else {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));

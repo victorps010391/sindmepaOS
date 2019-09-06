@@ -9,6 +9,7 @@ import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.CadSetor;
+import com.softbean.sindmepaOs.util.MailUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -38,6 +39,8 @@ public class CadOsBean implements Serializable {
     CadOsControle osControle;
     @Inject
     CadNotaControle notaControle;
+    @Inject
+    MailUtil mailUtil;
 
     String priorAlt;
     Integer setAlt;
@@ -71,6 +74,15 @@ public class CadOsBean implements Serializable {
     List<Map<String, Object>> setorResponsListaPesq;
     List<Map<String, Object>> colabResponsPesq;
     List<Map<String, Object>> sitOsListaPesq;
+    
+    public void enviarEmail(){
+        try {
+            mailUtil.enviar();
+            System.out.println("Enviado com sucesso");
+        } catch (Exception e) {
+            System.out.println("erro ao enviar");
+        }
+    }
 
     public void pesquisar() {
         try {
@@ -84,7 +96,7 @@ public class CadOsBean implements Serializable {
 
     public void pesquisarNota(Integer os) {
         try {
-            setGridSecundario(notaControle.gridSecundario(os));           
+            setGridSecundario(notaControle.gridSecundario(os));
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarNota " + e.getMessage());
             e.printStackTrace();

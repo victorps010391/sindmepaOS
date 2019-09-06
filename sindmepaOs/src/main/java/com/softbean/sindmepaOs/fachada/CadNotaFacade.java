@@ -42,9 +42,11 @@ public class CadNotaFacade extends AbstractFacade<CadNota> {
         sql.append("        ,hist_nota as historico ");
         sql.append("        ,TO_CHAR(dt_regi_nota, 'DD/MM/YYYY')||' '||TO_CHAR(dt_regi_nota, 'HH24:MI:SS') as data_hora_regi ");
         sql.append("        ,TO_CHAR(dt_ult_atu_nota, 'DD/MM/YYYY')||' '||TO_CHAR(dt_ult_atu_nota, 'HH24:MI:SS') as data_ultima_atualizacao ");
-        sql.append(" from cad_nota ");
-        sql.append(" where nr_os_nota = ").append(nrOs);
-        sql.append(" order by dt_regi_nota desc ");
+        sql.append("        ,serial_nota as serial ");
+        sql.append("        ,cast(nr_os_nota as character varying)||' / '||cast(serial_nota as character varying) as os_nota ");
+        sql.append(" from cad_nota where invalida_nota is null ");
+        sql.append(" and nr_os_nota = ").append(nrOs);
+        sql.append(" order by dt_ult_atu_nota desc ");
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();
@@ -56,6 +58,8 @@ public class CadNotaFacade extends AbstractFacade<CadNota> {
                 map.put("historico", array[1]);
                 map.put("data_hora_regi", array[2]);
                 map.put("data_ultima_atualizacao", array[3]);
+                map.put("serial", array[4]);
+                map.put("os_nota", array[5]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {
@@ -80,4 +84,21 @@ public class CadNotaFacade extends AbstractFacade<CadNota> {
         }
     }
 
+    public CadNota buscar(Integer os, Integer serial) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT c FROM CadNota c WHERE c.cadNotaPK.nrOsNota = :nrOsNota ");
+        sql.append(" and c.cadNotaPK.serialNota = :serialNota ");
+
+        try {
+            Query q = em.createQuery(sql.toString());
+            q.setParameter("nrOsNota", os);
+            q.setParameter("serialNota", serial);
+            return (CadNota) q.getSingleResult();
+            
+        } catch (Exception e) {
+            System.err.println("erro no metodo buscar (nota) " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }        
 }

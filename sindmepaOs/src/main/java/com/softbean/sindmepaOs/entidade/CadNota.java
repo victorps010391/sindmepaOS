@@ -36,6 +36,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "CadNota.findByFuncUltAtuNota", query = "SELECT c FROM CadNota c WHERE c.funcUltAtuNota = :funcUltAtuNota")})
 public class CadNota implements Serializable {
 
+    @Size(max = 1)
+    @Column(name = "invalida_nota")
+    private String invalidaNota;
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected CadNotaPK cadNotaPK;
@@ -135,6 +139,14 @@ public class CadNota implements Serializable {
     @Override
     public String toString() {
         return "com.softbean.sindmepaOs.entidade.CadNota[ cadNotaPK=" + cadNotaPK + " ]";
+    }
+
+    public String getInvalidaNota() {
+        return invalidaNota;
+    }
+
+    public void setInvalidaNota(String invalidaNota) {
+        this.invalidaNota = invalidaNota;
     }
     
 }

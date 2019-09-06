@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+import javax.persistence.Query;
 
 /**
  *
@@ -46,11 +47,35 @@ public class CadNotaControle implements Serializable {
         }
     }
 
+    public Boolean alterarNotaControle(CadNota obj) {
+        try {
+            notaFacade.edit(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método alterarNotaControle " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Boolean excluirNotaControle(CadNota obj) {
+        try {
+            notaFacade.edit(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método excluirNotaControle " + e.getMessage());
+            return false;
+        }
+    }
+
+    public CadNota buscar(Integer os, Integer serial) {
+        return notaFacade.buscar(os, serial);
+    }
+
     public Integer retornaSeqNota(Integer os) {
         return notaFacade.retornaSeqNota(os);
     }
-    
-    public List<Map<String, Object>> gridSecundario(Integer nrOs){
+
+    public List<Map<String, Object>> gridSecundario(Integer nrOs) {
         return notaFacade.gridSecundario(nrOs);
     }
 
