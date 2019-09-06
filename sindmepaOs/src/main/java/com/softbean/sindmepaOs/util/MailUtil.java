@@ -28,7 +28,7 @@ public class MailUtil implements Serializable {
     public void enviar(){
         MultiPartEmail email = new MultiPartEmail(); 
         email.setHostName("smtp.gmail.com");
-        email.setSslSmtpPort("465");
+        email.setSslSmtpPort("587");
         email.setStartTLSRequired(true);
         email.setStartTLSEnabled(true);
         email.setSSLOnConnect(true);
