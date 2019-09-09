@@ -11,26 +11,29 @@
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                 <title>SINDMEPA - Gerenciamento de Protocolos</title>
-            </f:facet>
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" />
+            </f:facet>            
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.css" />
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.min.css" />
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.css" />
             <link type="text/css" rel="stylesheet" href="theme/jjquery-ui.theme.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" />            
         </h:head>
         <h:body>
-            <!--            <h:form enctype="multipart/form-data">-->
+            <!--            <h:form enctype="multipart/form-data">-->                       
             <p:layout fullPage="true">
 
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage name="/images/loading.gif" />
+                </p:dialog>
+
                 <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true">
-
                 </p:layoutUnit>
-
                 <!--                <p:layoutUnit position="south" size="40" closable="true" collapsible="true">
                                     
                                 </p:layoutUnit>-->
-
                 <p:layoutUnit position="west" header="Esconder" collapsible="true" resizable="true">
                     <ui:insert name="menu">
                         <ui:include src="/menu.xhtml"></ui:include>
