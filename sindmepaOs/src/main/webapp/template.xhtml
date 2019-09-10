@@ -17,17 +17,27 @@
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.css" />
             <link type="text/css" rel="stylesheet" href="theme/jjquery-ui.theme.min.css" />
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" />            
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" /> 
+            <link type="text/css" rel="stylesheet" href="theme/estilos.css" /> 
         </h:head>
         <h:body>
-            <!--            <h:form enctype="multipart/form-data">-->                       
-            <p:layout fullPage="true">
+            <div id="messages" style="display: block;">
+                <p:ajaxStatus style="display:none;margin-bottom:2em;height:24px;">
+                    <f:facet name="start">
+                        <h:outputLabel value="Processando..."/>
+                        <p:graphicImage url="/images/loading.gif" />
+                    </f:facet>
+                </p:ajaxStatus>
 
                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                    <p:graphicImage name="/images/loading.gif" />
+                    <h:outputLabel value="Processando..." />
+                    <p:graphicImage url="/images/loading.gif" />
                 </p:dialog>
+            </div>            
+            <!--            <h:form enctype="multipart/form-data">-->                       
+            <p:layout fullPage="true">
 
                 <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true">
                 </p:layoutUnit>
@@ -40,8 +50,8 @@
                     </ui:insert>                                      
                 </p:layoutUnit>
 
-                <p:layoutUnit position="center">
-                    <ui:insert name="centro"></ui:insert>
+                <p:layoutUnit position="center">                    
+                    <ui:insert name="centro"></ui:insert>                    
                 </p:layoutUnit>
 
             </p:layout>
