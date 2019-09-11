@@ -13,6 +13,7 @@ import com.softbean.sindmepaOs.util.MailUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -74,15 +75,6 @@ public class CadOsBean implements Serializable {
     List<Map<String, Object>> setorResponsListaPesq;
     List<Map<String, Object>> colabResponsPesq;
     List<Map<String, Object>> sitOsListaPesq;
-    
-    public void enviarEmail(){
-        try {
-            mailUtil.enviar();
-            System.out.println("Enviado com sucesso");
-        } catch (Exception e) {
-            System.out.println("erro ao enviar");
-        }
-    }
 
     public void pesquisar() {
         try {
@@ -175,6 +167,8 @@ public class CadOsBean implements Serializable {
         try {
             setCadSetorObj(osControle.buscarSetor(getSetAlt()));
             getObCadOs().setSetorResponOs(getCadSetorObj());
+            getObCadOs().setDtUltAtuOs(new Date());
+            getObCadOs().setFuncUltAtuOs(111);
             if (osControle.alterarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Alteração do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
                 context.execute("PF('dlAltOs').hide()");
@@ -183,6 +177,29 @@ public class CadOsBean implements Serializable {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Alterar Protocolo: " + getObCadOs().getNrOs() + "."));
             }
         } catch (Exception e) {
+            System.out.println("Erro no método alterar (OS) " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void cancelar() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            getObCadOs().setDtUltAtuOs(new Date());
+            getObCadOs().setFuncUltAtuOs(111);
+            getObCadOs().setSitOs("06");
+            getObCadOs().setDtFechaOs(new Date());
+            if (osControle.alterarOsControle(getObCadOs())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Cancelado com Sucesso."));
+                context.execute("PF('dlCancelOs').hide()");
+                setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(), getColabRespon(), getObCadOs().getSitOs()));
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Cancelar Protocolo: " + getObCadOs().getNrOs() + "."));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método cancelar (OS) " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -203,10 +220,15 @@ public class CadOsBean implements Serializable {
             getObCadOs().setDtUltAtuOs(new Date());
             getObCadOs().setFuncUltAtuOs(999);
             getObCadOs().setSitOs("02");
+
             if (osControle.alterarOsControle(getObCadOs())) {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Encaminhado Para Atendimento com Sucesso."));
-                context.execute("PF('dlConfirm').hide()");
-                setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getObCadOs().getSetorResponOs().getCdSetor(), getColabRespon(), getObCadOs().getSitOs()));
+                if (disparaEmailabertura(getObCadOs())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Encaminhado Para Atendimento com Sucesso."));
+                    context.execute("PF('dlConfirm').hide()");
+                    setGridPesquisa(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getObCadOs().getSetorResponOs().getCdSetor(), getColabRespon(), getObCadOs().getSitOs()));
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Protocolo: " + getObCadOs().getNrOs() + " Para Atendimento."));
+                }
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Protocolo: " + getObCadOs().getNrOs() + " Para Atendimento."));
             }
@@ -215,16 +237,15 @@ public class CadOsBean implements Serializable {
             e.printStackTrace();
         }
     }
-
-//    public void novaOs() {
-//        try {
-//            limparCadastro();
-//            setNrOsCad(osControle.retornaNrOs());
-//        } catch (Exception e) {
-//            System.err.println("Erro no metodo novaOs " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
+    //    public void novaOs() {
+    //        try {
+    //            limparCadastro();
+    //            setNrOsCad(osControle.retornaNrOs());
+    //        } catch (Exception e) {
+    //            System.err.println("Erro no metodo novaOs " + e.getMessage());
+    //            e.printStackTrace();
+    //        }
+    //    }
 
     public void retornaPrioridade() {
         try {
@@ -241,6 +262,47 @@ public class CadOsBean implements Serializable {
         } catch (Exception e) {
             System.err.println("Erro no metodo retornaPrioridadeAlt " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public Boolean disparaEmailabertura(CadOs obj) {
+        try {
+            String assunto = "Abertura de Protocolo";
+            String destinatario = "victorps91@gmail.com";
+
+            SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
+
+            StringBuilder corpoEmailAbertura = new StringBuilder();
+            corpoEmailAbertura.append("<p style='font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;'>Senhor(a),<br />");
+            corpoEmailAbertura.append("Informamos que seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />");
+            corpoEmailAbertura.append("<strong>Número do protocolo: </strong>");
+            corpoEmailAbertura.append(obj.getNrOs());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Solicitação: </strong>");
+            corpoEmailAbertura.append(obj.getHistOs());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Data de Abertura: </strong>");
+            corpoEmailAbertura.append(formate.format(obj.getDtAbertOs()));
+            corpoEmailAbertura.append("<br />");
+//            corpoEmailAbertura.append("<strong>Descrição da Ocorrência: </strong>");
+//            corpoEmailAbertura.append(registroOcorrencia.getTroDsOcor());
+//            corpoEmailAbertura.append("<br />");
+//            corpoEmailAbertura.append("<strong>Local: </strong>");
+//            corpoEmailAbertura.append(orgao);
+            corpoEmailAbertura.append("<br /><br />");
+            corpoEmailAbertura.append("<i>Email Enviado automaticamente pelo sistema ");
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Data: ");
+            corpoEmailAbertura.append(formate.format(new Date()));
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Softbean ©");
+            corpoEmailAbertura.append("</i></p>");
+
+            mailUtil.enviar(assunto, destinatario, corpoEmailAbertura.toString());
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

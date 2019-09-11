@@ -46,7 +46,7 @@ public class CadNotaFacade extends AbstractFacade<CadNota> {
         sql.append("        ,cast(nr_os_nota as character varying)||' / '||cast(serial_nota as character varying) as os_nota ");
         sql.append("        ,case when invalida_nota = 'S' then 'CANCELADA' else 'ATIVA' end as situacao_nota ");
         sql.append(" from cad_nota ");
-        sql.append(" and nr_os_nota = ").append(nrOs);
+        sql.append(" where nr_os_nota = ").append(nrOs);
         sql.append(" order by dt_ult_atu_nota desc ");
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
