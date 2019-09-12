@@ -11,7 +11,6 @@ import com.softbean.sindmepaOs.entidade.Endereco;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +110,7 @@ public class CadExternoBean implements Serializable {
                 getCadExterno().setRgExt(getRg());
                 getCadExterno().setCpfExt(getCpf());
                 getCadExterno().setCrmExt(getCrm());
-                getCadExterno().setEspExt(getEspec());
+                getCadExterno().setEspExt(getEspec());  
                 getCadExterno().setDataNascExt(getDtNascimento());
                 getCadExterno().setSexoExt(getSexo());
                 getCadExterno().setEmail(getEmail());
