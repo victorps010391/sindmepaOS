@@ -6,7 +6,10 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadExternoControle;
+import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.entidade.CadExterno;
+import com.softbean.sindmepaOs.entidade.CadOs;
+import com.softbean.sindmepaOs.entidade.CadSetor;
 import com.softbean.sindmepaOs.entidade.Endereco;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -17,8 +20,8 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -34,6 +37,9 @@ public class CadExternoBean implements Serializable {
     @Inject
     CadExternoControle cadExternoControle;
 
+    @Inject
+    CadOsControle cadOsControle;
+
     List<Map<String, Object>> comboSetor;
     List<Map<String, Object>> comboCategoria;
     List<Map<String, Object>> comboTipoPag;
@@ -42,6 +48,8 @@ public class CadExternoBean implements Serializable {
     //Objeto
     CadExterno cadExterno;
     Endereco enderecoObj;
+    CadOs cadOs;
+    CadSetor objSetor;
 
     //VARIÁVEIS DE ARMAZENAMENTO PESSOAL
     Integer categoria, setor, pagamento, instituicao, idEndereco;
@@ -68,10 +76,10 @@ public class CadExternoBean implements Serializable {
         if (getPagamento() == 13) {//"13 - DÉBITO MENSAL NO CARTÃO DE CRÉDITO"
             System.out.println("Entrou no If salvarExterno() - 13 ");
             salvaPagDebMenCartCred();
-        } else if (getPagamento() == 10){//"10 - DÉBITO EM CONTA CORRENTE"
+        } else if (getPagamento() == 10) {//"10 - DÉBITO EM CONTA CORRENTE"
             System.out.println("Entrou no If salvarExterno() - 10 ");
             salvaPagDebCCorrente();
-        } else if(getPagamento() == 11){//"11 - DÉBITO EM CONTRA-CHEQUE"
+        } else if (getPagamento() == 11) {//"11 - DÉBITO EM CONTRA-CHEQUE"
             System.out.println("Entrou no If salvarExterno() - 11 ");
             salvaPagDebCCheque();
         }
@@ -110,16 +118,38 @@ public class CadExternoBean implements Serializable {
                 getCadExterno().setRgExt(getRg());
                 getCadExterno().setCpfExt(getCpf());
                 getCadExterno().setCrmExt(getCrm());
-                getCadExterno().setEspExt(getEspec());  
+                getCadExterno().setEspExt(getEspec());
                 getCadExterno().setDataNascExt(getDtNascimento());
                 getCadExterno().setSexoExt(getSexo());
                 getCadExterno().setEmail(getEmail());
                 System.out.println(" ========= ANTES DO IF ========");
                 if (cadExternoControle.salvarUsuarioExt(getCadExterno())) {
                     System.out.println("== Entrou no If salvaPagDebMenCartCred() ==");
-                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: NUMERO_DA_OS Realizado com Sucesso."));
-                    System.out.println("== SALVOU, FDP!");
+                    setCadOs(null)/*limpar variavel*/;
+                    setCadOs(new CadOs());
+                    getCadOs().setNrOs(cadOsControle.retornaNrOs());
+                    getCadOs().setCategOs(getCategoria());
+                    setObjSetor(null);
+                    setObjSetor(cadOsControle.buscarSetor(0));
+                    getCadOs().setSetorAbertOs(getObjSetor());
+                    getCadOs().setSetorResponOs(getObjSetor());
+                    getCadOs().setDtAbertOs(new Date());
+                    getCadOs().setDtFechaOs(null);
+                    getCadOs().setDtUltAtuOs(new Date());
+                    getCadOs().setFuncAbertOs(999);
+                    getCadOs().setFuncResponOs(999);
+                    getCadOs().setFuncUltAtuOs(999);
+                    getCadOs().setHistOs("Protocolo enviado via atendimento externo");
+                    getCadOs().setObsOs(null);
+                    getCadOs().setSitOs("01");
+                    getCadOs().setTipEnvioOs("E");
+                    System.out.println(" ========= ANTES DO IF getCadOs() ========");
+                    if(cadExternoControle.salvarOsExt(getCadOs())){
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: " + getCadOs().getNrOs() + " Realizado com Sucesso."));
+                        System.out.println("== SALVOU, FDP!");
+                    }
                 }
+
             }
 
         } catch (Exception e) {
@@ -218,6 +248,9 @@ public class CadExternoBean implements Serializable {
                 System.out.println(" ========= ANTES DO IF ========");
                 if (cadExternoControle.salvarUsuarioExt(getCadExterno())) {
                     System.out.println("== Entrou no If salvaPagDebCCheque() ==");
+
+                    getCadOs().setNrOs(cadOsControle.retornaNrOs());
+                    getCadOs().setCategOs(getCategoria());
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: NUMERO_DA_OS Realizado com Sucesso."));
                     System.out.println("== SALVOU, FDP!");
                 }
@@ -228,11 +261,11 @@ public class CadExternoBean implements Serializable {
             e.printStackTrace();
         }
     }
-    
-    public void salvaOsExterna(){
-        
+
+    public void salvaOsExterna() {
+
     }
-    
+
     public void validador() {
         setAbriOsExt("false");
         setSindicaliza("false");
@@ -653,4 +686,27 @@ public class CadExternoBean implements Serializable {
         this.whatsapp = whatsapp;
     }
 
+    public CadOsControle getCadOsControle() {
+        return cadOsControle;
+    }
+
+    public void setCadOsControle(CadOsControle cadOsControle) {
+        this.cadOsControle = cadOsControle;
+    }
+
+    public CadOs getCadOs() {
+        return cadOs;
+    }
+
+    public void setCadOs(CadOs cadOs) {
+        this.cadOs = cadOs;
+    }
+
+    public CadSetor getObjSetor() {
+        return objSetor;
+    }
+
+    public void setObjSetor(CadSetor objSetor) {
+        this.objSetor = objSetor;
+    }
 }
