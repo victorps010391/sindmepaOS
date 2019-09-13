@@ -31,21 +31,17 @@ public class CadAnaliseBean implements Serializable {
     CadAnaliseControle analiseControle;
 
     Integer nrOs;
-    String ocultarFieldset;
     String priorPesq;
-    String sitPesq;
     List<Map<String, Object>> grid01;
+    List<Map<String, Object>> grid02;
+    List<Map<String, Object>> grid03;    
     List<Map<String, Object>> priorListaPesq;
-    List<Map<String, Object>> sitListaPesq;
 
     public void pesquisar() {
         try {
-            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), getSitPesq()));
-            System.out.println("::::::::::::: fieldset01 antes " + getOcultarFieldset());
-            if (!getGrid01().isEmpty()) {
-                setOcultarFieldset("false");
-            }
-            System.out.println("::::::::::::: fieldset01 depois " + getOcultarFieldset());
+            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq()));
+            setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq()));
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq()));            
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
             e.printStackTrace();
@@ -61,15 +57,13 @@ public class CadAnaliseBean implements Serializable {
         }
         return getPriorListaPesq();
     }
-
-    public List<Map<String, Object>> listarSitOs() {
-        try {
-            setSitListaPesq(analiseControle.listarSitAnaliseOs());
-        } catch (Exception e) {
-            System.out.println("Erro no método listarSitOs " + e.getMessage());
-            e.printStackTrace();
-        }
-        return getSitListaPesq();
+    
+    public void limparPesquisa(){
+        setPriorListaPesq(null);
+        setNrOs(null);
+        setGrid01(null);
+        setGrid02(null);
+        setGrid03(null);        
     }
 
     public Integer getNrOs() {
@@ -80,17 +74,6 @@ public class CadAnaliseBean implements Serializable {
         this.nrOs = nrOs;
     }
 
-    public String getOcultarFieldset() {
-        if (ocultarFieldset == null) {
-            ocultarFieldset = "true";
-        }
-        return ocultarFieldset;
-    }
-
-    public void setOcultarFieldset(String ocultarFieldset) {
-        this.ocultarFieldset = ocultarFieldset;
-    }
-
     public String getPriorPesq() {
         return priorPesq;
     }
@@ -98,13 +81,21 @@ public class CadAnaliseBean implements Serializable {
     public void setPriorPesq(String priorPesq) {
         this.priorPesq = priorPesq;
     }
-
-    public String getSitPesq() {
-        return sitPesq;
+    
+    public List<Map<String, Object>> getGrid03() {
+        return grid03;
     }
 
-    public void setSitPesq(String sitPesq) {
-        this.sitPesq = sitPesq;
+    public void setGrid03(List<Map<String, Object>> grid03) {
+        this.grid03 = grid03;
+    }
+
+    public List<Map<String, Object>> getGrid02() {
+        return grid02;
+    }
+
+    public void setGrid02(List<Map<String, Object>> grid02) {
+        this.grid02 = grid02;
     }
 
     public List<Map<String, Object>> getGrid01() {
@@ -122,13 +113,4 @@ public class CadAnaliseBean implements Serializable {
     public void setPriorListaPesq(List<Map<String, Object>> priorListaPesq) {
         this.priorListaPesq = priorListaPesq;
     }
-
-    public List<Map<String, Object>> getSitListaPesq() {
-        return sitListaPesq;
-    }
-
-    public void setSitListaPesq(List<Map<String, Object>> sitListaPesq) {
-        this.sitListaPesq = sitListaPesq;
-    }
-
 }
