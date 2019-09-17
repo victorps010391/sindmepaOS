@@ -33,6 +33,10 @@ public class CadAnaliseControle implements Serializable {
     @Inject
     CadOsFacade osFacade;
 
+    public List<Map<String, Object>> verOs(Integer os) {
+        return osFacade.verOs(os);
+    }
+
     public List<Map<String, Object>> listarPriorAnaliseOs() {
         return detalheFacade.listarPriorAnaliseOs();
     }

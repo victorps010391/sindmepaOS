@@ -189,10 +189,29 @@
                         <f:facet name="header">
                             <h:outputText value="Ações"/>
                         </f:facet>                        
-                        <p:commandButton value="Análise" update="@form"/>
+                        <p:commandButton value="Análise" 
+                                         actionListener="#{cadOsBean.buscarEncaminhar(item.get('os'))}"
+                                         onclick="PF('dlConfirm').show()" 
+                                         update=":frmDlConfirm"/>
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>
         </h:form>
+        
+        <p:dialog widgetVar="dlConfirm" header="Confirmação">
+            <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="1" > 
+                        <h:outputLabel value="Iniciar Análise do Protocolo? " style="font-weight:bold ; font-size: medium;"/><br/>
+                        <h:outputLabel value="IMPORTANTE: Informamos que após inicio você se tornará responsável pelo protocolo."
+                                       style="font-size: small; color: red; font-weight:bold"/>                       
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton actionListener="#{cadOsBean.encaminhar()}" value="Sim" update="@form :frmCadAnalise" icon="ui-icon ui-icon-check" />
+                        <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmCadAnalise" icon="ui-icon ui-icon-closethick"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>
