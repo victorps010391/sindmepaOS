@@ -138,7 +138,7 @@
                         <f:facet name="header">
                             <h:outputText value="Ações"/>
                         </f:facet>                        
-                        <p:commandButton value="Análise" update="@form"/>
+                        <p:commandButton value="Análise" update="@form" action="#{cadAnaliseBean.analiseIniciada(item.get('os'))}"/>
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>

@@ -39,26 +39,26 @@ public class CadFuncionarioBean implements Serializable {
    
     
     public void salvarCadFuncionario() {
-        RequestContext context = RequestContext.getCurrentInstance();
-        FacesContext mensagem = FacesContext.getCurrentInstance();
-        try {
-            setObjFunc(new CadFuncionario());
-            getObjFunc().setNmFunc(getNome().toUpperCase());
-            setObjFunc(new CadFuncionario(getCpf()));
-
-            if (setorControle.salvarSetorControle(getObjSetor())) {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Setor Realizado com Sucesso."));
-                context.execute("PF('dlCadSetor').hide()");
-                limparCadastro();
-                setGridPesquisa(setorControle.gridPrincipal(getObjSetor().getNmSetor(), getObjSetor().getCdSetor(), getObjSetor().getSitSetor()));
-            } else {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Setor."));
-                limparCadastro();
-            }
-        } catch (Exception e) {
-            System.out.println("Erro metódo salvarSetorBean");
-            e.printStackTrace();
-        }
+//        RequestContext context = RequestContext.getCurrentInstance();
+//        FacesContext mensagem = FacesContext.getCurrentInstance();
+//        try {
+//            setObjFunc(new CadFuncionario());
+//            getObjFunc().setNmFunc(getNome().toUpperCase());
+//            setObjFunc(new CadFuncionario(getCpf()));
+//
+//            if (setorControle.salvarSetorControle(getObjSetor())) {
+//                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Setor Realizado com Sucesso."));
+//                context.execute("PF('dlCadSetor').hide()");
+//                limparCadastro();
+//                setGridPesquisa(setorControle.gridPrincipal(getObjSetor().getNmSetor(), getObjSetor().getCdSetor(), getObjSetor().getSitSetor()));
+//            } else {
+//                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Setor."));
+//                limparCadastro();
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Erro metódo salvarSetorBean");
+//            e.printStackTrace();
+//        }
     }
 
     public String getNome() {
