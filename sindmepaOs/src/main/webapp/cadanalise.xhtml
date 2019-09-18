@@ -197,7 +197,7 @@
                 </p:dataTable>
             </p:fieldset>
         </h:form>
-        
+
         <p:dialog widgetVar="dlConfirm" header="Confirmação">
             <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
                 <p:panel>
@@ -207,7 +207,7 @@
                                        style="font-size: small; color: red; font-weight:bold"/>                       
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <p:commandButton actionListener="#{cadOsBean.encaminhar()}" value="Sim" update="@form :frmCadAnalise" icon="ui-icon ui-icon-check" />
+                        <p:commandButton action="#{cadAnaliseBean.iniciarAnalise()}" value="Sim" update="@form :frmCadAnalise" icon="ui-icon ui-icon-check" />
                         <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmCadAnalise" icon="ui-icon ui-icon-closethick"/>
                     </f:facet>
                 </p:panel>

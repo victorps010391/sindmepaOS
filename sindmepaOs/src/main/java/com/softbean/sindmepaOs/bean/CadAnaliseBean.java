@@ -6,13 +6,19 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadAnaliseControle;
+import com.softbean.sindmepaOs.controle.CadOsControle;
+import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.util.ObjVerOsUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -30,7 +36,10 @@ public class CadAnaliseBean implements Serializable {
 
     @Inject
     CadAnaliseControle analiseControle;
+    @Inject
+    CadOsControle osControle;
 
+    CadOs objOs;
     Integer nrOs;
     String priorPesq;
     List<Map<String, Object>> grid01;
@@ -56,13 +65,52 @@ public class CadAnaliseBean implements Serializable {
 
     public void analise(Integer os) {
         try {
+            setVerOs(null);
             setVerOs(analiseControle.verOs(os));
             for (Map<String, Object> elemento : getVerOs()) {
                 setVcategoria((String) elemento.get("categoria"));
+                setVos((Integer) elemento.get("os"));
+                setVprioridade((String) elemento.get("prioridade"));
+                setVsetor_responsavel((String) elemento.get("setor_responsavel"));
+                setVdata_hora_abert((String) elemento.get("data_hora_abert"));
+                setVdata_hora_fecha((String) elemento.get("data_hora_fecha"));
+                setVsit((String) elemento.get("sit"));
+                setVcd_sit((String) elemento.get("cd_sit"));
+                setVhistorico((String) elemento.get("historico"));
+                setVobservacao((String) elemento.get("observacao"));
+                setVsetor_abertura((String) elemento.get("setor_abertura"));
+                setVcod_setor_abertura((Integer) elemento.get("cod_setor_abert"));
+                setVcod_categoria((Integer) elemento.get("cod_categoria"));
+                setVfunc_abert((String) elemento.get("func_abert"));
             }
-            
-            
+
         } catch (Exception e) {
+            System.out.println("Erro no método analise " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public String iniciarAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setObjOs(osControle.buscarOsControle(getVos()));
+            getObjOs().setFuncUltAtuOs(999);
+            getObjOs().setDtUltAtuOs(new Date());
+            getObjOs().setFuncResponOs(999);
+            getObjOs().setSitOs("03");
+            if (osControle.alterarOsControle(getObjOs())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise do protocolo: " + getObjOs().getNrOs() + " Iniciada com Sucesso."));
+                context.execute("PF('dlConfirm').hide()");
+                return "cadsetor";
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao iniciar Análise do protocolo: " + getObjOs().getNrOs() + "."));
+                return "";
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método iniciarAnalise " + e.getMessage());
+            e.printStackTrace();
+            return "";
         }
     }
 
@@ -93,6 +141,17 @@ public class CadAnaliseBean implements Serializable {
         setGrid01(null);
         setGrid02(null);
         setGrid03(null);
+    }
+
+    public CadOs getObjOs() {
+        if (objOs == null) {
+            objOs = new CadOs();
+        }
+        return objOs;
+    }
+
+    public void setObjOs(CadOs objOs) {
+        this.objOs = objOs;
     }
 
     public Integer getNrOs() {
