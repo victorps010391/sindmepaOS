@@ -33,6 +33,10 @@ public class CadAnaliseControle implements Serializable {
     @Inject
     CadOsFacade osFacade;
 
+    public List<Map<String, Object>> verOs(Integer os) {
+        return osFacade.verOs(os);
+    }
+
     public List<Map<String, Object>> listarPriorAnaliseOs() {
         return detalheFacade.listarPriorAnaliseOs();
     }
@@ -41,7 +45,16 @@ public class CadAnaliseControle implements Serializable {
         return detalheFacade.listarSitAnaliseOs();
     }
 
-    public List<Map<String, Object>> gridAnalise01(Integer nrOs, String prior, String sit) {
-        return osFacade.gridAnalise01(nrOs, prior, sit);
+    public List<Map<String, Object>> gridAnalise01(Integer nrOs, String prior) {
+        return osFacade.gridAnalise01(nrOs, prior);
     }
+
+    public List<Map<String, Object>> gridAnalise02(Integer nrOs, String prior) {
+        return osFacade.gridAnalise02(nrOs, prior);
+    }
+
+    public List<Map<String, Object>> gridAnalise03(Integer nrOs, String prior) {
+        return osFacade.gridAnalise03(nrOs, prior);
+    }
+
 }

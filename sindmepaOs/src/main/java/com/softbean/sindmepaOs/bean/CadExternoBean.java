@@ -114,6 +114,7 @@ public class CadExternoBean implements Serializable {
                 getCadExterno().setIdEndExt(getEnderecoObj());
                 getCadExterno().setCdTipPagExt(getPagamento());
                 //Dados pessoais
+                getCadExterno().setNomeExt(getNomeExt());
                 getCadExterno().setTipoPesExt('E'); //tipoPessoaExterna
                 getCadExterno().setRgExt(getRg());
                 getCadExterno().setCpfExt(getCpf());
@@ -136,7 +137,7 @@ public class CadExternoBean implements Serializable {
                     getCadOs().setDtAbertOs(new Date());
                     getCadOs().setDtFechaOs(null);
                     getCadOs().setDtUltAtuOs(new Date());
-                    getCadOs().setFuncAbertOs(999);
+                    getCadOs().setFuncAbertOs(getCadExterno().getIdExt());
                     getCadOs().setFuncResponOs(999);
                     getCadOs().setFuncUltAtuOs(999);
                     getCadOs().setHistOs("Protocolo enviado via atendimento externo");
