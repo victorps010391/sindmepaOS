@@ -57,6 +57,10 @@ public class CadAnaliseBean implements Serializable {
     public void analise(Integer os) {
         try {
             setVerOs(analiseControle.verOs(os));
+            for (Map<String, Object> elemento : getVerOs()) {
+                setVcategoria((String) elemento.get("categoria"));
+            }
+            
             
         } catch (Exception e) {
         }

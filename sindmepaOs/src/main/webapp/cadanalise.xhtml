@@ -81,7 +81,10 @@
                         <f:facet name="header">
                             <h:outputText value="Ações"/>
                         </f:facet>                        
-                        <p:commandButton value="Iniciar Análise" update="@form"/>
+                        <p:commandButton value="Iniciar Análise" 
+                                         actionListener="#{cadAnaliseBean.analise(item.get('os'))}"
+                                         onclick="PF('dlConfirm').show()" 
+                                         update=":frmDlConfirm"/>
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>
@@ -189,10 +192,7 @@
                         <f:facet name="header">
                             <h:outputText value="Ações"/>
                         </f:facet>                        
-                        <p:commandButton value="Análise" 
-                                         actionListener="#{cadOsBean.buscarEncaminhar(item.get('os'))}"
-                                         onclick="PF('dlConfirm').show()" 
-                                         update=":frmDlConfirm"/>
+                        <p:commandButton value="Análise" />
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>

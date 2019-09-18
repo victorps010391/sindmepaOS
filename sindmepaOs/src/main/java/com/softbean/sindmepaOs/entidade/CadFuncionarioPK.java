@@ -14,11 +14,10 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Victor
+ * @author Raphael
  */
 @Embeddable
 public class CadFuncionarioPK implements Serializable {
-
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 11)
