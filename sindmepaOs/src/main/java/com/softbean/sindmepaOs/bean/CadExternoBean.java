@@ -141,7 +141,7 @@ public class CadExternoBean implements Serializable {
                     getCadOs().setFuncUltAtuOs(999);
                     getCadOs().setHistOs("Protocolo enviado via atendimento externo");
                     getCadOs().setObsOs(null);
-                    getCadOs().setSitOs("01");
+                    getCadOs().setSitOs("02");
                     getCadOs().setTipEnvioOs("E");
                     System.out.println(" ========= ANTES DO IF getCadOs() ========");
                     if(cadExternoControle.salvarOsExt(getCadOs())){
