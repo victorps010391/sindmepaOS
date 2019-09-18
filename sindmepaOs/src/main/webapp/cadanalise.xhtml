@@ -13,73 +13,205 @@
             <p:panel header="Análise de Protocolos" >
                 <h:panelGrid columns="2" >
                     <h:outputLabel value="Número do Protocolo: "/>
-                    <p:inputText value="">
+                    <p:inputText value="#{cadAnaliseBean.nrOs}">
                         <f:convertNumber type="number"/>
                     </p:inputText>
 
                     <h:outputLabel value="Prioridade:"/>
-                    <p:selectOneMenu value="" id="categDrop" filter="true" filterMatchMode="contains">
+                    <p:selectOneMenu value="#{cadAnaliseBean.priorPesq}" id="priorDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" />
-                        <f:selectItems value="" var="categPesq"  
-                                       itemLabel="" itemValue="" />
-                    </p:selectOneMenu> 
-                    <h:outputLabel value="Situação:"/>
-                    <p:selectOneMenu id="sitDrop" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="........................................" />                        
+                        <f:selectItems value="#{cadAnaliseBean.listarPriorOs()}" var="prior"  
+                                       itemLabel="#{prior.get('nome')}" itemValue="#{prior.get('codigo')}" />
                     </p:selectOneMenu>
+
                 </h:panelGrid>
                 <f:facet name="footer">                    
-                    <p:commandButton value="Pesquisar" />                    
-                    <p:commandButton value="Limpar" update="frmCadAnalise"/>                                                                    
+                    <p:commandButton value="Pesquisar" actionListener="#{cadAnaliseBean.pesquisar()}" update="grid01 grid02 grid03"/>                    
+                    <p:commandButton value="Limpar" actionListener="#{cadAnaliseBean.limparPesquisa()}" update="frmCadAnalise"/>                                                                    
                     <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />                    
                 </f:facet>
             </p:panel>
             <br/>
-            <p:fieldset legend="Protocolos Encaminhados Para Atendimento"  
-                        toggleable="true" 
-                        toggleSpeed="500"
-                        style="border:2px solid red;">                
-                <h:panelGrid columns="2" cellpadding="5">                    
-                    <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream.
-                                  In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
-                                  killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows."></h:outputText>
-                </h:panelGrid>
-            </p:fieldset>
-            <br/>
-            <p:fieldset legend="Protocolos Em atendimento"  
-                        toggleable="true" 
-                        toggleSpeed="500"
-                        style="border:2px solid blue;">                
-                <h:panelGrid columns="2" cellpadding="5">                    
-                    <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream.
-                                  In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
-                                  killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows."></h:outputText>
-                </h:panelGrid>
-            </p:fieldset>
-            <br/>
-            <p:fieldset legend="Protocolos Pendentes"  
-                        toggleable="true" 
-                        toggleSpeed="500"
-                        style="border:2px solid gray;">                
-                <h:panelGrid columns="2" cellpadding="5">                    
-                    <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream.
-                                  In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
-                                  killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows."></h:outputText>
-                </h:panelGrid>
-            </p:fieldset>
-            <br/>
-            <p:fieldset legend="Protocolos Finalizados"  
+            <p:fieldset legend="Protocolos Encaminhados Para Atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid red;" >                
+                <p:dataTable id="grid01" value="#{cadAnaliseBean.grid01}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
+                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto">
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Nr. do Protocolo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('os')}"/>
+                    </p:column>
 
-                        toggleable="true" 
-                        toggleSpeed="500"
-                        style="border:2px solid green;"
-                        collapsed="true">                
-                <h:panelGrid columns="2" cellpadding="5">                    
-                    <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream.
-                                  In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy,
-                                  killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows."></h:outputText>
-                </h:panelGrid>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Prioridade"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('prioridade')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Categoria"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('categoria')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Abertura"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_abert')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Fechamento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_fecha')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('sit')}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>                        
+                        <p:commandButton value="Iniciar Análise" 
+                                         actionListener="#{cadAnaliseBean.analise(item.get('os'))}"
+                                         onclick="PF('dlConfirm').show()" 
+                                         update=":frmDlConfirm"/>
+                    </p:column>              
+                </p:dataTable>
+            </p:fieldset>
+            <br/>
+            <p:fieldset legend="Protocolos Em atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid blue;">                
+                <p:dataTable id="grid02" value="#{cadAnaliseBean.grid02}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
+                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto" >
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Nr. do Protocolo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('os')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Prioridade"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('prioridade')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Categoria"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('categoria')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Abertura"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_abert')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Fechamento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_fecha')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('sit')}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>                        
+                        <p:commandButton value="Análise" update="@form"/>
+                    </p:column>              
+                </p:dataTable>
+            </p:fieldset>
+            <br/>
+            <p:fieldset legend="Protocolos Finalizados" toggleable="true" toggleSpeed="500" style="border:2px solid green;" collapsed="true">                
+                <p:dataTable id="grid03" value="#{cadAnaliseBean.grid03}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
+                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto" >
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Nr. do Protocolo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('os')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Prioridade"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('prioridade')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Categoria"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('categoria')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Data e Hora de Abertura"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_abert')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Data e Hora de Fechamento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_fecha')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('sit')}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>                        
+                        <p:commandButton value="Análise" />
+                    </p:column>              
+                </p:dataTable>
             </p:fieldset>
         </h:form>
+
+        <p:dialog widgetVar="dlConfirm" header="Confirmação">
+            <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="1" > 
+                        <h:outputLabel value="Iniciar Análise do Protocolo? " style="font-weight:bold ; font-size: medium;"/><br/>
+                        <h:outputLabel value="IMPORTANTE: Informamos que após inicio você se tornará responsável pelo protocolo."
+                                       style="font-size: small; color: red; font-weight:bold"/>                       
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton action="#{cadAnaliseBean.iniciarAnalise()}" value="Sim" update="@form :frmCadAnalise" icon="ui-icon ui-icon-check" />
+                        <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmCadAnalise" icon="ui-icon ui-icon-closethick"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

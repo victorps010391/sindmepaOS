@@ -34,6 +34,210 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         super(CadOs.class);
     }
 
+    public List<Map<String, Object>> verOs(Integer nrOs) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select nr_os as os 																										   ");
+        sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR'                                          ");
+        sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade ");
+        sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria                          ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor_responsavel                                ");
+        sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert                        ");
+        sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha                        ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as sit         ");
+        sql.append("        ,sit_os as cd_sit                                                                                                      ");
+        sql.append("        ,upper(hist_os) as historico                                                                                           ");
+        sql.append("        ,upper(obs_os) as observacao                                                                                           ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_abert_os) as setor_abertura                                    ");
+        sql.append("        ,setor_abert_os as cod_setor_abert                                                                                     ");
+        sql.append("        ,categ_os as cod_categoria                                                                                             ");
+        sql.append("        ,(case when setor_abert_os = 0                                                                                         ");
+        sql.append("               then (select nome_ext from cad_externo where id_ext = func_abert_os)                                            ");
+        sql.append("               else cast(func_abert_os as varchar)                                                                             ");
+        sql.append("               end) as func_abert                                                                                              ");
+        sql.append(" from cad_os                                                                                                                   ");
+        sql.append(" where nr_os = ").append(nrOs);
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("os", array[0]);
+                map.put("prioridade", array[1]);
+                map.put("categoria", array[2]);
+                map.put("setor_responsavel", array[3]);
+                map.put("data_hora_abert", array[4]);
+                map.put("data_hora_fecha", array[5]);
+                map.put("sit", array[6]);
+                map.put("cd_sit", array[7]);
+                map.put("historico", array[8]);
+                map.put("observacao", array[9]);
+                map.put("setor_abertura", array[10]);
+                map.put("cod_setor_abert", array[11]);
+                map.put("cod_categoria", array[12]);
+                map.put("func_abert", array[13]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método verOs " + e.getMessage());
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> gridAnalise01(Integer nrOs, String prior) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select nr_os as os 																											");
+        sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR'                                           ");
+        sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade  ");
+        sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria                           ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor                                             ");
+        sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert                         ");
+        sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha                         ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as sit          ");
+        sql.append("        ,sit_os as cd_sit                                                                                                       ");
+        sql.append(" from cad_os                                                                                                                    ");
+        sql.append(" where 1=1                                                                                                                      ");
+        sql.append(" and sit_os = '02'                                                                                                              ");
+
+        if (nrOs != null) {
+            sql.append(" and nr_os = ").append(nrOs);
+        }
+        if (prior != null) {
+            sql.append(" and (select cod_valor_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
+            sql.append(" and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os)) = '").append(prior).append("'");
+        }
+
+        sql.append(" order by dt_abert_os desc ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("os", array[0]);
+                map.put("prioridade", array[1]);
+                map.put("categoria", array[2]);
+                map.put("setor", array[3]);
+                map.put("data_hora_abert", array[4]);
+                map.put("data_hora_fecha", array[5]);
+                map.put("sit", array[6]);
+                map.put("cd_sit", array[7]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método gridAnalise01 ");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> gridAnalise02(Integer nrOs, String prior) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select nr_os as os 																											");
+        sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR'                                           ");
+        sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade  ");
+        sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria                           ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor                                             ");
+        sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert                         ");
+        sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha                         ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as sit          ");
+        sql.append("        ,sit_os as cd_sit                                                                                                       ");
+        sql.append(" from cad_os                                                                                                                    ");
+        sql.append(" where 1=1                                                                                                                      ");
+        sql.append(" and sit_os in ('03','04')                                                                                                              ");
+
+        if (nrOs != null) {
+            sql.append(" and nr_os = ").append(nrOs);
+        }
+        if (prior != null) {
+            sql.append(" and (select cod_valor_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
+            sql.append(" and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os)) = '").append(prior).append("'");
+        }
+
+        sql.append(" order by dt_abert_os desc ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("os", array[0]);
+                map.put("prioridade", array[1]);
+                map.put("categoria", array[2]);
+                map.put("setor", array[3]);
+                map.put("data_hora_abert", array[4]);
+                map.put("data_hora_fecha", array[5]);
+                map.put("sit", array[6]);
+                map.put("cd_sit", array[7]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método gridAnalise02 ");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> gridAnalise03(Integer nrOs, String prior) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select nr_os as os 																											");
+        sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR'                                           ");
+        sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade  ");
+        sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria                           ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor                                             ");
+        sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert                         ");
+        sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha                         ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as sit          ");
+        sql.append("        ,sit_os as cd_sit                                                                                                       ");
+        sql.append(" from cad_os                                                                                                                    ");
+        sql.append(" where 1=1                                                                                                                      ");
+        sql.append(" and sit_os in ('05','07')                                                                                                              ");
+
+        if (nrOs != null) {
+            sql.append(" and nr_os = ").append(nrOs);
+        }
+        if (prior != null) {
+            sql.append(" and (select cod_valor_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
+            sql.append(" and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os)) = '").append(prior).append("'");
+        }
+
+        sql.append(" order by dt_abert_os desc ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("os", array[0]);
+                map.put("prioridade", array[1]);
+                map.put("categoria", array[2]);
+                map.put("setor", array[3]);
+                map.put("data_hora_abert", array[4]);
+                map.put("data_hora_fecha", array[5]);
+                map.put("sit", array[6]);
+                map.put("cd_sit", array[7]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método gridAnalise04 ");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
     public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;

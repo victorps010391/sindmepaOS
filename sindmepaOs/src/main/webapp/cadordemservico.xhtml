@@ -48,7 +48,7 @@
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
                     <p:commandButton value="Novo Protocolo" onclick="PF('dlCadOs').show()" update="@form :frmDlCadOs"/>  
                     <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
-                    <p:commandButton value="Enviar" actionListener="#{cadOsBean.enviarEmail()}" update="@form"/>                    
+<!--                    <p:commandButton value="Enviar" actionListener="# {cadOsBean.enviarEmail()}" update="@form"/>                    -->
                 </f:facet>
             </p:panel>
 
@@ -242,7 +242,7 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <p:commandButton actionListener="#{cadOsBean.encaminhar()}" value="Sim" update="@form :frmCadOs" icon="ui-icon ui-icon-check" />
-                        <p:commandButton onclick="PF('dlCadOs').hide()" type="button" value="Não" update="@form :frmCadOs" icon="ui-icon ui-icon-closethick"/>
+                        <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmCadOs" icon="ui-icon ui-icon-closethick"/>
                     </f:facet>
                 </p:panel>
             </h:form>

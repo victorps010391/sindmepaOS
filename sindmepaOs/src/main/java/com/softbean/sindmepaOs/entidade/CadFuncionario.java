@@ -10,8 +10,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -22,19 +20,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Victor
+ * @author Raphael
  */
 @Entity
 @Table(name = "cad_funcionario")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CadFuncionario.findAll", query = "SELECT c FROM CadFuncionario c")
-    , @NamedQuery(name = "CadFuncionario.findByCpfFunc", query = "SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cpfFunc = :cpfFunc")
-    , @NamedQuery(name = "CadFuncionario.findByCdFunc", query = "SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cdFunc = :cdFunc")
-    , @NamedQuery(name = "CadFuncionario.findByNmFunc", query = "SELECT c FROM CadFuncionario c WHERE c.nmFunc = :nmFunc")
-    , @NamedQuery(name = "CadFuncionario.findByDtNascFunc", query = "SELECT c FROM CadFuncionario c WHERE c.dtNascFunc = :dtNascFunc")})
+    @NamedQuery(name = "CadFuncionario.findAll", query = "SELECT c FROM CadFuncionario c"),
+    @NamedQuery(name = "CadFuncionario.findByCpfFunc", query = "SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cpfFunc = :cpfFunc"),
+    @NamedQuery(name = "CadFuncionario.findByCdFunc", query = "SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cdFunc = :cdFunc"),
+    @NamedQuery(name = "CadFuncionario.findByNmFunc", query = "SELECT c FROM CadFuncionario c WHERE c.nmFunc = :nmFunc"),
+    @NamedQuery(name = "CadFuncionario.findByDtNascFunc", query = "SELECT c FROM CadFuncionario c WHERE c.dtNascFunc = :dtNascFunc")})
 public class CadFuncionario implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected CadFuncionarioPK cadFuncionarioPK;
@@ -44,9 +41,6 @@ public class CadFuncionario implements Serializable {
     @Column(name = "dt_nasc_func")
     @Temporal(TemporalType.DATE)
     private Date dtNascFunc;
-    @JoinColumn(name = "setor_func", referencedColumnName = "cd_setor")
-    @ManyToOne(optional = false)
-    private CadSetor setorFunc;
 
     public CadFuncionario() {
     }
@@ -81,14 +75,6 @@ public class CadFuncionario implements Serializable {
 
     public void setDtNascFunc(Date dtNascFunc) {
         this.dtNascFunc = dtNascFunc;
-    }
-
-    public CadSetor getSetorFunc() {
-        return setorFunc;
-    }
-
-    public void setSetorFunc(CadSetor setorFunc) {
-        this.setorFunc = setorFunc;
     }
 
     @Override

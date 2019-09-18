@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -42,12 +43,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadExterno.findByEspExt", query = "SELECT c FROM CadExterno c WHERE c.espExt = :espExt"),
     @NamedQuery(name = "CadExterno.findByTipoPesExt", query = "SELECT c FROM CadExterno c WHERE c.tipoPesExt = :tipoPesExt"),
     @NamedQuery(name = "CadExterno.findByEmail", query = "SELECT c FROM CadExterno c WHERE c.email = :email"),
+    @NamedQuery(name = "CadExterno.findByDtCadExt", query = "SELECT c FROM CadExterno c WHERE c.dtCadExt = :dtCadExt"),
+    @NamedQuery(name = "CadExterno.findByDtUltAtuExt", query = "SELECT c FROM CadExterno c WHERE c.dtUltAtuExt = :dtUltAtuExt"),
+    @NamedQuery(name = "CadExterno.findByCdTipPagExt", query = "SELECT c FROM CadExterno c WHERE c.cdTipPagExt = :cdTipPagExt"),
     @NamedQuery(name = "CadExterno.findByAgExt", query = "SELECT c FROM CadExterno c WHERE c.agExt = :agExt"),
     @NamedQuery(name = "CadExterno.findByBcExt", query = "SELECT c FROM CadExterno c WHERE c.bcExt = :bcExt"),
     @NamedQuery(name = "CadExterno.findByCcExt", query = "SELECT c FROM CadExterno c WHERE c.ccExt = :ccExt"),
     @NamedQuery(name = "CadExterno.findByNrMatExt", query = "SELECT c FROM CadExterno c WHERE c.nrMatExt = :nrMatExt"),
-    @NamedQuery(name = "CadExterno.findByCdInstExt", query = "SELECT c FROM CadExterno c WHERE c.cdInstExt = :cdInstExt"),
-    @NamedQuery(name = "CadExterno.findByCdTipPagExt", query = "SELECT c FROM CadExterno c WHERE c.cdTipPagExt = :cdTipPagExt")})
+    @NamedQuery(name = "CadExterno.findByCdInstExt", query = "SELECT c FROM CadExterno c WHERE c.cdInstExt = :cdInstExt")})
 public class CadExterno implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -81,6 +84,16 @@ public class CadExterno implements Serializable {
     @Size(max = 512)
     @Column(name = "email")
     private String email;
+    @Column(name = "dt_cad_ext")
+    @Temporal(TemporalType.DATE)
+    private Date dtCadExt;
+    @Column(name = "dt_ult_atu_ext")
+    @Temporal(TemporalType.DATE)
+    private Date dtUltAtuExt;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "cd_tip_pag_ext")
+    private int cdTipPagExt;
     @Size(max = 2147483647)
     @Column(name = "ag_ext")
     private String agExt;
@@ -95,8 +108,6 @@ public class CadExterno implements Serializable {
     private String nrMatExt;
     @Column(name = "cd_inst_ext")
     private Integer cdInstExt;
-    @Column(name = "cd_tip_pag_ext")
-    private Integer cdTipPagExt;
     @JoinColumn(name = "id_end_ext", referencedColumnName = "id_end")
     @ManyToOne
     private Endereco idEndExt;
@@ -106,6 +117,11 @@ public class CadExterno implements Serializable {
 
     public CadExterno(Integer idExt) {
         this.idExt = idExt;
+    }
+
+    public CadExterno(Integer idExt, int cdTipPagExt) {
+        this.idExt = idExt;
+        this.cdTipPagExt = cdTipPagExt;
     }
 
     public Integer getIdExt() {
@@ -188,6 +204,30 @@ public class CadExterno implements Serializable {
         this.email = email;
     }
 
+    public Date getDtCadExt() {
+        return dtCadExt;
+    }
+
+    public void setDtCadExt(Date dtCadExt) {
+        this.dtCadExt = dtCadExt;
+    }
+
+    public Date getDtUltAtuExt() {
+        return dtUltAtuExt;
+    }
+
+    public void setDtUltAtuExt(Date dtUltAtuExt) {
+        this.dtUltAtuExt = dtUltAtuExt;
+    }
+
+    public int getCdTipPagExt() {
+        return cdTipPagExt;
+    }
+
+    public void setCdTipPagExt(int cdTipPagExt) {
+        this.cdTipPagExt = cdTipPagExt;
+    }
+
     public String getAgExt() {
         return agExt;
     }
@@ -226,14 +266,6 @@ public class CadExterno implements Serializable {
 
     public void setCdInstExt(Integer cdInstExt) {
         this.cdInstExt = cdInstExt;
-    }
-
-    public Integer getCdTipPagExt() {
-        return cdTipPagExt;
-    }
-
-    public void setCdTipPagExt(Integer cdTipPagExt) {
-        this.cdTipPagExt = cdTipPagExt;
     }
 
     public Endereco getIdEndExt() {

@@ -12,11 +12,10 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Victor
+ * @author Raphael
  */
 @Stateless
 public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
-
     @PersistenceContext(unitName = "com.softbean_sindmepaOs_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -28,5 +27,7 @@ public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
     public CadFuncionarioFacade() {
         super(CadFuncionario.class);
     }
-    
+   public void test(){
+   
+   } 
 }
