@@ -57,4 +57,8 @@ public class CadAnaliseControle implements Serializable {
         return osFacade.gridAnalise03(nrOs, prior);
     }
 
+    public List<Map<String, Object>> listarSitFinalizacaoOs() {
+        return detalheFacade.listarSitFinalizacaoOs();
+    }
+
 }

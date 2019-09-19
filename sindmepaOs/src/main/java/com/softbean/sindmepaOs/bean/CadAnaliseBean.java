@@ -6,9 +6,9 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadAnaliseControle;
+import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.entidade.CadOs;
-import com.softbean.sindmepaOs.util.ObjVerOsUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -38,6 +38,8 @@ public class CadAnaliseBean implements Serializable {
     CadAnaliseControle analiseControle;
     @Inject
     CadOsControle osControle;
+    @Inject
+    CadNotaControle notaControle;
 
     CadOs objOs;
     Integer nrOs;
@@ -47,6 +49,8 @@ public class CadAnaliseBean implements Serializable {
     List<Map<String, Object>> grid03;
     List<Map<String, Object>> priorListaPesq;
     List<Map<String, Object>> verOs;
+    List<Map<String, Object>> listarFinalizacao;
+    List<Map<String, Object>> notaAnalise;
 
     Integer Vos;
     String Vprioridade;
@@ -62,6 +66,8 @@ public class CadAnaliseBean implements Serializable {
     Integer Vcod_setor_abertura;
     Integer Vcod_categoria;
     String Vfunc_abert;
+    String sitFinal;
+    String descFinal;
 
     public void analise(Integer os) {
         try {
@@ -102,7 +108,9 @@ public class CadAnaliseBean implements Serializable {
             if (osControle.alterarOsControle(getObjOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise do protocolo: " + getObjOs().getNrOs() + " Iniciada com Sucesso."));
                 context.execute("PF('dlConfirm').hide()");
-                context.update(":frmAnaliseOs");
+                setNotaAnalise(null);
+                setNotaAnalise(notaControle.gridSecundario(getVos()));
+                context.update(":frmAnaliseOs :gridNota");
                 return "analise";
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao iniciar Análise do protocolo: " + getObjOs().getNrOs() + "."));
@@ -137,7 +145,9 @@ public class CadAnaliseBean implements Serializable {
                 setVcod_categoria((Integer) elemento.get("cod_categoria"));
                 setVfunc_abert((String) elemento.get("func_abert"));
             }
-            context.update(":frmAnaliseOs");
+            setNotaAnalise(null);
+            setNotaAnalise(notaControle.gridSecundario(getVos()));
+            context.update(":frmAnaliseOs :gridNota");
             return "analise";
 
         } catch (Exception e) {
@@ -154,6 +164,16 @@ public class CadAnaliseBean implements Serializable {
             setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq()));
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarNota() {
+        try {
+            setNotaAnalise(null);
+            setNotaAnalise(notaControle.gridSecundario(getVos()));
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarNota " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -176,6 +196,31 @@ public class CadAnaliseBean implements Serializable {
         setGrid03(null);
     }
 
+    public String dadosSindicais() {
+        if (getVcod_categoria() == 7 && getVcod_setor_abertura() == 0) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+
+    public String renderizarFinalização() {
+        if ("05".equals(getVcd_sit()) || "07".equals(getVcd_sit())) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+
+    public List<Map<String, Object>> listarFinalizacao() {
+        try {
+            setListarFinalizacao(analiseControle.listarSitFinalizacaoOs());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarFinalizacao " + e.getMessage());
+        }
+        return getListarFinalizacao();
+    }
+
     public CadOs getObjOs() {
         if (objOs == null) {
             objOs = new CadOs();
@@ -185,6 +230,22 @@ public class CadAnaliseBean implements Serializable {
 
     public void setObjOs(CadOs objOs) {
         this.objOs = objOs;
+    }
+
+    public String getDescFinal() {
+        return descFinal;
+    }
+
+    public void setDescFinal(String descFinal) {
+        this.descFinal = descFinal;
+    }
+
+    public String getSitFinal() {
+        return sitFinal;
+    }
+
+    public void setSitFinal(String sitFinal) {
+        this.sitFinal = sitFinal;
     }
 
     public Integer getNrOs() {
@@ -201,6 +262,22 @@ public class CadAnaliseBean implements Serializable {
 
     public void setPriorPesq(String priorPesq) {
         this.priorPesq = priorPesq;
+    }
+
+    public List<Map<String, Object>> getNotaAnalise() {
+        return notaAnalise;
+    }
+
+    public void setNotaAnalise(List<Map<String, Object>> notaAnalise) {
+        this.notaAnalise = notaAnalise;
+    }
+
+    public List<Map<String, Object>> getListarFinalizacao() {
+        return listarFinalizacao;
+    }
+
+    public void setListarFinalizacao(List<Map<String, Object>> listarFinalizacao) {
+        this.listarFinalizacao = listarFinalizacao;
     }
 
     public List<Map<String, Object>> getGrid03() {

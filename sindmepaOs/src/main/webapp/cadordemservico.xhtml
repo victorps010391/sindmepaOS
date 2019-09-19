@@ -125,13 +125,12 @@
                                     actionListener="#{cadOsBean.buscar(item.get('os'))}"
                                     onclick="PF('dlAltOs').show()" 
                                     update=":frmDlAltOs"
-                                    disabled="#{'02'.equals(item.get('cd_sit')) || '06'.equals(item.get('cd_sit'))}"/>
+                                    disabled="#{!'01'.equals(item.get('cd_sit'))}"/>
 
                         <p:menuitem value="Detalhes"
                                     actionListener="#{cadOsBean.visualizar(item.get('os'))}"
                                     onclick="PF('dlVerOs').show()" 
-                                    update=":frmDlVerOs"
-                                    disabled="#{'06'.equals(item.get('cd_sit'))}"/>
+                                    update=":frmDlVerOs"/>
 
                         <p:menuitem value="Anexos" 
                                     url="cadanexo.xhtml"
@@ -141,13 +140,13 @@
                                     actionListener="#{cadOsBean.buscarEncaminhar(item.get('os'))}"
                                     onclick="PF('dlConfirm').show()" 
                                     update=":frmDlConfirm"
-                                    disabled="#{'02'.equals(item.get('cd_sit')) || '06'.equals(item.get('cd_sit'))}"/>
+                                    disabled="#{!'01'.equals(item.get('cd_sit'))}"/>
 
                         <p:menuitem value="Cancelar"
                                     actionListener="#{cadOsBean.buscar(item.get('os'))}"
                                     onclick="PF('dlCancelOs').show()" 
                                     update=":frmDlCancelOs"
-                                    disabled="#{'02'.equals(item.get('cd_sit')) || '06'.equals(item.get('cd_sit'))}"/>
+                                    disabled="#{!'01'.equals(item.get('cd_sit'))}"/>
 
                         <p:menuitem value="Adicionar Nota"
                                     actionListener="#{cadNotaBean.buscaNrOS(item.get('os'))}"

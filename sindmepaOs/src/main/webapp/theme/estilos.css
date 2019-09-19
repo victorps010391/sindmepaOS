@@ -14,3 +14,12 @@ and open the template in the editor.
 .ui-datatable .ui-datatable-data .odd-row td{
     background-color:#ffffff;
 }
+.tituloV{
+    font-size: small;
+    font-weight: bold;
+    color: indianred    
+}
+.conteudoV{
+    font-size: small;
+    font-weight: bold;       
+}
