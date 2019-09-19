@@ -66,6 +66,7 @@ public class CadAnaliseBean implements Serializable {
     Integer Vcod_setor_abertura;
     Integer Vcod_categoria;
     String Vfunc_abert;
+    String Vdesc_final;
     String sitFinal;
     String descFinal;
 
@@ -88,6 +89,7 @@ public class CadAnaliseBean implements Serializable {
                 setVcod_setor_abertura((Integer) elemento.get("cod_setor_abert"));
                 setVcod_categoria((Integer) elemento.get("cod_categoria"));
                 setVfunc_abert((String) elemento.get("func_abert"));
+                setVdesc_final((String) elemento.get("desc_finalizacao"));
             }
         } catch (Exception e) {
             System.out.println("Erro no método analise " + e.getMessage());
@@ -144,6 +146,7 @@ public class CadAnaliseBean implements Serializable {
                 setVcod_setor_abertura((Integer) elemento.get("cod_setor_abert"));
                 setVcod_categoria((Integer) elemento.get("cod_categoria"));
                 setVfunc_abert((String) elemento.get("func_abert"));
+                setVdesc_final((String) elemento.get("desc_finalizacao"));
             }
             setNotaAnalise(null);
             setNotaAnalise(notaControle.gridSecundario(getVos()));
@@ -155,6 +158,32 @@ public class CadAnaliseBean implements Serializable {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public void finalizarAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setObjOs(null);
+            setObjOs(osControle.buscarOsControle(getVos()));
+            getObjOs().setFuncUltAtuOs(999);
+            getObjOs().setDtUltAtuOs(new Date());
+            getObjOs().setFuncFinaliOs(999);
+            getObjOs().setDtFechaOs(new Date());
+            getObjOs().setDescFinalizacaoOs(getDescFinal());
+            getObjOs().setSitOs(getSitFinal());
+            if (osControle.alterarOsControle(getObjOs())) {
+                limparFinalização();
+                context.execute("PF('dlResolvOs').hide()");
+                analise(getObjOs().getNrOs());
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObjOs().getNrOs() + " finalizado com sucesso."));
+            } else {
+                limparFinalização();
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar protocolo: " + getObjOs().getNrOs() + "."));
+            }
+        } catch (Exception e) {
+        }
+
     }
 
     public void pesquisar() {
@@ -188,14 +217,6 @@ public class CadAnaliseBean implements Serializable {
         return getPriorListaPesq();
     }
 
-    public void limparPesquisa() {
-        setPriorListaPesq(null);
-        setNrOs(null);
-        setGrid01(null);
-        setGrid02(null);
-        setGrid03(null);
-    }
-
     public String dadosSindicais() {
         if (getVcod_categoria() == 7 && getVcod_setor_abertura() == 0) {
             return "true";
@@ -210,6 +231,21 @@ public class CadAnaliseBean implements Serializable {
         } else {
             return "false";
         }
+    }
+
+    public void limparPesquisa() {
+        setPriorListaPesq(null);
+        setPriorPesq(null);
+        setNrOs(null);
+        setGrid01(null);
+        setGrid02(null);
+        setGrid03(null);
+    }
+
+    public void limparFinalização() {
+        setListarFinalizacao(null);
+        setSitFinal(null);
+        setDescFinal(null);
     }
 
     public List<Map<String, Object>> listarFinalizacao() {
@@ -314,6 +350,14 @@ public class CadAnaliseBean implements Serializable {
 
     public List<Map<String, Object>> getVerOs() {
         return verOs;
+    }
+
+    public String getVdesc_final() {
+        return Vdesc_final;
+    }
+
+    public void setVdesc_final(String Vdesc_final) {
+        this.Vdesc_final = Vdesc_final;
     }
 
     public void setVerOs(List<Map<String, Object>> verOs) {

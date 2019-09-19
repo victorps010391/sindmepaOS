@@ -45,6 +45,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadOs.findByFuncUltAtuOs", query = "SELECT c FROM CadOs c WHERE c.funcUltAtuOs = :funcUltAtuOs")})
 public class CadOs implements Serializable {
 
+    @Column(name = "func_finali_os")
+    private Integer funcFinaliOs;
+
     @Column(name = "func_ult_atu_os")
     private Integer funcUltAtuOs;
     @Size(max = 1000)
@@ -267,5 +270,13 @@ public class CadOs implements Serializable {
 
     public void setDescFinalizacaoOs(String descFinalizacaoOs) {
         this.descFinalizacaoOs = descFinalizacaoOs;
+    }
+
+    public Integer getFuncFinaliOs() {
+        return funcFinaliOs;
+    }
+
+    public void setFuncFinaliOs(Integer funcFinaliOs) {
+        this.funcFinaliOs = funcFinaliOs;
     }
 }

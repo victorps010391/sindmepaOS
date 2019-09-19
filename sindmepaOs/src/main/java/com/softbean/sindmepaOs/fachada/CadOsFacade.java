@@ -56,7 +56,8 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("               then (select nome_ext from cad_externo where id_ext = func_abert_os)                                            ");
         sql.append("               else cast(func_abert_os as varchar)                                                                             ");
         sql.append("               end) as func_abert                                                                                              ");
-        sql.append(" from cad_os                                                                                                                   ");
+        sql.append("        ,upper(desc_finalizacao_os) as desc_finalizacao                                                                        ");
+        sql.append(" from cad_os                                                                                                                   ");        
         sql.append(" where nr_os = ").append(nrOs);
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
@@ -79,6 +80,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 map.put("cod_setor_abert", array[11]);
                 map.put("cod_categoria", array[12]);
                 map.put("func_abert", array[13]);
+                map.put("desc_finalizacao", array[14]);                
                 resultMaps.add(map);
             }
         } catch (Exception e) {

@@ -192,7 +192,9 @@
                         <f:facet name="header">
                             <h:outputText value="Ações"/>
                         </f:facet>                        
-                        <p:commandButton value="Análise" />
+                        <p:commandButton value="Análise" 
+                                         action="#{cadAnaliseBean.analiseIniciada(item.get('os'))}"
+                                         update="@form"/>
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>

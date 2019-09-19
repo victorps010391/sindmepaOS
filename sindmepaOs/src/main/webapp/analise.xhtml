@@ -67,15 +67,19 @@
                                 <h:outputLabel value="Data e Hora de Fechamento: " styleClass="tituloV"/>                                
                                 <h:outputLabel value="#{cadAnaliseBean.vdata_hora_fecha}" styleClass="conteudoV"/>
                                 <h:outputLabel value="Resolução: " styleClass="tituloV"/>
-                                <h:outputLabel value="#{cadAnaliseBean.vdata_hora_fecha}" styleClass="conteudoV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vdesc_final}" styleClass="conteudoV"/>
                             </h:panelGrid>
                             <f:facet name="footer">                    
-                                <p:commandButton value="Criar Tarefa" />                    
-                                <p:commandButton value="Criar Nota" />
+                                <p:commandButton value="Criar Tarefa" 
+                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>                    
+                                <p:commandButton value="Criar Nota" 
+                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>
                                 <p:commandButton value="Visualizar Dados do Solicitante" rendered="#{cadAnaliseBean.dadosSindicais()}" />
-                                <p:commandButton value="Resolver" 
+                                <p:commandButton value="Resolver"
+                                                 actionListener="#{cadAnaliseBean.limparFinalização()}"
                                                  onclick="PF('dlResolvOs').show()" 
-                                                 update=":frmDlResolvOs"/>                                
+                                                 update=":frmDlResolvOs"
+                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>                                
                                 <p:commandButton value="Voltar" action="cadanalise.xhtml" ajax="false" style="float: right" />                    
                             </f:facet>
                         </p:panel>
@@ -132,15 +136,17 @@
                                     <f:selectItems value="#{cadAnaliseBean.listarFinalizacao()}" var="sitResolv"  
                                                    itemLabel="#{sitResolv.get('nome')}" itemValue="#{sitResolv.get('codigo')}" />
                                 </p:selectOneMenu>
-
-                                <h:outputLabel value="Descrição do Resolvido:"/>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="1" > 
+                                <h:outputLabel value="Descrição do Resolvido:" styleClass="conteudoV"/>
                                 <p:inputTextarea value="#{cadAnaliseBean.descFinal}" rows="6" cols="33" counter="display" 
                                                  maxlength="1000" counterTemplate="{0} Caracteres Restantes." autoResize="false" />
                                 <br />
                                 <h:outputText id="display" />                              
                             </h:panelGrid>
                             <f:facet name="footer">
-                                <p:commandButton value="Salvar" update="@form :frmAnaliseOs" />
+                                <p:commandButton value="Salvar" actionListener="#{cadAnaliseBean.finalizarAnalise()}" update="@form :frmAnaliseOs" />
                                 <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltOs').hide()" update="@form :frmDlResolvOs" />
                             </f:facet>
                         </p:panel>
