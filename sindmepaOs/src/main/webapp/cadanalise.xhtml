@@ -22,9 +22,8 @@
                         <f:selectItem itemLabel="........................................" />
                         <f:selectItems value="#{cadAnaliseBean.listarPriorOs()}" var="prior"  
                                        itemLabel="#{prior.get('nome')}" itemValue="#{prior.get('codigo')}" />
-                    </p:selectOneMenu>
-
-                </h:panelGrid>
+                    </p:selectOneMenu>                 
+                </h:panelGrid>                             
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadAnaliseBean.pesquisar()}" update="grid01 grid02 grid03"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadAnaliseBean.limparPesquisa()}" update="frmCadAnalise"/>                                                                    

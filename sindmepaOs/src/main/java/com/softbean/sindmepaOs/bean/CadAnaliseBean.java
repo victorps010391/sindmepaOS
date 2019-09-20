@@ -8,6 +8,8 @@ package com.softbean.sindmepaOs.bean;
 import com.softbean.sindmepaOs.controle.CadAnaliseControle;
 import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
+import com.softbean.sindmepaOs.entidade.CadNota;
+import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import com.softbean.sindmepaOs.entidade.CadOs;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -42,6 +44,8 @@ public class CadAnaliseBean implements Serializable {
     CadNotaControle notaControle;
 
     CadOs objOs;
+    CadNota cadNotaObj;
+    CadNotaPK cadNotaObjPK;
     Integer nrOs;
     String priorPesq;
     List<Map<String, Object>> grid01;
@@ -69,6 +73,21 @@ public class CadAnaliseBean implements Serializable {
     String Vdesc_final;
     String sitFinal;
     String descFinal;
+    String descNotaAnalise;
+
+    public String voltarCadAnalise() {
+        try {
+            setGrid01(analiseControle.gridAnalise01(null, null));
+            setGrid02(analiseControle.gridAnalise02(null, null));
+            setGrid03(analiseControle.gridAnalise03(null, null));
+            return "cadanalise";
+
+        } catch (Exception e) {
+            System.out.println("Erro no método voltarCadAnalise " + e.getMessage());
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     public void analise(Integer os) {
         try {
@@ -150,6 +169,7 @@ public class CadAnaliseBean implements Serializable {
             }
             setNotaAnalise(null);
             setNotaAnalise(notaControle.gridSecundario(getVos()));
+            limparCadastroNota();
             context.update(":frmAnaliseOs :gridNota");
             return "analise";
 
@@ -233,6 +253,37 @@ public class CadAnaliseBean implements Serializable {
         }
     }
 
+    public void salvarNotaAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            if (getCadNotaObj().getCadNotaPK() == null) {
+                setCadNotaObjPK(new CadNotaPK());
+                getCadNotaObjPK().setNrOsNota(getVos());
+                getCadNotaObjPK().setSerialNota(notaControle.retornaSeqNota(getVos()));
+
+                setCadNotaObj(new CadNota());
+                getCadNotaObj().setHistNota(getDescNotaAnalise());
+                getCadNotaObj().setDtRegiNota(new Date());
+                getCadNotaObj().setFuncRegiNota(999);
+                getCadNotaObj().setDtUltAtuNota(new Date());
+                getCadNotaObj().setFuncUltAtuNota(999);
+
+                if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
+                    context.update("@form :frmAnaliseOs");
+                    context.execute("PF('dlCadNotaAnalise').hide()");
+                    pesquisarNota();
+                    limparCadastroNota();
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));
+                    context.update("@form :frmAnaliseOs");
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
     public void limparPesquisa() {
         setPriorListaPesq(null);
         setPriorPesq(null);
@@ -246,6 +297,12 @@ public class CadAnaliseBean implements Serializable {
         setListarFinalizacao(null);
         setSitFinal(null);
         setDescFinal(null);
+    }
+
+    public void limparCadastroNota() {
+        setCadNotaObj(null);
+        setCadNotaObjPK(null);
+        setDescNotaAnalise(null);
     }
 
     public List<Map<String, Object>> listarFinalizacao() {
@@ -266,6 +323,14 @@ public class CadAnaliseBean implements Serializable {
 
     public void setObjOs(CadOs objOs) {
         this.objOs = objOs;
+    }
+
+    public String getDescNotaAnalise() {
+        return descNotaAnalise;
+    }
+
+    public void setDescNotaAnalise(String descNotaAnalise) {
+        this.descNotaAnalise = descNotaAnalise;
     }
 
     public String getDescFinal() {
@@ -476,4 +541,25 @@ public class CadAnaliseBean implements Serializable {
         this.Vfunc_abert = Vfunc_abert;
     }
 
+    public CadNota getCadNotaObj() {
+        if (cadNotaObj == null) {
+            cadNotaObj = new CadNota();
+        }
+        return cadNotaObj;
+    }
+
+    public void setCadNotaObj(CadNota cadNotaObj) {
+        this.cadNotaObj = cadNotaObj;
+    }
+
+    public CadNotaPK getCadNotaObjPK() {
+        if (cadNotaObjPK == null) {
+            cadNotaObjPK = new CadNotaPK();
+        }
+        return cadNotaObjPK;
+    }
+
+    public void setCadNotaObjPK(CadNotaPK cadNotaObjPK) {
+        this.cadNotaObjPK = cadNotaObjPK;
+    }
 }
