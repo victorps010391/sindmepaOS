@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Stateless
 public class CadTarefaFacade extends AbstractFacade<CadTarefa> {

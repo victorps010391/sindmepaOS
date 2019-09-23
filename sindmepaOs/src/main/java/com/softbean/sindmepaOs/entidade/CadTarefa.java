@@ -22,23 +22,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Entity
 @Table(name = "cad_tarefa")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CadTarefa.findAll", query = "SELECT c FROM CadTarefa c")
-    , @NamedQuery(name = "CadTarefa.findByNrOsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.nrOsTarefa = :nrOsTarefa")
-    , @NamedQuery(name = "CadTarefa.findBySeqTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.seqTarefa = :seqTarefa")
-    , @NamedQuery(name = "CadTarefa.findBySetorAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorAbertTarefa = :setorAbertTarefa")
-    , @NamedQuery(name = "CadTarefa.findByFuncAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcAbertTarefa = :funcAbertTarefa")
-    , @NamedQuery(name = "CadTarefa.findByDtAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtAbertTarefa = :dtAbertTarefa")
-    , @NamedQuery(name = "CadTarefa.findBySetorResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorResponTarefa = :setorResponTarefa")
-    , @NamedQuery(name = "CadTarefa.findByFuncResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcResponTarefa = :funcResponTarefa")
-    , @NamedQuery(name = "CadTarefa.findByDtFechaTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtFechaTarefa = :dtFechaTarefa")
-    , @NamedQuery(name = "CadTarefa.findByHistTarefa", query = "SELECT c FROM CadTarefa c WHERE c.histTarefa = :histTarefa")
-    , @NamedQuery(name = "CadTarefa.findByObsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.obsTarefa = :obsTarefa")})
+    @NamedQuery(name = "CadTarefa.findAll", query = "SELECT c FROM CadTarefa c"),
+    @NamedQuery(name = "CadTarefa.findByNrOsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.nrOsTarefa = :nrOsTarefa"),
+    @NamedQuery(name = "CadTarefa.findBySeqTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.seqTarefa = :seqTarefa"),
+    @NamedQuery(name = "CadTarefa.findBySetorAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorAbertTarefa = :setorAbertTarefa"),
+    @NamedQuery(name = "CadTarefa.findByFuncAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcAbertTarefa = :funcAbertTarefa"),
+    @NamedQuery(name = "CadTarefa.findByDtAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtAbertTarefa = :dtAbertTarefa"),
+    @NamedQuery(name = "CadTarefa.findBySetorResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorResponTarefa = :setorResponTarefa"),
+    @NamedQuery(name = "CadTarefa.findByFuncResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcResponTarefa = :funcResponTarefa"),
+    @NamedQuery(name = "CadTarefa.findByDtFechaTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtFechaTarefa = :dtFechaTarefa"),
+    @NamedQuery(name = "CadTarefa.findByHistTarefa", query = "SELECT c FROM CadTarefa c WHERE c.histTarefa = :histTarefa"),
+    @NamedQuery(name = "CadTarefa.findByObsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.obsTarefa = :obsTarefa")})
 public class CadTarefa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -94,7 +94,7 @@ public class CadTarefa implements Serializable {
         this.histTarefa = histTarefa;
     }
 
-    public CadTarefa(int nrOsTarefa, int seqTarefa) {
+    public CadTarefa(String nrOsTarefa, int seqTarefa) {
         this.cadTarefaPK = new CadTarefaPK(nrOsTarefa, seqTarefa);
     }
 
