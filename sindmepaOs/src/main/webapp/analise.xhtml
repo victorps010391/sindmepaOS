@@ -90,7 +90,7 @@
                         </p:panel>
                         <br/>
                         <h:panelGrid columns="1" style="border: none !important;" >
-                            <p:dataTable id="gridTarefa" value="" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+                            <p:dataTable id="gridTarefa" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
                                 <f:facet name="header">
                                     Tarefas 
                                 </f:facet>
@@ -99,35 +99,35 @@
                                     <f:facet name="header">
                                         <h:outputText value="Nr. da Tarefa"/>
                                     </f:facet>
-                                    <h:outputText value=""/>
+                                    <h:outputText />
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Setor Responsável"/>
                                     </f:facet>
-                                    <h:outputText value=""/>
+                                    <h:outputText />
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Data e Hora de Abertura"/>
                                     </f:facet>
-                                    <h:outputText value=""/>
+                                    <h:outputText />
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Data e Hora de Fechamento"/>
                                     </f:facet>
-                                    <h:outputText value=""/>
+                                    <h:outputText />
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Situação"/>
                                     </f:facet>
-                                    <h:outputText value=""/>
+                                    <h:outputText />
                                 </p:column>
 
                                 <p:column style="text-align: center; width: 5%">
@@ -253,27 +253,29 @@
                         <p:panel>
                             <h:panelGrid columns="2" >                                                                             
                                 <h:outputLabel value="Setor Responsável:"/>
-                                <p:selectOneMenu value="" id="setorCadDrop" filter="true" filterMatchMode="contains">
-                                    <f:selectItem itemLabel="........................................" />                                     
+                                <p:selectOneMenu value="#{cadAnaliseBean.cdSetorTarefa}" id="setorTarDrop" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="........................................" />   
+                                    <f:selectItems value="#{cadAnaliseBean.listarSetorTarefa()}" var="setorTar"  
+                                           itemLabel="#{setorTar.get('nome')}" itemValue="#{setorTar.get('codigo')}" />
                                 </p:selectOneMenu>
 
                                 <h:outputLabel value="Colaborador Responsável:"/>
-                                <p:selectOneMenu value="" id="ColabCadDrop" filter="true" filterMatchMode="contains">
+                                <p:selectOneMenu id="ColabCadDrop" filter="true" filterMatchMode="contains">
                                     <f:selectItem itemLabel="........................................" />                       
                                 </p:selectOneMenu>
 
                                 <h:outputLabel value="Solicitação:"/>
-                                <p:inputTextarea value="" rows="6" cols="33" counter="display" 
+                                <p:inputTextarea value="#{cadAnaliseBean.descTarefa}" rows="6" cols="33" counter="display" 
                                                  maxlength="512" counterTemplate="{0} Caracteres Restantes." autoResize="false" />
                                 <br />
                                 <h:outputText id="display" />
 
                                 <h:outputLabel value="Observações:"/>
-                                <p:inputTextarea rows="6" cols="33" value=""/>
+                                <p:inputTextarea rows="6" cols="33" value="#{cadAnaliseBean.descObsTarefa}"/>
 
                             </h:panelGrid>
                             <f:facet name="footer">
-                                <p:commandButton value="Salvar" update="@form :frmAnaliseOs" />
+                                <p:commandButton value="Salvar" actionListener="#{cadAnaliseBean.salvarTarefaAnalise()}" update="@form :frmAnaliseOs" />
                                 <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadTar').hide()" update="@form :frmAnaliseOs" />
                             </f:facet>
                         </p:panel>

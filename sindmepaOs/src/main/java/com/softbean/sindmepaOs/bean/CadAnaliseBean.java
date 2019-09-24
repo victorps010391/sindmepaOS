@@ -8,9 +8,12 @@ package com.softbean.sindmepaOs.bean;
 import com.softbean.sindmepaOs.controle.CadAnaliseControle;
 import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
+import com.softbean.sindmepaOs.controle.CadTarefaControle;
 import com.softbean.sindmepaOs.entidade.CadNota;
 import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import com.softbean.sindmepaOs.entidade.CadOs;
+import com.softbean.sindmepaOs.entidade.CadTarefa;
+import com.softbean.sindmepaOs.entidade.CadTarefaPK;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -42,10 +45,14 @@ public class CadAnaliseBean implements Serializable {
     CadOsControle osControle;
     @Inject
     CadNotaControle notaControle;
+    @Inject
+    CadTarefaControle tarefaControle;
 
     CadOs objOs;
     CadNota cadNotaObj;
     CadNotaPK cadNotaObjPK;
+    CadTarefa objTarefa;
+    CadTarefaPK objTarefaPk;
     Integer nrOs;
     String priorPesq;
     List<Map<String, Object>> grid01;
@@ -55,6 +62,7 @@ public class CadAnaliseBean implements Serializable {
     List<Map<String, Object>> verOs;
     List<Map<String, Object>> listarFinalizacao;
     List<Map<String, Object>> notaAnalise;
+    List<Map<String, Object>> setorTarefa;
 
     Integer Vos;
     String Vprioridade;
@@ -74,6 +82,9 @@ public class CadAnaliseBean implements Serializable {
     String sitFinal;
     String descFinal;
     String descNotaAnalise;
+    Integer cdSetorTarefa;
+    String descTarefa;
+    String descObsTarefa;
 
     public String voltarCadAnalise() {
         try {
@@ -227,6 +238,16 @@ public class CadAnaliseBean implements Serializable {
         }
     }
 
+    public List<Map<String, Object>> listarSetorTarefa() {
+        try {
+            setSetorTarefa(tarefaControle.listarSetorTarefa());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarSetorTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+        return getSetorTarefa();
+    }
+
     public List<Map<String, Object>> listarPriorOs() {
         try {
             setPriorListaPesq(analiseControle.listarPriorAnaliseOs());
@@ -250,6 +271,37 @@ public class CadAnaliseBean implements Serializable {
             return "true";
         } else {
             return "false";
+        }
+    }
+
+    public void salvarTarefaAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            if (getObjTarefa().getCadTarefaPK() == null) {
+                setObjTarefaPk(new CadTarefaPK());
+                getObjTarefaPk().setNrOsTarefa(getVos().toString());
+                getObjTarefaPk().setSeqTarefa(tarefaControle.retornaSeqTarefa(getVos()));
+
+                setObjTarefa(new CadTarefa());
+                getObjTarefa().setDtAbertTarefa(new Date());
+                getObjTarefa().setDtFechaTarefa(new Date());
+                getObjTarefa().setFuncAbertTarefa(999);
+                getObjTarefa().setFuncResponTarefa(999);
+                getObjTarefa().setHistTarefa(getDescTarefa());
+                getObjTarefa().setObsTarefa(getDescObsTarefa());
+                getObjTarefa().setSetorAbertTarefa(0);
+                getObjTarefa().setSetorResponTarefa(getCdSetorTarefa());
+                                
+                if (tarefaControle.salvarTarefaControle(getObjTarefa(), getObjTarefaPk())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Tarefa Realizado com Sucesso."));
+                    context.execute("PF('dlCadTar').hide()");                    
+                    limparCadastroTarefa();
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Tarefa."));
+                }
+            }
+        } catch (Exception e) {
         }
     }
 
@@ -304,6 +356,14 @@ public class CadAnaliseBean implements Serializable {
         setCadNotaObjPK(null);
         setDescNotaAnalise(null);
     }
+    
+    public void limparCadastroTarefa(){
+        setObjTarefa(null);
+        setObjTarefaPk(null);
+        setDescTarefa(null);
+        setDescObsTarefa(null);
+        setCdSetorTarefa(null);
+    }
 
     public List<Map<String, Object>> listarFinalizacao() {
         try {
@@ -323,6 +383,30 @@ public class CadAnaliseBean implements Serializable {
 
     public void setObjOs(CadOs objOs) {
         this.objOs = objOs;
+    }
+
+    public String getDescTarefa() {
+        return descTarefa;
+    }
+
+    public void setDescTarefa(String descTarefa) {
+        this.descTarefa = descTarefa;
+    }
+
+    public String getDescObsTarefa() {
+        return descObsTarefa;
+    }
+
+    public void setDescObsTarefa(String descObsTarefa) {
+        this.descObsTarefa = descObsTarefa;
+    }
+
+    public Integer getCdSetorTarefa() {
+        return cdSetorTarefa;
+    }
+
+    public void setCdSetorTarefa(Integer cdSetorTarefa) {
+        this.cdSetorTarefa = cdSetorTarefa;
     }
 
     public String getDescNotaAnalise() {
@@ -363,6 +447,14 @@ public class CadAnaliseBean implements Serializable {
 
     public void setPriorPesq(String priorPesq) {
         this.priorPesq = priorPesq;
+    }
+
+    public List<Map<String, Object>> getSetorTarefa() {
+        return setorTarefa;
+    }
+
+    public void setSetorTarefa(List<Map<String, Object>> setorTarefa) {
+        this.setorTarefa = setorTarefa;
     }
 
     public List<Map<String, Object>> getNotaAnalise() {
@@ -562,4 +654,27 @@ public class CadAnaliseBean implements Serializable {
     public void setCadNotaObjPK(CadNotaPK cadNotaObjPK) {
         this.cadNotaObjPK = cadNotaObjPK;
     }
+
+    public CadTarefa getObjTarefa() {
+        if (objTarefa == null) {
+            objTarefa = new CadTarefa();
+        }
+        return objTarefa;
+    }
+
+    public void setObjTarefa(CadTarefa objTarefa) {
+        this.objTarefa = objTarefa;
+    }
+
+    public CadTarefaPK getObjTarefaPk() {
+        if (objTarefaPk == null) {
+            objTarefaPk = new CadTarefaPK();
+        }
+        return objTarefaPk;
+    }
+
+    public void setObjTarefaPk(CadTarefaPK objTarefaPk) {
+        this.objTarefaPk = objTarefaPk;
+    }
+
 }

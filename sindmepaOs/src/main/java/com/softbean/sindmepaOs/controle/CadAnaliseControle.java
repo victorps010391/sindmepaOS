@@ -7,6 +7,7 @@ package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.fachada.CadDetalheFacade;
 import com.softbean.sindmepaOs.fachada.CadOsFacade;
+import com.softbean.sindmepaOs.fachada.CadTarefaFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -32,6 +33,8 @@ public class CadAnaliseControle implements Serializable {
     CadDetalheFacade detalheFacade;
     @Inject
     CadOsFacade osFacade;
+    @Inject
+    CadTarefaFacade tarefaFacade;
 
     public List<Map<String, Object>> verOs(Integer os) {
         return osFacade.verOs(os);
@@ -59,6 +62,5 @@ public class CadAnaliseControle implements Serializable {
 
     public List<Map<String, Object>> listarSitFinalizacaoOs() {
         return detalheFacade.listarSitFinalizacaoOs();
-    }
-
+    }    
 }
