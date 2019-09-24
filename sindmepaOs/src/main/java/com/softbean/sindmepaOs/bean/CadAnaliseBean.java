@@ -62,6 +62,7 @@ public class CadAnaliseBean implements Serializable {
     List<Map<String, Object>> verOs;
     List<Map<String, Object>> listarFinalizacao;
     List<Map<String, Object>> notaAnalise;
+    List<Map<String, Object>> tarefaAnalise;
     List<Map<String, Object>> setorTarefa;
 
     Integer Vos;
@@ -121,6 +122,8 @@ public class CadAnaliseBean implements Serializable {
                 setVfunc_abert((String) elemento.get("func_abert"));
                 setVdesc_final((String) elemento.get("desc_finalizacao"));
             }
+            limparCadastroNota();
+            limparCadastroTarefa();
         } catch (Exception e) {
             System.out.println("Erro no método analise " + e.getMessage());
             e.printStackTrace();
@@ -141,8 +144,10 @@ public class CadAnaliseBean implements Serializable {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise do protocolo: " + getObjOs().getNrOs() + " Iniciada com Sucesso."));
                 context.execute("PF('dlConfirm').hide()");
                 setNotaAnalise(null);
+                setTarefaAnalise(null);
                 setNotaAnalise(notaControle.gridSecundario(getVos()));
-                context.update(":frmAnaliseOs :gridNota");
+                setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+                context.update(":frmAnaliseOs :gridNota :gridTarefa");
                 return "analise";
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao iniciar Análise do protocolo: " + getObjOs().getNrOs() + "."));
@@ -179,9 +184,12 @@ public class CadAnaliseBean implements Serializable {
                 setVdesc_final((String) elemento.get("desc_finalizacao"));
             }
             setNotaAnalise(null);
+            setTarefaAnalise(null);
             setNotaAnalise(notaControle.gridSecundario(getVos()));
+            setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
             limparCadastroNota();
-            context.update(":frmAnaliseOs :gridNota");
+            limparCadastroTarefa();
+            context.update(":frmAnaliseOs :gridNota :gridTarefa");
             return "analise";
 
         } catch (Exception e) {
@@ -213,6 +221,8 @@ public class CadAnaliseBean implements Serializable {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar protocolo: " + getObjOs().getNrOs() + "."));
             }
         } catch (Exception e) {
+            System.out.println("Erro no método finalizarAnalise " + e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -234,6 +244,16 @@ public class CadAnaliseBean implements Serializable {
             setNotaAnalise(notaControle.gridSecundario(getVos()));
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarNota " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarTarefa() {
+        try {
+            setTarefaAnalise(null);
+            setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarTarefa " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -284,24 +304,39 @@ public class CadAnaliseBean implements Serializable {
                 getObjTarefaPk().setSeqTarefa(tarefaControle.retornaSeqTarefa(getVos()));
 
                 setObjTarefa(new CadTarefa());
-                getObjTarefa().setDtAbertTarefa(new Date());
-                getObjTarefa().setDtFechaTarefa(new Date());
+                getObjTarefa().setDtAbertTarefa(new Date());                
                 getObjTarefa().setFuncAbertTarefa(999);
                 getObjTarefa().setFuncResponTarefa(999);
                 getObjTarefa().setHistTarefa(getDescTarefa());
                 getObjTarefa().setObsTarefa(getDescObsTarefa());
                 getObjTarefa().setSetorAbertTarefa(0);
                 getObjTarefa().setSetorResponTarefa(getCdSetorTarefa());
-                                
-                if (tarefaControle.salvarTarefaControle(getObjTarefa(), getObjTarefaPk())) {
-                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Tarefa Realizado com Sucesso."));
-                    context.execute("PF('dlCadTar').hide()");                    
-                    limparCadastroTarefa();
+                getObjTarefa().setSitTarefa("01");
+                getObjTarefa().setDtUltAtuTarefa(new Date());
+                getObjTarefa().setFuncUltAtuTarefa(999);
+
+                setObjOs(null);
+                setObjOs(osControle.buscarOsControle(getVos()));
+                getObjOs().setSitOs("04");
+                getObjOs().setDtUltAtuOs(new Date());
+                getObjOs().setFuncUltAtuOs(999);
+
+                if (osControle.alterarOsControle(getObjOs())) {
+                    if (tarefaControle.salvarTarefaControle(getObjTarefa(), getObjTarefaPk())) {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Tarefa Realizado com Sucesso."));
+                        context.execute("PF('dlCadTar').hide()");
+                        pesquisarTarefa();
+                        limparCadastroTarefa();
+                    } else {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Tarefa."));
+                    }
                 } else {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Tarefa."));
                 }
             }
         } catch (Exception e) {
+            System.out.println("Erro no método salvarTarefaAnalise " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -356,8 +391,8 @@ public class CadAnaliseBean implements Serializable {
         setCadNotaObjPK(null);
         setDescNotaAnalise(null);
     }
-    
-    public void limparCadastroTarefa(){
+
+    public void limparCadastroTarefa() {
         setObjTarefa(null);
         setObjTarefaPk(null);
         setDescTarefa(null);
@@ -455,6 +490,14 @@ public class CadAnaliseBean implements Serializable {
 
     public void setSetorTarefa(List<Map<String, Object>> setorTarefa) {
         this.setorTarefa = setorTarefa;
+    }
+
+    public List<Map<String, Object>> getTarefaAnalise() {
+        return tarefaAnalise;
+    }
+
+    public void setTarefaAnalise(List<Map<String, Object>> tarefaAnalise) {
+        this.tarefaAnalise = tarefaAnalise;
     }
 
     public List<Map<String, Object>> getNotaAnalise() {

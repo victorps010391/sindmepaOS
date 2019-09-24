@@ -54,4 +54,8 @@ public class CadTarefaControle implements Serializable {
         return tarefaFacade.retornaSeqTarefa(os);
     }
 
+    public List<Map<String, Object>> gridTarefa(Integer nrOs) {
+        return tarefaFacade.gridTarefa(nrOs);
+    }
+
 }

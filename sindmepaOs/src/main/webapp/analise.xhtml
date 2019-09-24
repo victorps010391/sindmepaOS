@@ -90,7 +90,9 @@
                         </p:panel>
                         <br/>
                         <h:panelGrid columns="1" style="border: none !important;" >
-                            <p:dataTable id="gridTarefa" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+                            <p:dataTable id="gridTarefa" var="tarefa" rows="8" paginator="true" 
+                                         paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                                         value="#{cadAnaliseBean.tarefaAnalise}">
                                 <f:facet name="header">
                                     Tarefas 
                                 </f:facet>
@@ -99,35 +101,35 @@
                                     <f:facet name="header">
                                         <h:outputText value="Nr. da Tarefa"/>
                                     </f:facet>
-                                    <h:outputText />
+                                    <h:outputText value="#{tarefa.get('nr_tarefa')}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Setor Responsável"/>
                                     </f:facet>
-                                    <h:outputText />
+                                    <h:outputText value="#{tarefa.get('nm_setor_respon')}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Data e Hora de Abertura"/>
                                     </f:facet>
-                                    <h:outputText />
+                                    <h:outputText value="#{tarefa.get('data_hora_abert')}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Data e Hora de Fechamento"/>
                                     </f:facet>
-                                    <h:outputText />
+                                    <h:outputText value="#{tarefa.get('data_hora_fecha')}"/>
                                 </p:column>
 
                                 <p:column>
                                     <f:facet name="header">
                                         <h:outputText value="Situação"/>
                                     </f:facet>
-                                    <h:outputText />
+                                    <h:outputText value="#{tarefa.get('sit_tarefa')}"/>
                                 </p:column>
 
                                 <p:column style="text-align: center; width: 5%">
