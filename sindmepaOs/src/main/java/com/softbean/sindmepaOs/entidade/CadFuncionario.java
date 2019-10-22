@@ -32,6 +32,20 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadFuncionario.findByNmFunc", query = "SELECT c FROM CadFuncionario c WHERE c.nmFunc = :nmFunc"),
     @NamedQuery(name = "CadFuncionario.findByDtNascFunc", query = "SELECT c FROM CadFuncionario c WHERE c.dtNascFunc = :dtNascFunc")})
 public class CadFuncionario implements Serializable {
+
+    @Size(max = 100)
+    @Column(name = "email_func")
+    private String emailFunc;
+    @Column(name = "dt_reg_func")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtRegFunc;
+    @Column(name = "dt_ult_atu_func")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtUltAtuFunc;
+    @Column(name = "func_reg_func")
+    private Integer funcRegFunc;
+    @Column(name = "func_ult_atu_func")
+    private Integer funcUltAtuFunc;
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected CadFuncionarioPK cadFuncionarioPK;
@@ -100,6 +114,46 @@ public class CadFuncionario implements Serializable {
     @Override
     public String toString() {
         return "com.softbean.sindmepaOs.entidade.CadFuncionario[ cadFuncionarioPK=" + cadFuncionarioPK + " ]";
+    }
+
+    public String getEmailFunc() {
+        return emailFunc;
+    }
+
+    public void setEmailFunc(String emailFunc) {
+        this.emailFunc = emailFunc;
+    }
+
+    public Date getDtRegFunc() {
+        return dtRegFunc;
+    }
+
+    public void setDtRegFunc(Date dtRegFunc) {
+        this.dtRegFunc = dtRegFunc;
+    }
+
+    public Date getDtUltAtuFunc() {
+        return dtUltAtuFunc;
+    }
+
+    public void setDtUltAtuFunc(Date dtUltAtuFunc) {
+        this.dtUltAtuFunc = dtUltAtuFunc;
+    }
+
+    public Integer getFuncRegFunc() {
+        return funcRegFunc;
+    }
+
+    public void setFuncRegFunc(Integer funcRegFunc) {
+        this.funcRegFunc = funcRegFunc;
+    }
+
+    public Integer getFuncUltAtuFunc() {
+        return funcUltAtuFunc;
+    }
+
+    public void setFuncUltAtuFunc(Integer funcUltAtuFunc) {
+        this.funcUltAtuFunc = funcUltAtuFunc;
     }
     
 }

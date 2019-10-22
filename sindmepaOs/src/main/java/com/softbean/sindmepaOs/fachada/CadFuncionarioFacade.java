@@ -9,6 +9,7 @@ import com.softbean.sindmepaOs.entidade.CadFuncionario;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -16,6 +17,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
+
     @PersistenceContext(unitName = "com.softbean_sindmepaOs_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -27,7 +29,19 @@ public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
     public CadFuncionarioFacade() {
         super(CadFuncionario.class);
     }
-   public void test(){
-   
-   } 
+
+    public Integer retornaCdFunc() {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(" select retorna_cod_func() ");
+
+        try {
+            Query q = em.createNativeQuery(sql.toString());
+            return (Integer) q.getSingleResult();
+        } catch (Exception e) {
+            System.err.println("Erro no metodo retornaCdFunc " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
