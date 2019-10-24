@@ -6,8 +6,10 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadFuncionarioControle;
+import com.softbean.sindmepaOs.controle.CadSetorControle;
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
-import com.softbean.sindmepaOs.entidade.CadSetor;
+import com.softbean.sindmepaOs.entidade.CadFuncionarioPK;
+import com.softbean.sindmepaOs.util.Util;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -30,35 +32,49 @@ public class CadFuncionarioBean implements Serializable {
      */
     public CadFuncionarioBean() {
     }
+
     @Inject
     CadFuncionarioControle funcionarioControle;
+    @Inject
+    CadSetorControle setorControle;
+    @Inject
+    Util util;
+
     CadFuncionario objFunc;
+    CadFuncionarioPK objfuncPK;
+
     String nome, cpf;
     Date dataNascimento;
     Integer codSetor;
-   
-    
+
     public void salvarCadFuncionario() {
-//        RequestContext context = RequestContext.getCurrentInstance();
-//        FacesContext mensagem = FacesContext.getCurrentInstance();
-//        try {
-//            setObjFunc(new CadFuncionario());
-//            getObjFunc().setNmFunc(getNome().toUpperCase());
-//            setObjFunc(new CadFuncionario(getCpf()));
-//
-//            if (setorControle.salvarSetorControle(getObjSetor())) {
-//                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Setor Realizado com Sucesso."));
-//                context.execute("PF('dlCadSetor').hide()");
-//                limparCadastro();
-//                setGridPesquisa(setorControle.gridPrincipal(getObjSetor().getNmSetor(), getObjSetor().getCdSetor(), getObjSetor().getSitSetor()));
-//            } else {
-//                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Setor."));
-//                limparCadastro();
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Erro metódo salvarSetorBean");
-//            e.printStackTrace();
-//        }
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            if (getObjFunc().getCadFuncionarioPK() == null) {                                
+                setObjfuncPK(new CadFuncionarioPK());
+                getObjfuncPK().setCdFunc(funcionarioControle.retornaCdFunc());
+                getObjfuncPK().setCpfFunc(getCpf());
+
+                setObjFunc(new CadFuncionario());
+                getObjFunc().setNmFunc(getNome().toUpperCase());
+                getObjFunc().setDtNascFunc(getDataNascimento());
+                getObjFunc().setSetorFunc(setorControle.buscarSetor(getCodSetor()));
+
+                if (util.CPFcorreto(getCpf())) {
+                    if (funcionarioControle.salvarFuncioControle(getObjFunc(), getObjfuncPK())) {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Funcionário Realizado com Sucesso."));
+                    } else {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Funcionário."));
+                    }
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "O CPF informado é invalido."));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Erro metódo salvarCadFuncionario " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public String getNome() {
@@ -84,8 +100,6 @@ public class CadFuncionarioBean implements Serializable {
     public void setCodSetor(Integer codSetor) {
         this.codSetor = codSetor;
     }
-    
-    
 
     public Date getDataNascimento() {
         return dataNascimento;
@@ -94,12 +108,26 @@ public class CadFuncionarioBean implements Serializable {
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-  
+
     public CadFuncionario getObjFunc() {
+        if (objFunc == null) {
+            objFunc = new CadFuncionario();
+        }
         return objFunc;
     }
 
     public void setObjFunc(CadFuncionario objFunc) {
         this.objFunc = objFunc;
-    }  
+    }
+
+    public CadFuncionarioPK getObjfuncPK() {
+        if (objfuncPK == null) {
+            objfuncPK = new CadFuncionarioPK();
+        }
+        return objfuncPK;
+    }
+
+    public void setObjfuncPK(CadFuncionarioPK objfuncPK) {
+        this.objfuncPK = objfuncPK;
+    }
 }

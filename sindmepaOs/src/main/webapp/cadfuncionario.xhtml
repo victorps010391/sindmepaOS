@@ -17,7 +17,7 @@
                     <h:outputLabel value="CPF: "/>
                     <p:inputText value="#{cadFuncionarioBean.cpf}" />
                     <h:outputLabel value="Data de Nascimento: "/>
-                    <p:calendar locale="pt_BR" pattern="dd/MM/yyyy" value="#{cadFuncionarioBean.dataNascimento}" />
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadFuncionarioBean.dataNascimento}" />
                     <h:outputLabel value="Setor Responsável:"/>
                     <p:selectOneMenu value="#{cadFuncionarioBean.codSetor}" id="setorDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" /> 
@@ -26,7 +26,8 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <f:facet name="footer">                    
-                    <p:commandButton value="Salvar"/>                    
+                    <p:commandButton value="Salvar" actionListener="#{cadFuncionarioBean.salvarCadFuncionario()}"
+                                     update="@form :frmCadFunc"/>                    
                 </f:facet>
             </p:panel>
 

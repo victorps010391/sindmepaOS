@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -32,6 +34,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadFuncionario.findByNmFunc", query = "SELECT c FROM CadFuncionario c WHERE c.nmFunc = :nmFunc"),
     @NamedQuery(name = "CadFuncionario.findByDtNascFunc", query = "SELECT c FROM CadFuncionario c WHERE c.dtNascFunc = :dtNascFunc")})
 public class CadFuncionario implements Serializable {
+
+    @JoinColumn(name = "setor_func", referencedColumnName = "cd_setor")
+    @ManyToOne(optional = false)
+    private CadSetor setorFunc;
 
     @Size(max = 100)
     @Column(name = "email_func")
@@ -154,6 +160,14 @@ public class CadFuncionario implements Serializable {
 
     public void setFuncUltAtuFunc(Integer funcUltAtuFunc) {
         this.funcUltAtuFunc = funcUltAtuFunc;
+    }
+
+    public CadSetor getSetorFunc() {
+        return setorFunc;
+    }
+
+    public void setSetorFunc(CadSetor setorFunc) {
+        this.setorFunc = setorFunc;
     }
     
 }

@@ -6,6 +6,7 @@
 package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
+import com.softbean.sindmepaOs.entidade.CadFuncionarioPK;
 import com.softbean.sindmepaOs.fachada.CadFuncionarioFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -28,14 +29,21 @@ public class CadFuncionarioControle implements Serializable {
     @Inject
     CadFuncionarioFacade funcionarioFacade;
 
-    public Boolean salvarSetorControle(CadFuncionario obj) {
+    public Boolean salvarFuncioControle(CadFuncionario obj, CadFuncionarioPK objPk) {
         try {
+          
+            obj.setCadFuncionarioPK(objPk);
             funcionarioFacade.create(obj);
+
             return true;
         } catch (Exception e) {
-            System.out.println("ERRO no método salvarSetorControle");
+            System.out.println("Erro no método salvarFuncControle " + e.getMessage());
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Integer retornaCdFunc() {
+        return funcionarioFacade.retornaCdFunc();
     }
 }
