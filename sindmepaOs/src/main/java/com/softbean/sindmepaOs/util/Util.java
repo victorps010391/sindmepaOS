@@ -12,6 +12,8 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.InputMismatchException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -50,7 +52,7 @@ public class Util implements Serializable {
         return bytes;
     }
 
-    public boolean CPFcorreto(String CPF) {        
+    public boolean CPFcorreto(String CPF) {
         if (CPF.equals("00000000000")
                 || CPF.equals("11111111111")
                 || CPF.equals("22222222222") || CPF.equals("33333333333")
@@ -62,8 +64,8 @@ public class Util implements Serializable {
         }
 
         char dig10, dig11;
-        int sm, i, r, num, peso;       
-        try {            
+        int sm, i, r, num, peso;
+        try {
             sm = 0;
             peso = 10;
             for (i = 0; i < 9; i++) {
@@ -106,6 +108,19 @@ public class Util implements Serializable {
         } catch (InputMismatchException erro) {
             return (false);
         }
+    }
+
+    public boolean emailValido(String email) {
+        boolean isEmailIdValid = false;
+        if (email != null && email.length() > 0) {
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(email);
+            if (matcher.matches()) {
+                isEmailIdValid = true;
+            }
+        }
+        return isEmailIdValid;
     }
 
 }

@@ -46,4 +46,12 @@ public class CadFuncionarioControle implements Serializable {
     public Integer retornaCdFunc() {
         return funcionarioFacade.retornaCdFunc();
     }
+    
+    public Integer verificaCpfCadastrado(String cpf){
+        return funcionarioFacade.verificaCpfCadastrado(cpf);
+    }
+    
+    public CadFuncionario validaAcesso(String cpf, String email){
+        return funcionarioFacade.validaAcesso(cpf, email);
+    }
 }

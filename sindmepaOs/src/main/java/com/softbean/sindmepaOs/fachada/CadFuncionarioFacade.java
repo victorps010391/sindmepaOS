@@ -44,4 +44,43 @@ public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
             return null;
         }
     }
+
+    public Integer verificaCpfCadastrado(String cpf) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(" select cast(count(*) as integer) from cad_funcionario where cpf_func = '").append(cpf).append("'");
+
+        try {
+            Query q = em.createNativeQuery(sql.toString());
+            return (Integer) q.getSingleResult();
+        } catch (Exception e) {
+            System.err.println("Erro no metodo verificaCpfCadastrado " + e.getMessage());
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    public CadFuncionario validaAcesso(String cpf, String email) {
+        CadFuncionario usuario = null;
+        StringBuilder sql = new StringBuilder();
+
+        try {
+            sql.append(" SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cpfFunc = :cpfFunc ");
+            sql.append(" AND c.emailFunc = :emailFunc ");
+
+            Query createQuery = em.createQuery(sql.toString());
+            createQuery.setParameter("cpfFunc", cpf);
+            createQuery.setParameter("emailFunc", email);
+
+            usuario = (CadFuncionario) createQuery.getSingleResult();
+
+        } catch (Exception e) {
+            System.out.println("Erro no metodo validaAcesso " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("::::::::: USUARIIO ::::: "+usuario);
+        return usuario;
+
+    }
+
 }

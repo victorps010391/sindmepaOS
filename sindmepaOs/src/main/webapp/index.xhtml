@@ -5,10 +5,10 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
-    
+
     <ui:define name="centro">
         <h:form id="frmIndex" acceptcharset="ISO-8859-1">
-            HOME
+            <h:outputText value="Seja Bem-vindo #{loginBean.usuario.nmFunc}! Agora você possui acesso ao Site"/>            
         </h:form>
     </ui:define>
 

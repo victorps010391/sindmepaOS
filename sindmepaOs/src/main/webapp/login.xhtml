@@ -39,19 +39,27 @@
             <!--            <h:form enctype="multipart/form-data">-->                       
             <p:layout fullPage="true">
 
-                <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true">
-                </p:layoutUnit>
-                <!--                <p:layoutUnit position="south" size="40" closable="true" collapsible="true">
-                                    
-                                </p:layoutUnit>-->
-                <p:layoutUnit position="west" header="Esconder" collapsible="true" resizable="true">
-                    <ui:insert name="menu">
-                        <ui:include src="/menu.xhtml"></ui:include>
-                    </ui:insert>                                      
-                </p:layoutUnit>
+                <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true"></p:layoutUnit>
 
                 <p:layoutUnit position="center">                    
-                    <ui:insert name="centro"></ui:insert>                    
+                    <h:form id="frmLogin" acceptcharset="ISO-8859-1">
+                        <p:growl id="growl" showDetail="true"/>
+                        <p:panel style="width:300px; margin-left:auto; margin-right:auto;">
+                            <h:panelGrid columns="2" style="font-size: medium; font-weight:bold" > 
+                                <h:outputLabel value="CPF: "/>
+                                <p:inputText value="#{loginBean.cpfAcess}" />          
+                                <h:outputLabel value="E-mail: "/>
+                                <p:inputText value="#{loginBean.emailAcess}" />
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton action="#{loginBean.logar()}" 
+                                                 value="Acessar" 
+                                                 icon="ui-icon ui-icon-check" 
+                                                 style="font-size: small; font-weight:bold"
+                                                 update="@form :frmLogin"/>                                
+                            </f:facet>
+                        </p:panel>
+                    </h:form>                
                 </p:layoutUnit>
 
             </p:layout>
@@ -59,39 +67,5 @@
         </h:body>
 
     </f:view>
-    <script>
-        function abrirPgRelatorio() {
-            window.open('http://#{request.serverName}:#{request.serverPort}/sindmepaOs/visualizarPDF.xhtml', '_blank');
-        }
-    </script>
-
-    <script type="text/javascript">
-        PrimeFaces.locales['pt'] = {
-            closeText: 'Fechar',
-            prevText: 'Anterior',
-            nextText: 'Próximo',
-            currentText: 'Começo',
-            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-            dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
-            weekHeader: 'Semana',
-            firstDay: 0,
-            isRTL: false,
-            showMonthAfterYear: false,
-            yearSuffix: '',
-            timeOnlyTitle: 'Só Horas',
-            timeText: 'Tempo',
-            hourText: 'Hora',
-            minuteText: 'Minuto',
-            secondText: 'Segundo',
-            ampm: false,
-            month: 'Mês',
-            week: 'Semana',
-            day: 'Dia',
-            allDayText: 'Todo o Dia'
-        };
-    </script>
 </html>
 

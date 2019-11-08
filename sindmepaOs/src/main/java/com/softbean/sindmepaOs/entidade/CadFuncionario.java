@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadFuncionario.findByCpfFunc", query = "SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cpfFunc = :cpfFunc"),
     @NamedQuery(name = "CadFuncionario.findByCdFunc", query = "SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cdFunc = :cdFunc"),
     @NamedQuery(name = "CadFuncionario.findByNmFunc", query = "SELECT c FROM CadFuncionario c WHERE c.nmFunc = :nmFunc"),
-    @NamedQuery(name = "CadFuncionario.findByDtNascFunc", query = "SELECT c FROM CadFuncionario c WHERE c.dtNascFunc = :dtNascFunc")})
+    @NamedQuery(name = "CadFuncionario.findByDtNascFunc", query = "SELECT c FROM CadFuncionario c WHERE c.dtNascFunc = :dtNascFunc"),
+    @NamedQuery(name = "CadFuncionario.findByEmailFunc", query = "SELECT c FROM CadFuncionario c WHERE c.emailFunc = :emailFunc")})
 public class CadFuncionario implements Serializable {
 
     @JoinColumn(name = "setor_func", referencedColumnName = "cd_setor")

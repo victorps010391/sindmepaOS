@@ -6,6 +6,7 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadFuncionarioControle;
+import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.controle.CadSetorControle;
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
 import com.softbean.sindmepaOs.entidade.CadFuncionarioPK;
@@ -14,6 +15,8 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -39,19 +42,23 @@ public class CadFuncionarioBean implements Serializable {
     CadSetorControle setorControle;
     @Inject
     Util util;
+    @Inject
+    CadOsControle osControle;
 
     CadFuncionario objFunc;
     CadFuncionarioPK objfuncPK;
 
-    String nome, cpf;
+    String nome, cpf, email;
     Date dataNascimento;
     Integer codSetor;
+
+    List<Map<String, Object>> setorResponsFunc;
 
     public void salvarCadFuncionario() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
-            if (getObjFunc().getCadFuncionarioPK() == null) {                                
+            if (getObjFunc().getCadFuncionarioPK() == null) {
                 setObjfuncPK(new CadFuncionarioPK());
                 getObjfuncPK().setCdFunc(funcionarioControle.retornaCdFunc());
                 getObjfuncPK().setCpfFunc(getCpf());
@@ -60,21 +67,54 @@ public class CadFuncionarioBean implements Serializable {
                 getObjFunc().setNmFunc(getNome().toUpperCase());
                 getObjFunc().setDtNascFunc(getDataNascimento());
                 getObjFunc().setSetorFunc(setorControle.buscarSetor(getCodSetor()));
-
-                if (util.CPFcorreto(getCpf())) {
-                    if (funcionarioControle.salvarFuncioControle(getObjFunc(), getObjfuncPK())) {
-                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Funcionário Realizado com Sucesso."));
+                getObjFunc().setEmailFunc(getEmail());
+                getObjFunc().setDtRegFunc(new Date());
+                getObjFunc().setFuncRegFunc(999);
+                getObjFunc().setDtUltAtuFunc(new Date());
+                getObjFunc().setFuncUltAtuFunc(999);
+                
+                if (funcionarioControle.verificaCpfCadastrado(getCpf()) == 0) {
+                    if (util.emailValido(getEmail())) {
+                        if (util.CPFcorreto(getCpf())) {
+                            if (funcionarioControle.salvarFuncioControle(getObjFunc(), getObjfuncPK())) {
+                                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Funcionário Realizado com Sucesso."));
+                                limparCadastro();
+                            } else {
+                                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Funcionário."));
+                            }
+                        } else {
+                            mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "O CPF informado é inválido."));
+                        }
                     } else {
-                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Funcionário."));
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "O e-mail informado é inválido."));
                     }
                 } else {
-                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "O CPF informado é invalido."));
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Já existe cadastro para o CPF informado."));
                 }
             }
         } catch (Exception e) {
             System.out.println("Erro metódo salvarCadFuncionario " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public List<Map<String, Object>> listarSetorPesq() {
+        try {
+            setSetorResponsFunc(osControle.listarSetorPesq());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarSetorPesq");
+        }
+        return getSetorResponsFunc();
+    }
+
+    public void limparCadastro() {
+        setCpf(null);
+        setNome(null);
+        setDataNascimento(null);
+        setCodSetor(null);
+        setSetorResponsFunc(null);
+        setEmail(null);
+
     }
 
     public String getNome() {
@@ -116,8 +156,24 @@ public class CadFuncionarioBean implements Serializable {
         return objFunc;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public void setObjFunc(CadFuncionario objFunc) {
         this.objFunc = objFunc;
+    }
+
+    public List<Map<String, Object>> getSetorResponsFunc() {
+        return setorResponsFunc;
+    }
+
+    public void setSetorResponsFunc(List<Map<String, Object>> setorResponsFunc) {
+        this.setorResponsFunc = setorResponsFunc;
     }
 
     public CadFuncionarioPK getObjfuncPK() {
