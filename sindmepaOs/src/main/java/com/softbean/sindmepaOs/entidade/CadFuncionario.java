@@ -34,8 +34,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadFuncionario.findByCdFunc", query = "SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cdFunc = :cdFunc"),
     @NamedQuery(name = "CadFuncionario.findByNmFunc", query = "SELECT c FROM CadFuncionario c WHERE c.nmFunc = :nmFunc"),
     @NamedQuery(name = "CadFuncionario.findByDtNascFunc", query = "SELECT c FROM CadFuncionario c WHERE c.dtNascFunc = :dtNascFunc"),
-    @NamedQuery(name = "CadFuncionario.findByEmailFunc", query = "SELECT c FROM CadFuncionario c WHERE c.emailFunc = :emailFunc")})
+    @NamedQuery(name = "CadFuncionario.findByEmailFunc", query = "SELECT c FROM CadFuncionario c WHERE c.emailFunc = :emailFunc"),
+    @NamedQuery(name = "CadFuncionario.findBySenhaFunc", query = "SELECT c FROM CadFuncionario c WHERE c.senhaFunc = :senhaFunc")})
 public class CadFuncionario implements Serializable {
+
+    @Size(max = 8000)
+    @Column(name = "senha_func")
+    private String senhaFunc;
 
     @JoinColumn(name = "setor_func", referencedColumnName = "cd_setor")
     @ManyToOne(optional = false)
@@ -63,7 +68,7 @@ public class CadFuncionario implements Serializable {
     @Column(name = "dt_nasc_func")
     @Temporal(TemporalType.DATE)
     private Date dtNascFunc;
-    
+
     private static final Logger LOG = Logger.getLogger(CadFuncionario.class.getName());
 
     public CadFuncionario() {
@@ -173,5 +178,13 @@ public class CadFuncionario implements Serializable {
     public void setSetorFunc(CadSetor setorFunc) {
         this.setorFunc = setorFunc;
     }
-    
+
+    public String getSenhaFunc() {
+        return senhaFunc;
+    }
+
+    public void setSenhaFunc(String senhaFunc) {
+        this.senhaFunc = senhaFunc;
+    }
+
 }

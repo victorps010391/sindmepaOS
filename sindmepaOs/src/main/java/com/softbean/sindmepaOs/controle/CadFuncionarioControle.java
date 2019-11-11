@@ -11,6 +11,8 @@ import com.softbean.sindmepaOs.fachada.CadFuncionarioFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 /**
@@ -31,7 +33,7 @@ public class CadFuncionarioControle implements Serializable {
 
     public Boolean salvarFuncioControle(CadFuncionario obj, CadFuncionarioPK objPk) {
         try {
-          
+
             obj.setCadFuncionarioPK(objPk);
             funcionarioFacade.create(obj);
 
@@ -46,12 +48,31 @@ public class CadFuncionarioControle implements Serializable {
     public Integer retornaCdFunc() {
         return funcionarioFacade.retornaCdFunc();
     }
-    
-    public Integer verificaCpfCadastrado(String cpf){
+
+    public Integer verificaCpfCadastrado(String cpf) {
         return funcionarioFacade.verificaCpfCadastrado(cpf);
     }
-    
-    public CadFuncionario validaAcesso(String cpf, String email){
+
+    public CadFuncionario validaAcesso(String cpf, String email) {
         return funcionarioFacade.validaAcesso(cpf, email);
+    }
+
+    public List<Map<String, Object>> listarSetorPesq() {
+        return funcionarioFacade.listarSetorPesq();
+    }
+
+    public CadFuncionario retornaUsuario(String cpf, String senha) {
+        return funcionarioFacade.retornaUsuario(cpf, senha);
+    }
+
+    public Boolean alterarSenha(CadFuncionario obj) {
+        try {
+            funcionarioFacade.edit(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método alterarSenha " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 }

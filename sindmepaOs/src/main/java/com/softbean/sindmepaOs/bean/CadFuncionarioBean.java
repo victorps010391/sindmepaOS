@@ -53,7 +53,15 @@ public class CadFuncionarioBean implements Serializable {
     Integer codSetor;
 
     List<Map<String, Object>> setorResponsFunc;
-
+    
+    
+//    public void senha(){
+//        System.out.println("::::::::: SENHA MD5 ::::: " +util.converteParaMd5("102030"));
+//        if("4badaee57fed5610012a296273158f5f".equals(util.converteParaMd5("102030"))){
+//            System.out.println("SENHAS IGUAIS!");
+//        }
+//    }
+    
     public void salvarCadFuncionario() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
@@ -72,6 +80,7 @@ public class CadFuncionarioBean implements Serializable {
                 getObjFunc().setFuncRegFunc(999);
                 getObjFunc().setDtUltAtuFunc(new Date());
                 getObjFunc().setFuncUltAtuFunc(999);
+                getObjFunc().setSenhaFunc(util.converteParaMd5("102030"));
                 
                 if (funcionarioControle.verificaCpfCadastrado(getCpf()) == 0) {
                     if (util.emailValido(getEmail())) {
@@ -100,7 +109,7 @@ public class CadFuncionarioBean implements Serializable {
 
     public List<Map<String, Object>> listarSetorPesq() {
         try {
-            setSetorResponsFunc(osControle.listarSetorPesq());
+            setSetorResponsFunc(funcionarioControle.listarSetorPesq());
         } catch (Exception e) {
             System.out.println("Erro no metodo listarSetorPesq");
         }

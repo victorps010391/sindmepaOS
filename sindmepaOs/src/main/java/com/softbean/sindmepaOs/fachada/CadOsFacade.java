@@ -59,6 +59,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,upper(desc_finalizacao_os) as desc_finalizacao                                                                        ");
         sql.append(" from cad_os                                                                                                                   ");
         sql.append(" where nr_os = ").append(nrOs);
+
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();
@@ -90,7 +91,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> gridAnalise01(Integer nrOs, String prior) {
+    public List<Map<String, Object>> gridAnalise01(Integer nrOs, String prior, Integer cdSetor) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
@@ -105,8 +106,9 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,sit_os as cd_sit                                                                                                       ");
         sql.append(" from cad_os                                                                                                                    ");
         sql.append(" where 1=1                                                                                                                      ");
-        sql.append(" and sit_os = '02'                                                                                                              ");
-
+        sql.append(" and sit_os = '02'                                                                                                              ");        
+        sql.append(" and setor_respon_os = ").append(cdSetor);
+        
         if (nrOs != null) {
             sql.append(" and nr_os = ").append(nrOs);
         }
@@ -140,7 +142,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> gridAnalise02(Integer nrOs, String prior) {
+    public List<Map<String, Object>> gridAnalise02(Integer nrOs, String prior, Integer cdSetor) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
@@ -155,7 +157,8 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,sit_os as cd_sit                                                                                                       ");
         sql.append(" from cad_os                                                                                                                    ");
         sql.append(" where 1=1                                                                                                                      ");
-        sql.append(" and sit_os in ('03','04')                                                                                                              ");
+        sql.append(" and sit_os in ('03','04')                                                                                                      ");
+        sql.append(" and setor_respon_os = ").append(cdSetor);
 
         if (nrOs != null) {
             sql.append(" and nr_os = ").append(nrOs);
@@ -190,7 +193,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> gridAnalise03(Integer nrOs, String prior) {
+    public List<Map<String, Object>> gridAnalise03(Integer nrOs, String prior, Integer cdSetor) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
@@ -205,7 +208,8 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,sit_os as cd_sit                                                                                                       ");
         sql.append(" from cad_os                                                                                                                    ");
         sql.append(" where 1=1                                                                                                                      ");
-        sql.append(" and sit_os in ('05','07')                                                                                                              ");
+        sql.append(" and sit_os in ('05','07')                                                                                                      ");
+        sql.append(" and setor_respon_os = ").append(cdSetor);
 
         if (nrOs != null) {
             sql.append(" and nr_os = ").append(nrOs);
@@ -240,7 +244,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit) {
+    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
@@ -255,6 +259,10 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,sit_os as cd_sit ");
         sql.append(" from cad_os ");
         sql.append(" where 1=1 ");
+
+        if (usuSetor != 7) {
+            sql.append(" and setor_abert_os = ").append(usuSetor);
+        }
 
         if (nrOs != null) {
             sql.append(" and nr_os = ").append(nrOs);

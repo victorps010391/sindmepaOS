@@ -98,7 +98,7 @@ public class CadOsControle implements Serializable {
         return osFacade.listarSituaPesq();
     }
 
-    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit) {
-        return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit);
+    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
+        return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor);
     }
 }

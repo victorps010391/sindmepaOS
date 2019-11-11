@@ -6,6 +6,10 @@
 package com.softbean.sindmepaOs.fachada;
 
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -78,9 +82,53 @@ public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
             System.out.println("Erro no metodo validaAcesso " + e.getMessage());
             e.printStackTrace();
         }
-        System.out.println("::::::::: USUARIIO ::::: "+usuario);
         return usuario;
-
     }
 
+    public CadFuncionario retornaUsuario(String cpf, String senha) {
+        CadFuncionario usuario = null;
+        StringBuilder sql = new StringBuilder();
+
+        try {
+            sql.append(" SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cpfFunc = :cpfFunc ");
+            sql.append(" AND c.senhaFunc = :senhaFunc ");
+
+            Query createQuery = em.createQuery(sql.toString());
+            createQuery.setParameter("cpfFunc", cpf);
+            createQuery.setParameter("senhaFunc", senha);
+
+            usuario = (CadFuncionario) createQuery.getSingleResult();
+
+        } catch (Exception e) {
+            System.out.println("Erro no metodo validaAcesso " + e.getMessage());
+            e.printStackTrace();
+        }
+        return usuario;
+    }
+
+    public List<Map<String, Object>> listarSetorPesq() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select cd_setor as codigo ");
+        sql.append("        ,nm_setor as nome ");
+        sql.append(" from cad_setor where usu_setor in ('I','A') ");
+        sql.append(" order by nm_setor ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("codigo", array[0]);
+                map.put("nome", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método listarSetorPesq");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
 }
