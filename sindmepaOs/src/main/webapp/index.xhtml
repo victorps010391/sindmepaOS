@@ -7,9 +7,15 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="centro">
+
         <h:form id="frmIndex" acceptcharset="ISO-8859-1">
-            <h:outputText value="Seja Bem-vindo #{loginBean.usuario.nmFunc}! Agora você possui acesso ao Site"/>            
+            <p:panel>
+                <p:panelGrid>
+                    <h:outputText value="Seja Bem-vindo #{loginBean.usuario.nmFunc}!"/> 
+                </p:panelGrid>
+            </p:panel>
         </h:form>
+
     </ui:define>
 
 </ui:composition>

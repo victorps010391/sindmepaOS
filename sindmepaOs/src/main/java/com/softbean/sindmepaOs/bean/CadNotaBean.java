@@ -35,6 +35,8 @@ public class CadNotaBean implements Serializable {
     CadNotaControle notaControle;
     @Inject
     CadOsBean osBean;
+    @Inject
+    LoginBean loginBean;
 
     CadNota cadNotaObj;
     CadNotaPK cadNotaObjPK;
@@ -58,7 +60,7 @@ public class CadNotaBean implements Serializable {
 
         try {
             getCadNotaObj().setDtUltAtuNota(new Date());
-            getCadNotaObj().setFuncUltAtuNota(111);
+            getCadNotaObj().setFuncUltAtuNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             if (notaControle.alterarNotaControle(getCadNotaObj())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Nota Alterada com Sucesso."));
                 context.execute("PF('dlAltNota').hide()");
@@ -77,7 +79,7 @@ public class CadNotaBean implements Serializable {
 
         try {
             getCadNotaObj().setDtUltAtuNota(new Date());
-            getCadNotaObj().setFuncUltAtuNota(111);
+            getCadNotaObj().setFuncUltAtuNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getCadNotaObj().setInvalidaNota("S");
             if (notaControle.excluirNotaControle(getCadNotaObj())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Nota Excluida com Sucesso."));
@@ -107,9 +109,9 @@ public class CadNotaBean implements Serializable {
                 setCadNotaObj(new CadNota());
                 getCadNotaObj().setHistNota(getHisCad());
                 getCadNotaObj().setDtRegiNota(new Date());
-                getCadNotaObj().setFuncRegiNota(999);
+                getCadNotaObj().setFuncRegiNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
                 getCadNotaObj().setDtUltAtuNota(new Date());
-                getCadNotaObj().setFuncUltAtuNota(999);
+                getCadNotaObj().setFuncUltAtuNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
 
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));

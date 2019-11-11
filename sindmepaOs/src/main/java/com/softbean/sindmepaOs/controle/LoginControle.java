@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.softbean.sindmepaOs.manager;
+package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
 import javax.faces.application.NavigationHandler;
@@ -15,11 +15,17 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author admin
+ * @author Victor
  */
-public class LoginManager implements PhaseListener {
+public class LoginControle implements PhaseListener {
 
-    private FacesContext facesContext;
+    /**
+     * Creates a new instance of LoginControle
+     */
+    public LoginControle() {
+    }
+    
+     private FacesContext facesContext;
 
     @Override
     public void afterPhase(PhaseEvent event) {
@@ -30,9 +36,9 @@ public class LoginManager implements PhaseListener {
         boolean paginaLogin = viewId.lastIndexOf("login") > -1;
 
         if (existeUsuarioLogado() && paginaLogin) {
-            nh.handleNavigation(facesContext, null, "/index?faces-redirect=true");
+            nh.handleNavigation(facesContext, null, "index");
         } else if (!existeUsuarioLogado() && !paginaLogin) {
-            nh.handleNavigation(facesContext, null, "/login?faces-redirect=true");
+            nh.handleNavigation(facesContext, null, "login");
         }
     }
 
@@ -57,4 +63,5 @@ public class LoginManager implements PhaseListener {
     public PhaseId getPhaseId() {
         return PhaseId.RESTORE_VIEW;
     }
+    
 }

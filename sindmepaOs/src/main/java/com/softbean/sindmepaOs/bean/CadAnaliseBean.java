@@ -47,6 +47,8 @@ public class CadAnaliseBean implements Serializable {
     CadNotaControle notaControle;
     @Inject
     CadTarefaControle tarefaControle;
+    @Inject
+    LoginBean loginBean;
 
     CadOs objOs;
     CadNota cadNotaObj;
@@ -136,9 +138,9 @@ public class CadAnaliseBean implements Serializable {
         try {
             setObjOs(null);
             setObjOs(osControle.buscarOsControle(getVos()));
-            getObjOs().setFuncUltAtuOs(999);
+            getObjOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObjOs().setDtUltAtuOs(new Date());
-            getObjOs().setFuncResponOs(999);
+            getObjOs().setFuncResponOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObjOs().setSitOs("03");
             if (osControle.alterarOsControle(getObjOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise do protocolo: " + getObjOs().getNrOs() + " Iniciada com Sucesso."));
@@ -161,8 +163,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public String analiseIniciada(Integer os) {
-        RequestContext context = RequestContext.getCurrentInstance();
-        FacesContext mensagem = FacesContext.getCurrentInstance();
+        RequestContext context = RequestContext.getCurrentInstance();        
         try {
             setVerOs(null);
             setVerOs(analiseControle.verOs(os));
@@ -205,9 +206,9 @@ public class CadAnaliseBean implements Serializable {
         try {
             setObjOs(null);
             setObjOs(osControle.buscarOsControle(getVos()));
-            getObjOs().setFuncUltAtuOs(999);
+            getObjOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObjOs().setDtUltAtuOs(new Date());
-            getObjOs().setFuncFinaliOs(999);
+            getObjOs().setFuncFinaliOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObjOs().setDtFechaOs(new Date());
             getObjOs().setDescFinalizacaoOs(getDescFinal());
             getObjOs().setSitOs(getSitFinal());
@@ -304,22 +305,22 @@ public class CadAnaliseBean implements Serializable {
                 getObjTarefaPk().setSeqTarefa(tarefaControle.retornaSeqTarefa(getVos()));
 
                 setObjTarefa(new CadTarefa());
-                getObjTarefa().setDtAbertTarefa(new Date());                
-                getObjTarefa().setFuncAbertTarefa(999);
-                getObjTarefa().setFuncResponTarefa(999);
+                getObjTarefa().setDtAbertTarefa(new Date());
+                getObjTarefa().setFuncAbertTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getObjTarefa().setFuncResponTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
                 getObjTarefa().setHistTarefa(getDescTarefa());
                 getObjTarefa().setObsTarefa(getDescObsTarefa());
                 getObjTarefa().setSetorAbertTarefa(0);
                 getObjTarefa().setSetorResponTarefa(getCdSetorTarefa());
                 getObjTarefa().setSitTarefa("01");
                 getObjTarefa().setDtUltAtuTarefa(new Date());
-                getObjTarefa().setFuncUltAtuTarefa(999);
+                getObjTarefa().setFuncUltAtuTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
 
                 setObjOs(null);
                 setObjOs(osControle.buscarOsControle(getVos()));
                 getObjOs().setSitOs("04");
                 getObjOs().setDtUltAtuOs(new Date());
-                getObjOs().setFuncUltAtuOs(999);
+                getObjOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
 
                 if (osControle.alterarOsControle(getObjOs())) {
                     if (tarefaControle.salvarTarefaControle(getObjTarefa(), getObjTarefaPk())) {
@@ -352,9 +353,9 @@ public class CadAnaliseBean implements Serializable {
                 setCadNotaObj(new CadNota());
                 getCadNotaObj().setHistNota(getDescNotaAnalise());
                 getCadNotaObj().setDtRegiNota(new Date());
-                getCadNotaObj().setFuncRegiNota(999);
+                getCadNotaObj().setFuncRegiNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
                 getCadNotaObj().setDtUltAtuNota(new Date());
-                getCadNotaObj().setFuncUltAtuNota(999);
+                getCadNotaObj().setFuncUltAtuNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
 
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));

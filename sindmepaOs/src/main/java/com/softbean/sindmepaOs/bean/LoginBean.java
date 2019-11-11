@@ -54,10 +54,13 @@ public class LoginBean implements Serializable {
     }
 
     public String logOff() {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        RequestContext context = RequestContext.getCurrentInstance();
+        HttpSession session = (HttpSession) mensagem.getExternalContext().getSession(false);
+        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Você saiu do sistema."));
         session.invalidate();
-        return "/login?faces-redirect=true";
+        context.update(":frmLogin");
+        return "login";
     }
 
     public String getCpfAcess() {

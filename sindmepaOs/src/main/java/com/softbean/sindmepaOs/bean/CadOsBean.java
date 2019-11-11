@@ -42,6 +42,8 @@ public class CadOsBean implements Serializable {
     CadNotaControle notaControle;
     @Inject
     MailUtil mailUtil;
+    @Inject
+    LoginBean loginBean;
 
     String priorAlt;
     Integer setAlt;
@@ -105,9 +107,9 @@ public class CadOsBean implements Serializable {
             getObCadOs().setDtAbertOs(new Date());
             getObCadOs().setDtFechaOs(null);
             getObCadOs().setDtUltAtuOs(new Date());
-            getObCadOs().setFuncAbertOs(999);
+            getObCadOs().setFuncAbertOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObCadOs().setFuncResponOs(999);
-            getObCadOs().setFuncUltAtuOs(999);
+            getObCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObCadOs().setHistOs(getHist());
             getObCadOs().setNrOs(osControle.retornaNrOs());
             getObCadOs().setObsOs(getObs());
@@ -168,7 +170,7 @@ public class CadOsBean implements Serializable {
             setCadSetorObj(osControle.buscarSetor(getSetAlt()));
             getObCadOs().setSetorResponOs(getCadSetorObj());
             getObCadOs().setDtUltAtuOs(new Date());
-            getObCadOs().setFuncUltAtuOs(111);
+            getObCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             if (osControle.alterarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Alteração do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
                 context.execute("PF('dlAltOs').hide()");
@@ -187,7 +189,7 @@ public class CadOsBean implements Serializable {
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObCadOs().setDtUltAtuOs(new Date());
-            getObCadOs().setFuncUltAtuOs(111);
+            getObCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObCadOs().setSitOs("06");
             getObCadOs().setDtFechaOs(new Date());
             if (osControle.alterarOsControle(getObCadOs())) {
@@ -218,7 +220,7 @@ public class CadOsBean implements Serializable {
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObCadOs().setDtUltAtuOs(new Date());
-            getObCadOs().setFuncUltAtuOs(999);
+            getObCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObCadOs().setSitOs("02");
 
             if (osControle.alterarOsControle(getObCadOs())) {

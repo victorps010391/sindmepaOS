@@ -7,6 +7,7 @@ package com.softbean.sindmepaOs.entidade;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -62,6 +63,8 @@ public class CadFuncionario implements Serializable {
     @Column(name = "dt_nasc_func")
     @Temporal(TemporalType.DATE)
     private Date dtNascFunc;
+    
+    private static final Logger LOG = Logger.getLogger(CadFuncionario.class.getName());
 
     public CadFuncionario() {
     }

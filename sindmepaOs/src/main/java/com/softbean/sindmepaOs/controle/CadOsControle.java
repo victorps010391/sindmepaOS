@@ -5,6 +5,7 @@
  */
 package com.softbean.sindmepaOs.controle;
 
+import com.softbean.sindmepaOs.bean.LoginBean;
 import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.CadSetor;
 import com.softbean.sindmepaOs.fachada.CadCategoriaFacade;
@@ -37,6 +38,7 @@ public class CadOsControle implements Serializable {
     CadSetorFacade setorFacade;
     @Inject
     CadCategoriaFacade categoriaFacade;
+   
 
     public Boolean salvarOsControle(CadOs obj) {
         try {
