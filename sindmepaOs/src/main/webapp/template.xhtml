@@ -15,7 +15,7 @@
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.css" />
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.min.css" />
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jjquery-ui.theme.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.min.css" />
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
             <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" /> 
             <link type="text/css" rel="stylesheet" href="theme/estilos.css" /> 
@@ -24,7 +24,7 @@
             <div id="messages" style="display: block;">
                 <p:ajaxStatus style="display:none;margin-bottom:2em;height:24px;">
                     <f:facet name="start">
-                        <h:outputLabel value="Processando..."/>
+                        <h:outputLabel value="Processando" style="font-size: medium; font-weight:bold"/>
                         <p:graphicImage url="/images/loading.gif" />
                     </f:facet>
                 </p:ajaxStatus>
@@ -32,8 +32,10 @@
                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                    <h:outputLabel value="Processando..." />
-                    <p:graphicImage url="/images/loading.gif" />
+                    <p:panelGrid columns="1" style="width:100%; height:100%;">
+                        <h:outputLabel value="Processando" style="font-size: medium; font-weight:bold"/>
+                        <p:graphicImage library="images" name="loading.gif"/>
+                    </p:panelGrid>
                 </p:dialog>
             </div>            
             <!--            <h:form enctype="multipart/form-data">-->                       
@@ -44,7 +46,7 @@
                 <!--                <p:layoutUnit position="south" size="40" closable="true" collapsible="true">
                                     
                                 </p:layoutUnit>-->
-                <p:layoutUnit position="west" header="Esconder" collapsible="true" resizable="true">
+                <p:layoutUnit position="west" header="Esconder" collapsible="true">
                     <ui:insert name="menu">
                         <ui:include src="/menu.xhtml"></ui:include>
                     </ui:insert>                                      

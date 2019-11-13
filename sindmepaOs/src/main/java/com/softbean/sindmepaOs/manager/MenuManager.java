@@ -18,7 +18,8 @@ import javax.inject.Inject;
 @Named(value = "menuManager")
 @SessionScoped
 public class MenuManager implements Serializable {
-
+   
+            
     /**
      * Creates a new instance of MenuControle
      */

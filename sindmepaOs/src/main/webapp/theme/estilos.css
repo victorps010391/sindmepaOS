@@ -23,3 +23,13 @@ and open the template in the editor.
     font-size: small;
     font-weight: bold;       
 }
+
+.ui-panel, div.ui-state-hover {
+    margin: 10px;
+    width:200px;
+}
+
+.ui-dashboard-column {
+    width:220px;
+}
+

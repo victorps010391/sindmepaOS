@@ -14,6 +14,43 @@
                     <h:outputText value="Seja Bem-vindo #{loginBean.usuario.nmFunc}!"/> 
                 </p:panelGrid>
             </p:panel>
+            <br/>
+            <br/>
+
+            <p:fieldset id="protocolos" 
+                        legend="Protocolos" 
+                        toggleable="true" 
+                        toggleSpeed="500" 
+                        style=" width: 350px; border-width: thick;">                
+                <h:panelGrid columns="2" cellpadding="5">                   
+                    <p:dataTable var="item" rows="5" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+                        <p:column headerText="QUANTIDADE">
+                            <h:outputText value="" />
+                        </p:column>
+
+                        <p:column headerText="STATUS">
+                            <h:outputText value="" />
+                        </p:column>                    
+                    </p:dataTable>
+                </h:panelGrid>
+
+                <h:panelGrid columns="2" cellpadding="5" rendered="#{indexManager.gridDiretoria()}">                   
+                    <p:dataTable var="item" rows="5" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+                        <p:column headerText="QUANTIDADE">
+                            <h:outputText value="" />
+                        </p:column>
+
+                        <p:column headerText="STATUS">
+                            <h:outputText value="" />
+                        </p:column>   
+                        
+                         <p:column headerText="SETOR RESPONSAVEL">
+                            <h:outputText value="" />
+                        </p:column>                    
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:fieldset>          
+            <p:draggable for="protocolos"  grid="20,40" />
         </h:form>
 
     </ui:define>

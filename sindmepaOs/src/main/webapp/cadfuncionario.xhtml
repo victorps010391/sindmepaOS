@@ -31,7 +31,7 @@
                     <p:commandButton value="Salvar" 
                                      actionListener="#{cadFuncionarioBean.salvarCadFuncionario()}"
                                      update="@form :frmCadFunc"/> 
-                    <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
                 </f:facet>
             </p:panel>
 

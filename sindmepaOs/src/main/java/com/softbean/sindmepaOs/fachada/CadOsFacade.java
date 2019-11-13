@@ -106,9 +106,9 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,sit_os as cd_sit                                                                                                       ");
         sql.append(" from cad_os                                                                                                                    ");
         sql.append(" where 1=1                                                                                                                      ");
-        sql.append(" and sit_os = '02'                                                                                                              ");        
+        sql.append(" and sit_os = '02'                                                                                                              ");
         sql.append(" and setor_respon_os = ").append(cdSetor);
-        
+
         if (nrOs != null) {
             sql.append(" and nr_os = ").append(nrOs);
         }
@@ -392,6 +392,65 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
             }
         } catch (Exception e) {
             System.out.println("ERRO no método listarSetorPesq");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> usuDashboard(Integer cdSetor) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select count(*) as qtd ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as desc ");
+        sql.append(" from cad_os ");
+        sql.append(" where setor_respon_os = ").append(cdSetor);
+        sql.append(" group by sit_os ");
+        sql.append(" order by sit_os ");
+
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("qtd", array[0]);
+                map.put("desc", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método usuDashboard " + e.getMessage());
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> usuDiretorDashboard() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select count(*) as qtd ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as desc ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setRespon ");
+        sql.append(" from cad_os ");
+        sql.append(" group by sit_os,setor_respon_os ");
+        sql.append(" order by sit_os,setor_respon_os ");
+
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("qtd", array[0]);
+                map.put("desc", array[1]);
+                map.put("setRespon", array[2]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método usuDashboard " + e.getMessage());
             e.printStackTrace();
         }
         return resultMaps;

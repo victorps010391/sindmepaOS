@@ -76,7 +76,7 @@ public class LoginBean implements Serializable {
             if (session != null) {
                 session.setAttribute("usuario", getUsuario());
             }
-            context.update(":frmIndex");
+            context.update(":frmIndex :frmDashboard");
             return "index";
         }
     }

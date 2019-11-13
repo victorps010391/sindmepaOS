@@ -27,7 +27,7 @@
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadAnaliseBean.pesquisar()}" update="grid01 grid02 grid03"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadAnaliseBean.limparPesquisa()}" update="frmCadAnalise"/>                                                                    
-                    <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />                    
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />                    
                 </f:facet>
             </p:panel>
             <br/>

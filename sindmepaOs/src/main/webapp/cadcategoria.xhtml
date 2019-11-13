@@ -32,7 +32,7 @@
                     <p:commandButton value="Pesquisar" actionListener="#{cadCategoriaBean.pesquisa()}" update="gridPrincipal" ajax="false"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadCategoriaBean.limparPesquisa()}" update="frmCadCateg" ajax="false"/>                    
                     <p:commandButton value="Novo Setor" onclick="PF('dlCadCateg').show()" update="frmDlCadCateg"/>  
-                    <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
                 </f:facet>
             </p:panel>
 

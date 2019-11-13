@@ -115,7 +115,7 @@ public class CadOsBean implements Serializable {
             getObCadOs().setObsOs(getObs());
             setCadSetorObj(null)/*limpar variavel*/;
             setCadSetorObj(osControle.buscarSetor(getSetResponCad()));
-            getObCadOs().setSetorAbertOs(getCadSetorObj());
+            getObCadOs().setSetorAbertOs(loginBean.getUsuario().getSetorFunc());
             getObCadOs().setSetorResponOs(getCadSetorObj());
             getObCadOs().setSitOs("01");
             getObCadOs().setTipEnvioOs("I");
