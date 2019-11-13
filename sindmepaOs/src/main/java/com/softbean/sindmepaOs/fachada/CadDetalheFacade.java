@@ -140,4 +140,31 @@ public class CadDetalheFacade extends AbstractFacade<CadDetalhe> {
         return resultMaps;
     }
 
+    public List<Map<String, Object>> listarSitFinalizacaoOs() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select cod_valor_detalhe as codigo ");
+        sql.append("        ,desc_detalhe as nome ");
+        sql.append(" from cad_detalhe ");
+        sql.append(" where cod_item_detalhe = 'SITOS' ");
+        sql.append(" and cod_valor_detalhe in ('05','07') ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("codigo", array[0]);
+                map.put("nome", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método listarSitAnaliseOs");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
 }

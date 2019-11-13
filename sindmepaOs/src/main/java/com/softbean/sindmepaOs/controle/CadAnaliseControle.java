@@ -7,6 +7,7 @@ package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.fachada.CadDetalheFacade;
 import com.softbean.sindmepaOs.fachada.CadOsFacade;
+import com.softbean.sindmepaOs.fachada.CadTarefaFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -32,6 +33,8 @@ public class CadAnaliseControle implements Serializable {
     CadDetalheFacade detalheFacade;
     @Inject
     CadOsFacade osFacade;
+    @Inject
+    CadTarefaFacade tarefaFacade;
 
     public List<Map<String, Object>> verOs(Integer os) {
         return osFacade.verOs(os);
@@ -45,16 +48,19 @@ public class CadAnaliseControle implements Serializable {
         return detalheFacade.listarSitAnaliseOs();
     }
 
-    public List<Map<String, Object>> gridAnalise01(Integer nrOs, String prior) {
-        return osFacade.gridAnalise01(nrOs, prior);
+    public List<Map<String, Object>> gridAnalise01(Integer nrOs, String prior, Integer cdSetor) {
+        return osFacade.gridAnalise01(nrOs, prior, cdSetor);
     }
 
-    public List<Map<String, Object>> gridAnalise02(Integer nrOs, String prior) {
-        return osFacade.gridAnalise02(nrOs, prior);
+    public List<Map<String, Object>> gridAnalise02(Integer nrOs, String prior, Integer cdSetor) {
+        return osFacade.gridAnalise02(nrOs, prior, cdSetor);
     }
 
-    public List<Map<String, Object>> gridAnalise03(Integer nrOs, String prior) {
-        return osFacade.gridAnalise03(nrOs, prior);
+    public List<Map<String, Object>> gridAnalise03(Integer nrOs, String prior, Integer cdSetor) {
+        return osFacade.gridAnalise03(nrOs, prior, cdSetor);
     }
 
+    public List<Map<String, Object>> listarSitFinalizacaoOs() {
+        return detalheFacade.listarSitFinalizacaoOs();
+    }    
 }

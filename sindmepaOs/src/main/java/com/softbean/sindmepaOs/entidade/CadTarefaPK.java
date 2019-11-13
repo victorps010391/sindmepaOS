@@ -10,18 +10,20 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Embeddable
 public class CadTarefaPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 512)
     @Column(name = "nr_os_tarefa")
-    private int nrOsTarefa;
+    private String nrOsTarefa;
     @Basic(optional = false)
     @Column(name = "seq_tarefa")
     private int seqTarefa;
@@ -29,16 +31,16 @@ public class CadTarefaPK implements Serializable {
     public CadTarefaPK() {
     }
 
-    public CadTarefaPK(int nrOsTarefa, int seqTarefa) {
+    public CadTarefaPK(String nrOsTarefa, int seqTarefa) {
         this.nrOsTarefa = nrOsTarefa;
         this.seqTarefa = seqTarefa;
     }
 
-    public int getNrOsTarefa() {
+    public String getNrOsTarefa() {
         return nrOsTarefa;
     }
 
-    public void setNrOsTarefa(int nrOsTarefa) {
+    public void setNrOsTarefa(String nrOsTarefa) {
         this.nrOsTarefa = nrOsTarefa;
     }
 
@@ -53,7 +55,7 @@ public class CadTarefaPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) nrOsTarefa;
+        hash += (nrOsTarefa != null ? nrOsTarefa.hashCode() : 0);
         hash += (int) seqTarefa;
         return hash;
     }
@@ -65,7 +67,7 @@ public class CadTarefaPK implements Serializable {
             return false;
         }
         CadTarefaPK other = (CadTarefaPK) object;
-        if (this.nrOsTarefa != other.nrOsTarefa) {
+        if ((this.nrOsTarefa == null && other.nrOsTarefa != null) || (this.nrOsTarefa != null && !this.nrOsTarefa.equals(other.nrOsTarefa))) {
             return false;
         }
         if (this.seqTarefa != other.seqTarefa) {

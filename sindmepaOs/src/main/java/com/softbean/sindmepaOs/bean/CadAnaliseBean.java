@@ -6,9 +6,14 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadAnaliseControle;
+import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
+import com.softbean.sindmepaOs.controle.CadTarefaControle;
+import com.softbean.sindmepaOs.entidade.CadNota;
+import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import com.softbean.sindmepaOs.entidade.CadOs;
-import com.softbean.sindmepaOs.util.ObjVerOsUtil;
+import com.softbean.sindmepaOs.entidade.CadTarefa;
+import com.softbean.sindmepaOs.entidade.CadTarefaPK;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -38,8 +43,18 @@ public class CadAnaliseBean implements Serializable {
     CadAnaliseControle analiseControle;
     @Inject
     CadOsControle osControle;
+    @Inject
+    CadNotaControle notaControle;
+    @Inject
+    CadTarefaControle tarefaControle;
+    @Inject
+    LoginBean loginBean;
 
     CadOs objOs;
+    CadNota cadNotaObj;
+    CadNotaPK cadNotaObjPK;
+    CadTarefa objTarefa;
+    CadTarefaPK objTarefaPk;
     Integer nrOs;
     String priorPesq;
     List<Map<String, Object>> grid01;
@@ -47,6 +62,10 @@ public class CadAnaliseBean implements Serializable {
     List<Map<String, Object>> grid03;
     List<Map<String, Object>> priorListaPesq;
     List<Map<String, Object>> verOs;
+    List<Map<String, Object>> listarFinalizacao;
+    List<Map<String, Object>> notaAnalise;
+    List<Map<String, Object>> tarefaAnalise;
+    List<Map<String, Object>> setorTarefa;
 
     Integer Vos;
     String Vprioridade;
@@ -62,6 +81,27 @@ public class CadAnaliseBean implements Serializable {
     Integer Vcod_setor_abertura;
     Integer Vcod_categoria;
     String Vfunc_abert;
+    String Vdesc_final;
+    String sitFinal;
+    String descFinal;
+    String descNotaAnalise;
+    Integer cdSetorTarefa;
+    String descTarefa;
+    String descObsTarefa;
+
+    public String voltarCadAnalise() {
+        try {
+            setGrid01(analiseControle.gridAnalise01(null, null, null));
+            setGrid02(analiseControle.gridAnalise02(null, null, null));
+            setGrid03(analiseControle.gridAnalise03(null, null, null));
+            return "cadanalise";
+
+        } catch (Exception e) {
+            System.out.println("Erro no método voltarCadAnalise " + e.getMessage());
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     public void analise(Integer os) {
         try {
@@ -82,8 +122,10 @@ public class CadAnaliseBean implements Serializable {
                 setVcod_setor_abertura((Integer) elemento.get("cod_setor_abert"));
                 setVcod_categoria((Integer) elemento.get("cod_categoria"));
                 setVfunc_abert((String) elemento.get("func_abert"));
+                setVdesc_final((String) elemento.get("desc_finalizacao"));
             }
-
+            limparCadastroNota();
+            limparCadastroTarefa();
         } catch (Exception e) {
             System.out.println("Erro no método analise " + e.getMessage());
             e.printStackTrace();
@@ -94,15 +136,21 @@ public class CadAnaliseBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
+            setObjOs(null);
             setObjOs(osControle.buscarOsControle(getVos()));
-            getObjOs().setFuncUltAtuOs(999);
+            getObjOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObjOs().setDtUltAtuOs(new Date());
-            getObjOs().setFuncResponOs(999);
+            getObjOs().setFuncResponOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             getObjOs().setSitOs("03");
             if (osControle.alterarOsControle(getObjOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise do protocolo: " + getObjOs().getNrOs() + " Iniciada com Sucesso."));
                 context.execute("PF('dlConfirm').hide()");
-                return "cadsetor";
+                setNotaAnalise(null);
+                setTarefaAnalise(null);
+                setNotaAnalise(notaControle.gridSecundario(getVos()));
+                setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+                context.update(":frmAnaliseOs :gridNota :gridTarefa");
+                return "analise";
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao iniciar Análise do protocolo: " + getObjOs().getNrOs() + "."));
                 return "";
@@ -114,15 +162,111 @@ public class CadAnaliseBean implements Serializable {
         }
     }
 
+    public String analiseIniciada(Integer os) {
+        RequestContext context = RequestContext.getCurrentInstance();        
+        try {
+            setVerOs(null);
+            setVerOs(analiseControle.verOs(os));
+            for (Map<String, Object> elemento : getVerOs()) {
+                setVcategoria((String) elemento.get("categoria"));
+                setVos((Integer) elemento.get("os"));
+                setVprioridade((String) elemento.get("prioridade"));
+                setVsetor_responsavel((String) elemento.get("setor_responsavel"));
+                setVdata_hora_abert((String) elemento.get("data_hora_abert"));
+                setVdata_hora_fecha((String) elemento.get("data_hora_fecha"));
+                setVsit((String) elemento.get("sit"));
+                setVcd_sit((String) elemento.get("cd_sit"));
+                setVhistorico((String) elemento.get("historico"));
+                setVobservacao((String) elemento.get("observacao"));
+                setVsetor_abertura((String) elemento.get("setor_abertura"));
+                setVcod_setor_abertura((Integer) elemento.get("cod_setor_abert"));
+                setVcod_categoria((Integer) elemento.get("cod_categoria"));
+                setVfunc_abert((String) elemento.get("func_abert"));
+                setVdesc_final((String) elemento.get("desc_finalizacao"));
+            }
+            setNotaAnalise(null);
+            setTarefaAnalise(null);
+            setNotaAnalise(notaControle.gridSecundario(getVos()));
+            setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+            limparCadastroNota();
+            limparCadastroTarefa();
+            context.update(":frmAnaliseOs :gridNota :gridTarefa");
+            return "analise";
+
+        } catch (Exception e) {
+            System.out.println("Erro no método analiseIniciada " + e.getMessage());
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public void finalizarAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setObjOs(null);
+            setObjOs(osControle.buscarOsControle(getVos()));
+            getObjOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            getObjOs().setDtUltAtuOs(new Date());
+            getObjOs().setFuncFinaliOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            getObjOs().setDtFechaOs(new Date());
+            getObjOs().setDescFinalizacaoOs(getDescFinal());
+            getObjOs().setSitOs(getSitFinal());
+            if (osControle.alterarOsControle(getObjOs())) {
+                limparFinalização();
+                context.execute("PF('dlResolvOs').hide()");
+                analise(getObjOs().getNrOs());
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObjOs().getNrOs() + " finalizado com sucesso."));
+            } else {
+                limparFinalização();
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar protocolo: " + getObjOs().getNrOs() + "."));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método finalizarAnalise " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
     public void pesquisar() {
         try {
-            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq()));
-            setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq()));
-            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq()));
+            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public void pesquisarNota() {
+        try {
+            setNotaAnalise(null);
+            setNotaAnalise(notaControle.gridSecundario(getVos()));
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarNota " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarTarefa() {
+        try {
+            setTarefaAnalise(null);
+            setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public List<Map<String, Object>> listarSetorTarefa() {
+        try {
+            setSetorTarefa(tarefaControle.listarSetorTarefa());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarSetorTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+        return getSetorTarefa();
     }
 
     public List<Map<String, Object>> listarPriorOs() {
@@ -135,12 +279,135 @@ public class CadAnaliseBean implements Serializable {
         return getPriorListaPesq();
     }
 
+    public String dadosSindicais() {
+        if (getVcod_categoria() == 7 && getVcod_setor_abertura() == 0) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+
+    public String renderizarFinalização() {
+        if ("05".equals(getVcd_sit()) || "07".equals(getVcd_sit())) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
+
+    public void salvarTarefaAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            if (getObjTarefa().getCadTarefaPK() == null) {
+                setObjTarefaPk(new CadTarefaPK());
+                getObjTarefaPk().setNrOsTarefa(getVos().toString());
+                getObjTarefaPk().setSeqTarefa(tarefaControle.retornaSeqTarefa(getVos()));
+
+                setObjTarefa(new CadTarefa());
+                getObjTarefa().setDtAbertTarefa(new Date());
+                getObjTarefa().setFuncAbertTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getObjTarefa().setFuncResponTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getObjTarefa().setHistTarefa(getDescTarefa());
+                getObjTarefa().setObsTarefa(getDescObsTarefa());
+                getObjTarefa().setSetorAbertTarefa(0);
+                getObjTarefa().setSetorResponTarefa(getCdSetorTarefa());
+                getObjTarefa().setSitTarefa("01");
+                getObjTarefa().setDtUltAtuTarefa(new Date());
+                getObjTarefa().setFuncUltAtuTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+
+                setObjOs(null);
+                setObjOs(osControle.buscarOsControle(getVos()));
+                getObjOs().setSitOs("04");
+                getObjOs().setDtUltAtuOs(new Date());
+                getObjOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+
+                if (osControle.alterarOsControle(getObjOs())) {
+                    if (tarefaControle.salvarTarefaControle(getObjTarefa(), getObjTarefaPk())) {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Tarefa Realizado com Sucesso."));
+                        context.execute("PF('dlCadTar').hide()");
+                        pesquisarTarefa();
+                        limparCadastroTarefa();
+                    } else {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Tarefa."));
+                    }
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Tarefa."));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método salvarTarefaAnalise " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void salvarNotaAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            if (getCadNotaObj().getCadNotaPK() == null) {
+                setCadNotaObjPK(new CadNotaPK());
+                getCadNotaObjPK().setNrOsNota(getVos());
+                getCadNotaObjPK().setSerialNota(notaControle.retornaSeqNota(getVos()));
+
+                setCadNotaObj(new CadNota());
+                getCadNotaObj().setHistNota(getDescNotaAnalise());
+                getCadNotaObj().setDtRegiNota(new Date());
+                getCadNotaObj().setFuncRegiNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getCadNotaObj().setDtUltAtuNota(new Date());
+                getCadNotaObj().setFuncUltAtuNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+
+                if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
+                    context.update("@form :frmAnaliseOs");
+                    context.execute("PF('dlCadNotaAnalise').hide()");
+                    pesquisarNota();
+                    limparCadastroNota();
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));
+                    context.update("@form :frmAnaliseOs");
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
     public void limparPesquisa() {
         setPriorListaPesq(null);
+        setPriorPesq(null);
         setNrOs(null);
         setGrid01(null);
         setGrid02(null);
         setGrid03(null);
+    }
+
+    public void limparFinalização() {
+        setListarFinalizacao(null);
+        setSitFinal(null);
+        setDescFinal(null);
+    }
+
+    public void limparCadastroNota() {
+        setCadNotaObj(null);
+        setCadNotaObjPK(null);
+        setDescNotaAnalise(null);
+    }
+
+    public void limparCadastroTarefa() {
+        setObjTarefa(null);
+        setObjTarefaPk(null);
+        setDescTarefa(null);
+        setDescObsTarefa(null);
+        setCdSetorTarefa(null);
+    }
+
+    public List<Map<String, Object>> listarFinalizacao() {
+        try {
+            setListarFinalizacao(analiseControle.listarSitFinalizacaoOs());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarFinalizacao " + e.getMessage());
+        }
+        return getListarFinalizacao();
     }
 
     public CadOs getObjOs() {
@@ -152,6 +419,54 @@ public class CadAnaliseBean implements Serializable {
 
     public void setObjOs(CadOs objOs) {
         this.objOs = objOs;
+    }
+
+    public String getDescTarefa() {
+        return descTarefa;
+    }
+
+    public void setDescTarefa(String descTarefa) {
+        this.descTarefa = descTarefa;
+    }
+
+    public String getDescObsTarefa() {
+        return descObsTarefa;
+    }
+
+    public void setDescObsTarefa(String descObsTarefa) {
+        this.descObsTarefa = descObsTarefa;
+    }
+
+    public Integer getCdSetorTarefa() {
+        return cdSetorTarefa;
+    }
+
+    public void setCdSetorTarefa(Integer cdSetorTarefa) {
+        this.cdSetorTarefa = cdSetorTarefa;
+    }
+
+    public String getDescNotaAnalise() {
+        return descNotaAnalise;
+    }
+
+    public void setDescNotaAnalise(String descNotaAnalise) {
+        this.descNotaAnalise = descNotaAnalise;
+    }
+
+    public String getDescFinal() {
+        return descFinal;
+    }
+
+    public void setDescFinal(String descFinal) {
+        this.descFinal = descFinal;
+    }
+
+    public String getSitFinal() {
+        return sitFinal;
+    }
+
+    public void setSitFinal(String sitFinal) {
+        this.sitFinal = sitFinal;
     }
 
     public Integer getNrOs() {
@@ -168,6 +483,38 @@ public class CadAnaliseBean implements Serializable {
 
     public void setPriorPesq(String priorPesq) {
         this.priorPesq = priorPesq;
+    }
+
+    public List<Map<String, Object>> getSetorTarefa() {
+        return setorTarefa;
+    }
+
+    public void setSetorTarefa(List<Map<String, Object>> setorTarefa) {
+        this.setorTarefa = setorTarefa;
+    }
+
+    public List<Map<String, Object>> getTarefaAnalise() {
+        return tarefaAnalise;
+    }
+
+    public void setTarefaAnalise(List<Map<String, Object>> tarefaAnalise) {
+        this.tarefaAnalise = tarefaAnalise;
+    }
+
+    public List<Map<String, Object>> getNotaAnalise() {
+        return notaAnalise;
+    }
+
+    public void setNotaAnalise(List<Map<String, Object>> notaAnalise) {
+        this.notaAnalise = notaAnalise;
+    }
+
+    public List<Map<String, Object>> getListarFinalizacao() {
+        return listarFinalizacao;
+    }
+
+    public void setListarFinalizacao(List<Map<String, Object>> listarFinalizacao) {
+        this.listarFinalizacao = listarFinalizacao;
     }
 
     public List<Map<String, Object>> getGrid03() {
@@ -204,6 +551,14 @@ public class CadAnaliseBean implements Serializable {
 
     public List<Map<String, Object>> getVerOs() {
         return verOs;
+    }
+
+    public String getVdesc_final() {
+        return Vdesc_final;
+    }
+
+    public void setVdesc_final(String Vdesc_final) {
+        this.Vdesc_final = Vdesc_final;
     }
 
     public void setVerOs(List<Map<String, Object>> verOs) {
@@ -320,6 +675,50 @@ public class CadAnaliseBean implements Serializable {
 
     public void setVfunc_abert(String Vfunc_abert) {
         this.Vfunc_abert = Vfunc_abert;
+    }
+
+    public CadNota getCadNotaObj() {
+        if (cadNotaObj == null) {
+            cadNotaObj = new CadNota();
+        }
+        return cadNotaObj;
+    }
+
+    public void setCadNotaObj(CadNota cadNotaObj) {
+        this.cadNotaObj = cadNotaObj;
+    }
+
+    public CadNotaPK getCadNotaObjPK() {
+        if (cadNotaObjPK == null) {
+            cadNotaObjPK = new CadNotaPK();
+        }
+        return cadNotaObjPK;
+    }
+
+    public void setCadNotaObjPK(CadNotaPK cadNotaObjPK) {
+        this.cadNotaObjPK = cadNotaObjPK;
+    }
+
+    public CadTarefa getObjTarefa() {
+        if (objTarefa == null) {
+            objTarefa = new CadTarefa();
+        }
+        return objTarefa;
+    }
+
+    public void setObjTarefa(CadTarefa objTarefa) {
+        this.objTarefa = objTarefa;
+    }
+
+    public CadTarefaPK getObjTarefaPk() {
+        if (objTarefaPk == null) {
+            objTarefaPk = new CadTarefaPK();
+        }
+        return objTarefaPk;
+    }
+
+    public void setObjTarefaPk(CadTarefaPK objTarefaPk) {
+        this.objTarefaPk = objTarefaPk;
     }
 
 }

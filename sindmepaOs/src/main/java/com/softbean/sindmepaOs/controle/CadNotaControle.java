@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
-import javax.persistence.Query;
 
 /**
  *

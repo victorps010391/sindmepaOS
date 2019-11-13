@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html"> 
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>SINDMEPA - Gerenciamento de Protocolos</title>
+            </f:facet>            
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jjquery-ui.theme.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" /> 
+            <link type="text/css" rel="stylesheet" href="theme/estilos.css" /> 
+        </h:head>
+        <h:body>
+            <div id="messages" style="display: block;">
+                <p:ajaxStatus style="display:none;margin-bottom:2em;height:24px;">
+                    <f:facet name="start">
+                        <h:outputLabel value="Processando..."/>
+                        <p:graphicImage url="/images/loading.gif" />
+                    </f:facet>
+                </p:ajaxStatus>
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <h:outputLabel value="Processando..." />
+                    <p:graphicImage url="/images/loading.gif" />
+                </p:dialog>
+            </div> 
+            <p:layoutUnit position="center">               
+                <h:form id="frmAnaliseOs" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                    <p:growl id="growl" showDetail="true"/>                     
+                    <p:panel>
+                        <p:panel>
+                            <f:facet name="header">
+                                <h:outputText value="DADOS DO PROTOCOLO" styleClass="conteudoV"/>
+                            </f:facet>
+                            <h:panelGrid columns="2" style="border: none !important;" >
+                                <h:outputLabel value="Número do Protocolo: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vos}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Prioridade: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vprioridade}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Categoria: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vcategoria}" styleClass="conteudoV"/>                                
+                                <h:outputLabel value="Setor Solicitante: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vsetor_abertura}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Solicitante: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vfunc_abert}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Solicitação: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vhistorico}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Observações: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vobservacao}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Data e Hora de Abertura: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vdata_hora_abert}" styleClass="conteudoV"/>
+                            </h:panelGrid>
+                            <br/>
+                            <br/>
+                            <h:panelGrid columns="2" style="border: none !important;" rendered="#{cadAnaliseBean.renderizarFinalização()}">
+                                <h:outputLabel value="Data e Hora de Fechamento: " styleClass="tituloV"/>                                
+                                <h:outputLabel value="#{cadAnaliseBean.vdata_hora_fecha}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Resolução: " styleClass="tituloV"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vdesc_final}" styleClass="conteudoV"/>
+                            </h:panelGrid>
+                            <f:facet name="footer">                    
+                                <p:commandButton value="Criar Tarefa" 
+                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"
+                                                 onclick="PF('dlCadTar').show()" 
+                                                 update=":frmDlCadTar"/>                    
+                                <p:commandButton value="Criar Nota" 
+                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"
+                                                 onclick="PF('dlCadNotaAnalise').show()" 
+                                                 update=":frmDlCadNotaAnalise"/>
+                                <p:commandButton value="Visualizar Dados do Solicitante" rendered="#{cadAnaliseBean.dadosSindicais()}" />
+                                <p:commandButton value="Resolver"
+                                                 actionListener="#{cadAnaliseBean.limparFinalização()}"
+                                                 onclick="PF('dlResolvOs').show()" 
+                                                 update=":frmDlResolvOs"
+                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>                                
+                                <p:commandButton value="Voltar" action="#{cadAnaliseBean.voltarCadAnalise()}" style="float: right" />                    
+                            </f:facet>
+                        </p:panel>
+                        <br/>
+                        <h:panelGrid columns="1" style="border: none !important;" >
+                            <p:dataTable id="gridTarefa" var="tarefa" rows="8" paginator="true" 
+                                         paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                                         value="#{cadAnaliseBean.tarefaAnalise}">
+                                <f:facet name="header">
+                                    Tarefas 
+                                </f:facet>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nr. da Tarefa"/>
+                                    </f:facet>
+                                    <h:outputText value="#{tarefa.get('nr_tarefa')}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Setor Responsável"/>
+                                    </f:facet>
+                                    <h:outputText value="#{tarefa.get('nm_setor_respon')}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Data e Hora de Abertura"/>
+                                    </f:facet>
+                                    <h:outputText value="#{tarefa.get('data_hora_abert')}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Data e Hora de Fechamento"/>
+                                    </f:facet>
+                                    <h:outputText value="#{tarefa.get('data_hora_fecha')}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Situação"/>
+                                    </f:facet>
+                                    <h:outputText value="#{tarefa.get('sit_tarefa')}"/>
+                                </p:column>
+
+                                <p:column style="text-align: center; width: 5%">
+                                    <f:facet name="header">
+                                        <h:outputText value="Ações"/>
+                                    </f:facet>              
+                                    <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
+                                    <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
+                                        <p:menuitem value="Alterar" />
+                                        <p:menuitem value="Detalhes" />
+                                        <p:menuitem value="Anexos" url="cadanexo.xhtml" />
+                                        <p:menuitem value="Encaminhar para Atendimento" />
+                                        <p:menuitem value="Cancelar" />
+                                    </p:tieredMenu>
+                                </p:column>
+                            </p:dataTable>
+
+                            <br/>                            
+
+                            <p:dataTable id="gridNota" var="nota" rows="8" paginator="true" value="#{cadAnaliseBean.notaAnalise}" 
+                                         paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                                         rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+                                         rowIndexVar="rowIx">
+                                <f:facet name="header">
+                                    Notas Cadastradas 
+                                    <p:commandButton icon="ui-icon ui-icon-arrowrefresh-1-s" title="recarregar tabela de notas"
+                                                     actionListener="#{cadAnaliseBean.pesquisarNota()}" update="gridNota" />     
+                                </f:facet>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nr. da Nota"/>
+                                    </f:facet>
+                                    <h:outputText value="#{nota.get('os_nota')}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Nota"/>
+                                    </f:facet>
+                                    <h:outputText value="#{nota.get('historico')}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Data e Hora de Registro"/>
+                                    </f:facet>
+                                    <h:outputText value="#{nota.get('data_hora_regi')}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Data e Hora da Última Atualização"/>
+                                    </f:facet>
+                                    <h:outputText value="#{nota.get('data_ultima_atualizacao')}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:panel>  
+                </h:form>  
+                <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento">
+                    <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
+                        <p:panel>
+                            <h:panelGrid columns="2" >                                                                      
+                                <h:outputLabel value="Situação do Resolvido:"/>
+                                <p:selectOneMenu value="#{cadAnaliseBean.sitFinal}" id="sitResolvDrop" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="........................................" />
+                                    <f:selectItems value="#{cadAnaliseBean.listarFinalizacao()}" var="sitResolv"  
+                                                   itemLabel="#{sitResolv.get('nome')}" itemValue="#{sitResolv.get('codigo')}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="1" > 
+                                <h:outputLabel value="Descrição do Resolvido:" styleClass="conteudoV"/>
+                                <p:inputTextarea value="#{cadAnaliseBean.descFinal}" rows="6" cols="33" counter="display" 
+                                                 maxlength="1000" counterTemplate="{0} Caracteres Restantes." autoResize="false" />
+                                <br />
+                                <h:outputText id="display" />                              
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Salvar" actionListener="#{cadAnaliseBean.finalizarAnalise()}" update="@form :frmAnaliseOs" />
+                                <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltOs').hide()" update="@form :frmDlResolvOs" />
+                            </f:facet>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog widgetVar="dlCadNotaAnalise" header="Cadastrar Nota">
+                    <h:form id="frmDlCadNotaAnalise" acceptcharset="ISO-8859-1">
+                        <p:panel>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel value="#{cadAnaliseBean.vos}" style="font-weight:bold ; font-size: medium"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel>
+                            <h:panelGrid columns="1">                    
+                                <h:outputLabel value="Nota:" style="font-weight:bold ; font-size: small;"/>
+                                <p:inputTextarea value="#{cadAnaliseBean.descNotaAnalise}" rows="6" cols="33" counter="display" 
+                                                 maxlength="512" counterTemplate="{0} Caracteres Restantes." autoResize="false" /><br/>
+                                <h:outputText id="display" />                       
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Salvar" actionListener="#{cadAnaliseBean.salvarNotaAnalise()}" update="@form :frmAnaliseOs" />
+                                <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadNotaAnalise').hide()" update="@form :frmDlCadNotaAnalise" />
+                            </f:facet>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog widgetVar="dlCadTar" header="Cadastrar Tarefa">
+                    <h:form id="frmDlCadTar" acceptcharset="ISO-8859-1">
+                        <p:panel>
+                            <h:panelGrid columns="2" style="margin: 0 auto;">
+                                
+                                <h:outputLabel value="Protocolo " style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel id="protocol" value="#{cadAnaliseBean.vos}" style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel value="Prioridade: " style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel id="priorCad" value="#{cadAnaliseBean.vprioridade}" style="font-weight:bold ; font-size: medium;"/>
+
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel>
+                            <h:panelGrid columns="2" >                                                                             
+                                <h:outputLabel value="Setor Responsável:"/>
+                                <p:selectOneMenu value="#{cadAnaliseBean.cdSetorTarefa}" id="setorTarDrop" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="........................................" />   
+                                    <f:selectItems value="#{cadAnaliseBean.listarSetorTarefa()}" var="setorTar"  
+                                           itemLabel="#{setorTar.get('nome')}" itemValue="#{setorTar.get('codigo')}" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel value="Colaborador Responsável:"/>
+                                <p:selectOneMenu id="ColabCadDrop" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="........................................" />                       
+                                </p:selectOneMenu>
+
+                                <h:outputLabel value="Solicitação:"/>
+                                <p:inputTextarea value="#{cadAnaliseBean.descTarefa}" rows="6" cols="33" counter="display" 
+                                                 maxlength="512" counterTemplate="{0} Caracteres Restantes." autoResize="false" />
+                                <br />
+                                <h:outputText id="display" />
+
+                                <h:outputLabel value="Observações:"/>
+                                <p:inputTextarea rows="6" cols="33" value="#{cadAnaliseBean.descObsTarefa}"/>
+
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Salvar" actionListener="#{cadAnaliseBean.salvarTarefaAnalise()}" update="@form :frmAnaliseOs" />
+                                <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadTar').hide()" update="@form :frmAnaliseOs" />
+                            </f:facet>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>
+
+            </p:layoutUnit>
+        </h:body>
+
+    </f:view>
+    <script>
+        function abrirPgRelatorio() {
+            window.open('http://#{request.serverName}:#{request.serverPort}/sindmepaOs/visualizarPDF.xhtml', '_blank');
+        }
+    </script>
+</html>
+

@@ -36,6 +36,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CadSetor.findBySitSetor", query = "SELECT c FROM CadSetor c WHERE c.sitSetor = :sitSetor")})
 public class CadSetor implements Serializable {
 
+    @Column(name = "usu_setor")
+    private Character usuSetor;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "setorFunc")
+    private List<CadFuncionario> cadFuncionarioList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -125,6 +130,23 @@ public class CadSetor implements Serializable {
     @Override
     public String toString() {
         return "com.softbean.sindmepaOs.entidade.CadSetor[ cdSetor=" + cdSetor + " ]";
+    }
+
+    public Character getUsuSetor() {
+        return usuSetor;
+    }
+
+    public void setUsuSetor(Character usuSetor) {
+        this.usuSetor = usuSetor;
+    }
+
+    @XmlTransient
+    public List<CadFuncionario> getCadFuncionarioList() {
+        return cadFuncionarioList;
+    }
+
+    public void setCadFuncionarioList(List<CadFuncionario> cadFuncionarioList) {
+        this.cadFuncionarioList = cadFuncionarioList;
     }
     
 }

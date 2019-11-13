@@ -22,24 +22,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Entity
 @Table(name = "cad_tarefa")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CadTarefa.findAll", query = "SELECT c FROM CadTarefa c")
-    , @NamedQuery(name = "CadTarefa.findByNrOsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.nrOsTarefa = :nrOsTarefa")
-    , @NamedQuery(name = "CadTarefa.findBySeqTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.seqTarefa = :seqTarefa")
-    , @NamedQuery(name = "CadTarefa.findBySetorAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorAbertTarefa = :setorAbertTarefa")
-    , @NamedQuery(name = "CadTarefa.findByFuncAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcAbertTarefa = :funcAbertTarefa")
-    , @NamedQuery(name = "CadTarefa.findByDtAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtAbertTarefa = :dtAbertTarefa")
-    , @NamedQuery(name = "CadTarefa.findBySetorResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorResponTarefa = :setorResponTarefa")
-    , @NamedQuery(name = "CadTarefa.findByFuncResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcResponTarefa = :funcResponTarefa")
-    , @NamedQuery(name = "CadTarefa.findByDtFechaTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtFechaTarefa = :dtFechaTarefa")
-    , @NamedQuery(name = "CadTarefa.findByHistTarefa", query = "SELECT c FROM CadTarefa c WHERE c.histTarefa = :histTarefa")
-    , @NamedQuery(name = "CadTarefa.findByObsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.obsTarefa = :obsTarefa")})
+    @NamedQuery(name = "CadTarefa.findAll", query = "SELECT c FROM CadTarefa c"),
+    @NamedQuery(name = "CadTarefa.findByNrOsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.nrOsTarefa = :nrOsTarefa"),
+    @NamedQuery(name = "CadTarefa.findBySeqTarefa", query = "SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.seqTarefa = :seqTarefa"),
+    @NamedQuery(name = "CadTarefa.findBySetorAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorAbertTarefa = :setorAbertTarefa"),
+    @NamedQuery(name = "CadTarefa.findByFuncAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcAbertTarefa = :funcAbertTarefa"),
+    @NamedQuery(name = "CadTarefa.findByDtAbertTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtAbertTarefa = :dtAbertTarefa"),
+    @NamedQuery(name = "CadTarefa.findBySetorResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.setorResponTarefa = :setorResponTarefa"),
+    @NamedQuery(name = "CadTarefa.findByFuncResponTarefa", query = "SELECT c FROM CadTarefa c WHERE c.funcResponTarefa = :funcResponTarefa"),
+    @NamedQuery(name = "CadTarefa.findByDtFechaTarefa", query = "SELECT c FROM CadTarefa c WHERE c.dtFechaTarefa = :dtFechaTarefa"),
+    @NamedQuery(name = "CadTarefa.findByHistTarefa", query = "SELECT c FROM CadTarefa c WHERE c.histTarefa = :histTarefa"),
+    @NamedQuery(name = "CadTarefa.findByObsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.obsTarefa = :obsTarefa")})
 public class CadTarefa implements Serializable {
+
+    @Size(max = 2)
+    @Column(name = "sit_tarefa")
+    private String sitTarefa;
+    @Column(name = "dt_ult_atu_tarefa")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtUltAtuTarefa;
+    @Column(name = "func_ult_atu_tarefa")
+    private Integer funcUltAtuTarefa;
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -55,7 +64,7 @@ public class CadTarefa implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "dt_abert_tarefa")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dtAbertTarefa;
     @Basic(optional = false)
     @NotNull
@@ -63,10 +72,9 @@ public class CadTarefa implements Serializable {
     private int setorResponTarefa;
     @Column(name = "func_respon_tarefa")
     private Integer funcResponTarefa;
-    @Basic(optional = false)
-    @NotNull
+    @Basic(optional = false)    
     @Column(name = "dt_fecha_tarefa")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dtFechaTarefa;
     @Basic(optional = false)
     @NotNull
@@ -94,7 +102,7 @@ public class CadTarefa implements Serializable {
         this.histTarefa = histTarefa;
     }
 
-    public CadTarefa(int nrOsTarefa, int seqTarefa) {
+    public CadTarefa(String nrOsTarefa, int seqTarefa) {
         this.cadTarefaPK = new CadTarefaPK(nrOsTarefa, seqTarefa);
     }
 
@@ -193,6 +201,30 @@ public class CadTarefa implements Serializable {
     @Override
     public String toString() {
         return "com.softbean.sindmepaOs.entidade.CadTarefa[ cadTarefaPK=" + cadTarefaPK + " ]";
+    }
+
+    public String getSitTarefa() {
+        return sitTarefa;
+    }
+
+    public void setSitTarefa(String sitTarefa) {
+        this.sitTarefa = sitTarefa;
+    }
+
+    public Date getDtUltAtuTarefa() {
+        return dtUltAtuTarefa;
+    }
+
+    public void setDtUltAtuTarefa(Date dtUltAtuTarefa) {
+        this.dtUltAtuTarefa = dtUltAtuTarefa;
+    }
+
+    public Integer getFuncUltAtuTarefa() {
+        return funcUltAtuTarefa;
+    }
+
+    public void setFuncUltAtuTarefa(Integer funcUltAtuTarefa) {
+        this.funcUltAtuTarefa = funcUltAtuTarefa;
     }
     
 }
