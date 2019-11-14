@@ -50,6 +50,14 @@ public class CadOsControle implements Serializable {
             return false;
         }
     }
+    
+    public List<Map<String, Object>> usuDashboard(Integer cdSetor){
+        return osFacade.usuDashboard(cdSetor);
+    }
+    
+    public List<Map<String, Object>> usuDiretorDashboard(){
+        return osFacade.usuDiretorDashboard();
+    }
 
     public CadOs buscarOsControle(Integer cod) {
         return osFacade.find(cod);

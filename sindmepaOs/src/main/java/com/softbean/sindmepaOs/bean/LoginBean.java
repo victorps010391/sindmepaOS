@@ -7,6 +7,7 @@ package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadFuncionarioControle;
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
+import com.softbean.sindmepaOs.manager.IndexManager;
 import com.softbean.sindmepaOs.util.Util;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -36,6 +37,8 @@ public class LoginBean implements Serializable {
     CadFuncionarioControle funcionarioControle;
     @Inject
     Util util;
+    @Inject
+    IndexManager indexManager;
 
     String cpfAcess, emailAcess, senhaAcess, repetirSenhaAcess;
     CadFuncionario usuario;
@@ -71,11 +74,12 @@ public class LoginBean implements Serializable {
         if (getUsuario() == null) {
             mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Usuário ou senha inválidos, tente Novamente."));
             return null;
-        } else {
+        } else {            
             HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             if (session != null) {
                 session.setAttribute("usuario", getUsuario());
             }
+            indexManager.carregaGrid();
             context.update(":frmIndex :frmDashboard");
             return "index";
         }

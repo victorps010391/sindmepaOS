@@ -60,6 +60,7 @@ public class CadAnaliseBean implements Serializable {
     List<Map<String, Object>> grid01;
     List<Map<String, Object>> grid02;
     List<Map<String, Object>> grid03;
+    List<Map<String, Object>> gridTarefa;
     List<Map<String, Object>> priorListaPesq;
     List<Map<String, Object>> verOs;
     List<Map<String, Object>> listarFinalizacao;
@@ -94,6 +95,7 @@ public class CadAnaliseBean implements Serializable {
             setGrid01(analiseControle.gridAnalise01(null, null, null));
             setGrid02(analiseControle.gridAnalise02(null, null, null));
             setGrid03(analiseControle.gridAnalise03(null, null, null));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(null));
             return "cadanalise";
 
         } catch (Exception e) {
@@ -232,7 +234,8 @@ public class CadAnaliseBean implements Serializable {
         try {
             setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
-            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));            
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(loginBean.getUsuario().getSetorFunc().getCdSetor()));
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
             e.printStackTrace();
@@ -307,10 +310,10 @@ public class CadAnaliseBean implements Serializable {
                 setObjTarefa(new CadTarefa());
                 getObjTarefa().setDtAbertTarefa(new Date());
                 getObjTarefa().setFuncAbertTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
-                getObjTarefa().setFuncResponTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getObjTarefa().setFuncResponTarefa(999);
                 getObjTarefa().setHistTarefa(getDescTarefa());
                 getObjTarefa().setObsTarefa(getDescObsTarefa());
-                getObjTarefa().setSetorAbertTarefa(0);
+                getObjTarefa().setSetorAbertTarefa(loginBean.getUsuario().getSetorFunc().getCdSetor());
                 getObjTarefa().setSetorResponTarefa(getCdSetorTarefa());
                 getObjTarefa().setSitTarefa("01");
                 getObjTarefa().setDtUltAtuTarefa(new Date());
@@ -515,6 +518,14 @@ public class CadAnaliseBean implements Serializable {
 
     public void setListarFinalizacao(List<Map<String, Object>> listarFinalizacao) {
         this.listarFinalizacao = listarFinalizacao;
+    }
+
+    public List<Map<String, Object>> getGridTarefa() {
+        return gridTarefa;
+    }
+
+    public void setGridTarefa(List<Map<String, Object>> gridTarefa) {
+        this.gridTarefa = gridTarefa;
     }
 
     public List<Map<String, Object>> getGrid03() {

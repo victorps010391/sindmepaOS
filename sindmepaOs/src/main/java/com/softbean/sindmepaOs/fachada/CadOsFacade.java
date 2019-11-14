@@ -54,7 +54,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,categ_os as cod_categoria                                                                                             ");
         sql.append("        ,(case when setor_abert_os = 0                                                                                         ");
         sql.append("               then (select nome_ext from cad_externo where id_ext = func_abert_os)                                            ");
-        sql.append("               else cast(func_abert_os as varchar)                                                                             ");
+        sql.append("               else (select nm_func from cad_funcionario where cd_func = func_abert_os)                                        ");
         sql.append("               end) as func_abert                                                                                              ");
         sql.append("        ,upper(desc_finalizacao_os) as desc_finalizacao                                                                        ");
         sql.append(" from cad_os                                                                                                                   ");
@@ -405,6 +405,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as desc ");
         sql.append(" from cad_os ");
         sql.append(" where setor_respon_os = ").append(cdSetor);
+        sql.append(" and sit_os <> '01' ");
         sql.append(" group by sit_os ");
         sql.append(" order by sit_os ");
 
@@ -434,6 +435,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as desc ");
         sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setRespon ");
         sql.append(" from cad_os ");
+        sql.append(" where sit_os <> '01' ");
         sql.append(" group by sit_os,setor_respon_os ");
         sql.append(" order by sit_os,setor_respon_os ");
 

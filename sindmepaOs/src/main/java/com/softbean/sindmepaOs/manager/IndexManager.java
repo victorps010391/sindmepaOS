@@ -6,16 +6,14 @@
 package com.softbean.sindmepaOs.manager;
 
 import com.softbean.sindmepaOs.bean.LoginBean;
+import com.softbean.sindmepaOs.controle.CadOsControle;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import org.primefaces.context.RequestContext;
-import org.primefaces.model.DashboardColumn;
-import org.primefaces.model.DashboardModel;
-import org.primefaces.model.DefaultDashboardColumn;
-import org.primefaces.model.DefaultDashboardModel;
 
 /**
  *
@@ -56,9 +54,15 @@ public class IndexManager implements Serializable {
 
     @Inject
     LoginBean loginBean;
-
+    @Inject
+    CadOsControle osControle;
+    
+    List<Map<String, Object>> usu;
+    List<Map<String, Object>> usuDiretor;
+        
     public String voltar() {
         RequestContext context = RequestContext.getCurrentInstance();
+        carregaGrid();
         context.update(":frmIndex :frmDashboard");
         return "index";
     }
@@ -66,6 +70,16 @@ public class IndexManager implements Serializable {
     public Boolean gridDiretoria() {
         return loginBean.getUsuario().getSetorFunc().getCdSetor() == 7;
     }
+    
+    public void carregaGrid(){
+        try {
+            setUsu(osControle.usuDashboard(loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setUsuDiretor(osControle.usuDiretorDashboard());            
+        } catch (Exception e) {
+            System.out.println("Erro no metodo carregaGrid " +e.getMessage());
+            e.printStackTrace();
+        }
+    } 
 
 //    public DashboardModel getModel() {
 //        return model;
@@ -74,4 +88,20 @@ public class IndexManager implements Serializable {
 //    public void setModel(DashboardModel model) {
 //        this.model = model;
 //    }
+
+    public List<Map<String, Object>> getUsu() {
+        return usu;
+    }
+
+    public void setUsu(List<Map<String, Object>> usu) {
+        this.usu = usu;
+    }
+
+    public List<Map<String, Object>> getUsuDiretor() {
+        return usuDiretor;
+    }
+
+    public void setUsuDiretor(List<Map<String, Object>> usuDiretor) {
+        this.usuDiretor = usuDiretor;
+    }
 }
