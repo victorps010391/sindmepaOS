@@ -28,14 +28,14 @@ public class CadTarefaControle implements Serializable {
      */
     public CadTarefaControle() {
     }
-    
+
     @Inject
     CadTarefaFacade tarefaFacade;
-    
+
     public List<Map<String, Object>> listarSetorTarefa() {
         return tarefaFacade.listarSetorTarefa();
     }
-    
+
     public Boolean salvarTarefaControle(CadTarefa obj, CadTarefaPK objPk) {
         try {
             if (obj.getCadTarefaPK() == null) {
@@ -49,17 +49,32 @@ public class CadTarefaControle implements Serializable {
             return false;
         }
     }
-    
+
     public Integer retornaSeqTarefa(Integer os) {
         return tarefaFacade.retornaSeqTarefa(os);
     }
-    
+
     public List<Map<String, Object>> gridTarefa(Integer nrOs) {
         return tarefaFacade.gridTarefa(nrOs);
     }
 
-    public List<Map<String, Object>> gridTarefaAtendimento(Integer cdSetor) {
-        return tarefaFacade.gridTarefaAtendimento(cdSetor);
+    public List<Map<String, Object>> gridTarefaAtendimento(Integer nrOs, Integer cdSetor) {
+        return tarefaFacade.gridTarefaAtendimento(nrOs, cdSetor);
     }
-    
+
+    public CadTarefa buscarTarefaControle(String os, Integer seq) {
+        return tarefaFacade.retornaTarefa(os, seq);
+    }
+
+    public Boolean alterarTarefaControle(CadTarefa obj) {
+        try {
+            tarefaFacade.edit(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método alterarTarefaControle " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

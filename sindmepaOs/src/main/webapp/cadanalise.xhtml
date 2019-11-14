@@ -10,7 +10,7 @@
     <ui:define name="centro"> 
         <h:form id="frmCadAnalise" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
             <p:growl id="growl" showDetail="true"/>                                  
-            <p:panel header="Análise de Protocolos" >
+            <p:panel header="Análise de Protocolos e Tarefas" >
                 <h:panelGrid columns="2" >
                     <h:outputLabel value="Número do Protocolo: "/>
                     <p:inputText value="#{cadAnaliseBean.nrOs}">
@@ -25,7 +25,7 @@
                     </p:selectOneMenu>                 
                 </h:panelGrid>                             
                 <f:facet name="footer">                    
-                    <p:commandButton value="Pesquisar" actionListener="#{cadAnaliseBean.pesquisar()}" update="grid01 grid02 grid03"/>                    
+                    <p:commandButton value="Pesquisar" actionListener="#{cadAnaliseBean.pesquisar()}" update="grid01 grid02 grid03 gridTarefa"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadAnaliseBean.limparPesquisa()}" update="frmCadAnalise"/>                                                                    
                     <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />                    
                 </f:facet>
@@ -74,6 +74,63 @@
                             <h:outputText value="Situação"/>
                         </f:facet>
                         <h:outputText value="#{item.get('sit')}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>                        
+                        <p:commandButton value="Iniciar Análise" 
+                                         actionListener="#{cadAnaliseBean.analise(item.get('os'))}"
+                                         onclick="PF('dlConfirm').show()" 
+                                         update=":frmDlConfirm"/>
+                    </p:column>              
+                </p:dataTable>       
+            </p:fieldset>
+            <br/>
+            <p:fieldset legend="Tarefas Encaminhadas" toggleable="true" toggleSpeed="500" style="border:2px solid darkgrey;">                
+                <p:dataTable id="gridTarefa" value="#{cadAnaliseBean.gridTarefa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
+                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto">
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Nr. do Protocolo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('nr_os_tarefa')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nr. da Tarefa"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('nr_tarefa')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Quem abriu/setor"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('nome_setor')}"/>
+                    </p:column>                    
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Abertura"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_abert')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Fechamento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_fecha')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('sit_tarefa')}"/>
                     </p:column>
 
                     <p:column style="text-align: center;">

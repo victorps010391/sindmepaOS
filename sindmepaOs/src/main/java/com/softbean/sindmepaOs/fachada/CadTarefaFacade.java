@@ -84,6 +84,8 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
         sql.append("        ,TO_CHAR(dt_fecha_tarefa, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_tarefa, 'HH24:MI:SS') as data_hora_fecha                   ");
         sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITTA' and cod_valor_detalhe = sit_tarefa) as sit_tarefa ");
         sql.append("        ,sit_tarefa as cd_sit_tarefa                                                                                              ");
+        sql.append("        ,nr_os_tarefa                                                                                                             ");
+        sql.append("        ,seq_tarefa                                                                                                               ");
         sql.append(" from cad_tarefa where nr_os_tarefa = '").append(nrOs.toString()).append("'");
         sql.append(" order by dt_abert_tarefa desc ");
         try {
@@ -99,6 +101,8 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
                 map.put("data_hora_fecha", array[3]);
                 map.put("sit_tarefa", array[4]);
                 map.put("cd_sit_tarefa", array[5]);
+                map.put("nr_os_tarefa", array[6]);
+                map.put("seq_tarefa", array[7]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {
@@ -108,18 +112,27 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> gridTarefaAtendimento(Integer cdSetor) {
+    public List<Map<String, Object>> gridTarefaAtendimento(Integer nrOs, Integer cdSetor) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
         sql.append(" select nr_os_tarefa||'.'||cast(seq_tarefa as character varying(1)) as nr_tarefa                                                  ");
-        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_abert_tarefa) as nm_abert_respon                                 ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_abert_tarefa) as nm_abert_respon                                  ");
         sql.append("        ,TO_CHAR(dt_abert_tarefa, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_tarefa, 'HH24:MI:SS') as data_hora_abert                   ");
         sql.append("        ,TO_CHAR(dt_fecha_tarefa, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_tarefa, 'HH24:MI:SS') as data_hora_fecha                   ");
         sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITTA' and cod_valor_detalhe = sit_tarefa) as sit_tarefa ");
         sql.append("        ,sit_tarefa as cd_sit_tarefa                                                                                              ");
+        sql.append("        ,nr_os_tarefa                                                                                                             ");
+        sql.append("        ,seq_tarefa                                                                                                               ");
+        sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_abert_tarefa) ||'/'||                                          ");
+        sql.append("         (select nm_setor from cad_setor where cd_setor = setor_abert_tarefa) as nome_setor                                       ");
         sql.append(" from cad_tarefa where setor_respon_tarefa = ").append(cdSetor);
-        sql.append(" where sit_tarefa <> '01' ");
+        sql.append(" and sit_tarefa not in ('01','05') ");
+
+        if (nrOs != null) {
+            sql.append(" and nr_os_tarefa = ").append(nrOs);
+        }
+
         sql.append(" order by dt_abert_tarefa desc ");
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
@@ -134,6 +147,9 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
                 map.put("data_hora_fecha", array[3]);
                 map.put("sit_tarefa", array[4]);
                 map.put("cd_sit_tarefa", array[5]);
+                map.put("nr_os_tarefa", array[6]);
+                map.put("seq_tarefa", array[7]);
+                map.put("nome_setor", array[8]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {
@@ -141,6 +157,27 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
             e.printStackTrace();
         }
         return resultMaps;
+    }
+
+    public CadTarefa retornaTarefa(String os, Integer seq) {
+        CadTarefa tarefa = null;
+        StringBuilder sql = new StringBuilder();
+
+        try {
+            sql.append(" SELECT c FROM CadTarefa c WHERE c.cadTarefaPK.nrOsTarefa = :nrOsTarefa ");
+            sql.append(" AND c.cadTarefaPK.seqTarefa = :seqTarefa ");
+
+            Query createQuery = em.createQuery(sql.toString());
+            createQuery.setParameter("nrOsTarefa", os);
+            createQuery.setParameter("seqTarefa", seq);
+
+            tarefa = (CadTarefa) createQuery.getSingleResult();
+
+        } catch (Exception e) {
+            System.out.println("Erro no metodo retornaTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+        return tarefa;
     }
 
 }

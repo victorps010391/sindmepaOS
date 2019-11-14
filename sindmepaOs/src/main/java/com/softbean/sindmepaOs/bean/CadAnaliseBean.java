@@ -95,7 +95,7 @@ public class CadAnaliseBean implements Serializable {
             setGrid01(analiseControle.gridAnalise01(null, null, null));
             setGrid02(analiseControle.gridAnalise02(null, null, null));
             setGrid03(analiseControle.gridAnalise03(null, null, null));
-            setGridTarefa(tarefaControle.gridTarefaAtendimento(null));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(null, null));
             return "cadanalise";
 
         } catch (Exception e) {
@@ -235,7 +235,7 @@ public class CadAnaliseBean implements Serializable {
             setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));            
-            setGridTarefa(tarefaControle.gridTarefaAtendimento(loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
             e.printStackTrace();
