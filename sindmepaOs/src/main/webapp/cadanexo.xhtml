@@ -28,7 +28,9 @@
                 </f:facet>
             </p:panel>
 
-            <p:dataTable id="gridPrincipal" value="#{anexosBean.gridPesquisa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+            <p:dataTable id="gridPrincipal" value="#{anexosBean.gridPesquisa}" var="item" rows="8" 
+                         paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                         emptyMessage="Nenhum Registro Encontrado">
                 <f:facet name="header">
                     Anexos Cadastrados
                 </f:facet>

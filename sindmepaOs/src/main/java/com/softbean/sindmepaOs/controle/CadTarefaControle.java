@@ -54,11 +54,11 @@ public class CadTarefaControle implements Serializable {
         return tarefaFacade.retornaSeqTarefa(os);
     }
 
-    public List<Map<String, Object>> gridTarefa(Integer nrOs) {
-        return tarefaFacade.gridTarefa(nrOs);
+    public List<Map<String, Object>> gridTarefa(Integer nrOs, Integer cdFunc) {
+        return tarefaFacade.gridTarefa(nrOs, cdFunc);
     }
 
-    public List<Map<String, Object>> gridTarefaAtendimento(Integer nrOs, Integer cdSetor) {
+    public List<Map<String, Object>> gridTarefaAtendimento(String nrOs, Integer cdSetor) {
         return tarefaFacade.gridTarefaAtendimento(nrOs, cdSetor);
     }
 
@@ -75,6 +75,10 @@ public class CadTarefaControle implements Serializable {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    public List<Map<String, Object>> verTarefa(String nrOs, Integer seq){
+        return tarefaFacade.verTarefa(nrOs, seq);
     }
 
 }

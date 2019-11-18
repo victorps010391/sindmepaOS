@@ -1,0 +1,259 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html"> 
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>SINDMEPA - Gerenciamento de Protocolos</title>
+            </f:facet>            
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" /> 
+            <link type="text/css" rel="stylesheet" href="theme/estilos.css" /> 
+        </h:head>
+        <h:body>
+            <div id="messages" style="display: block;">
+                <p:ajaxStatus style="display:none;margin-bottom:2em;height:24px;">
+                    <f:facet name="start">
+                        <h:outputLabel value="Processando"/>
+                        <p:graphicImage library="imagesResources" name="loading.gif"/>
+                    </f:facet>
+                </p:ajaxStatus>
+
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:panelGrid columns="1" style="width:100%; height:100%;">
+                        <h:outputLabel value="Processando" style="font-size: medium; font-weight:bold"/>
+                        <p:graphicImage library="imagesResources" name="loading.gif"/>
+                    </p:panelGrid>
+                </p:dialog>
+            </div>
+
+            <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true">
+                <p:panel>
+                    <h:outputText value="ANÁLISE DE TAREFA" style="font-size: x-large; font-weight: bold; color: darkblue; margin: 0 auto;"/>
+                </p:panel>                
+            </p:layoutUnit>
+            <br/>
+            <p:layoutUnit position="center">               
+                <h:form id="frmAnaliseTarefa" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                    <p:growl id="growl" showDetail="true"/>                     
+                    <p:panel>
+                        <p:panel>
+                            <f:facet name="header">
+                                <h:outputText value="DADOS DA TAREFA" styleClass="conteudoV"/>
+                            </f:facet>
+                            <h:panelGrid columns="2" style="border: none !important;" >
+                                <h:outputLabel value="Número do Protocolo: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaOs}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Número da Tarefa: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaCategoria}" styleClass="conteudoV"/>     
+                                <h:outputLabel value="Prioridade: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaPrioridade}" styleClass="conteudoV"/>                                                           
+                                <h:outputLabel value="Setor Solicitante: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefasSetorAbertura}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Solicitante: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaFuncAbert}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Solicitação: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaHistorico}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Observações: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaObservacao}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Data e Hora de Abertura: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaDataHoraAbert}" styleClass="conteudoV"/>
+                            </h:panelGrid>
+                            <br/>
+                            <br/>
+                            <h:panelGrid columns="2" style="border: none !important;" rendered="#{cadTarefaBean.renderizarFinalizaçãoTarefa()}">
+                                <h:outputLabel value="Data e Hora de Fechamento: " style="font-size: small; font-weight: bold; color: darkblue;"/>                                
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaDataHoraFecha}" styleClass="conteudoV"/>
+                                <h:outputLabel value="Resolução: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                <h:outputLabel value="#{cadTarefaBean.vtarefaDescFinal}" styleClass="conteudoV"/>
+                            </h:panelGrid>
+                            <f:facet name="footer">                    
+                                <p:commandButton value="Criar Tarefa" 
+                                                 disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"
+                                                 onclick="PF('dlCadTar').show()" 
+                                                 update=":frmDlCadTar"/>                    
+                                <!-- <p:commandButton value="Criar Nota" 
+                                                 disabled="# {'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"
+                                                 onclick="PF('dlCadNotaAnalise').show()" 
+                                                 update=":frmDlCadNotaAnalise"/>                                
+                                <p:commandButton value="Resolver"
+                                                 actionListener="# {cadAnaliseBean.limparFinalização()}"
+                                                 onclick="PF('dlResolvOs').show()" 
+                                                 update=":frmDlResolvOs"
+                                                 disabled="# {'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>                                
+                                <p:commandButton value="Voltar" action="# {cadAnaliseBean.voltarCadAnalise()}" style="float: right" />                    -->
+                            </f:facet>
+                        </p:panel>
+                        <br/>
+                    </p:panel>  
+                </h:form>  
+                <!--                <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento">
+                                    <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
+                                        <p:panel>
+                                            <h:panelGrid columns="2" >                                                                      
+                                                <h:outputLabel value="Situação do Resolvido:"/>
+                                                <p:selectOneMenu value="# {cadAnaliseBean.sitFinal}" id="sitResolvDrop" filter="true" filterMatchMode="contains">
+                                                    <f:selectItem itemLabel="........................................" />
+                                                    <f:selectItems value="# {cadAnaliseBean.listarFinalizacao()}" var="sitResolv"  
+                                                                   itemLabel="# {sitResolv.get('nome')}" itemValue="# {sitResolv.get('codigo')}" />
+                                                </p:selectOneMenu>
+                                            </h:panelGrid>
+                
+                                            <h:panelGrid columns="1" > 
+                                                <h:outputLabel value="Descrição do Resolvido:" styleClass="conteudoV"/>
+                                                <p:inputTextarea value="# {cadAnaliseBean.descFinal}" rows="6" cols="33" counter="display" 
+                                                                 maxlength="1000" counterTemplate="{0} Caracteres Restantes." autoResize="false" />
+                                                <br />
+                                                <h:outputText id="display" />                              
+                                            </h:panelGrid>
+                                            <f:facet name="footer">
+                                                <p:commandButton value="Salvar" actionListener="# {cadAnaliseBean.finalizarAnalise()}" update="@form :frmAnaliseOs" />
+                                                <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltOs').hide()" update="@form :frmDlResolvOs" />
+                                            </f:facet>
+                                        </p:panel>
+                                    </h:form>
+                                </p:dialog>
+                -->
+                <p:dialog widgetVar="dlCadTar" header="Cadastrar Tarefa">
+                    <h:form id="frmDlCadTar" acceptcharset="ISO-8859-1">
+                        <p:panel>
+                            <h:panelGrid columns="2" style="margin: 0 auto;">
+
+                                <h:outputLabel value="Protocolo " style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel id="protocol" value="#{cadTarefaBean.vtarefaOs}" style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel value="Prioridade: " style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel id="priorCad" value="#{cadTarefaBean.vtarefaPrioridade}" style="font-weight:bold ; font-size: medium;"/>
+
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel>
+                            <h:panelGrid columns="2" >                                                                             
+                                <h:outputLabel value="Setor Responsável:"/>
+                                <p:selectOneMenu value="#{cadAnaliseBean.cdSetorTarefa}" id="setorTarDrop" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="........................................" />   
+                                    <f:selectItems value="#{cadAnaliseBean.listarSetorTarefa()}" var="setorTar"  
+                                                   itemLabel="#{setorTar.get('nome')}" itemValue="#{setorTar.get('codigo')}" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel value="Colaborador Responsável:"/>
+                                <p:selectOneMenu id="ColabCadDrop" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="........................................" />                       
+                                </p:selectOneMenu>
+
+                                <h:outputLabel value="Solicitação:"/>
+                                <p:inputTextarea value="#{cadAnaliseBean.descTarefa}" rows="6" cols="33" counter="display" 
+                                                 maxlength="512" counterTemplate="{0} Caracteres Restantes." autoResize="false" />
+                                <br />
+                                <h:outputText id="display" />
+
+                                <h:outputLabel value="Observações:"/>
+                                <p:inputTextarea rows="6" cols="33" value="#{cadAnaliseBean.descObsTarefa}"/>
+
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Salvar" actionListener="#{cadAnaliseBean.salvarTarefaAnalise()}" update="@form :frmAnaliseTarefa" />
+                                <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadTar').hide()" update="@form :frmAnaliseTarefa" />
+                            </f:facet>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>
+
+                <!--                <p:dialog widgetVar="dlConfirm" header="Confirmação">
+                                    <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
+                                        <p:panel>
+                                            <h:panelGrid columns="1" > 
+                                                <h:outputLabel value="Encaminhar Tarefa para Atendimento? " style="font-weight:bold ; font-size: medium;"/><br/>
+                                                <h:outputLabel value="IMPORTANTE: Informamos que após execução deste procedimento algumas ações não estarão mais disponiveis."
+                                                               style="font-size: small; color: red; font-weight:bold"/>                       
+                                            </h:panelGrid>
+                                            <f:facet name="footer">
+                                                <p:commandButton actionListener="# {cadTarefaBean.encaminharTarefa()}" value="Sim" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-check" />
+                                                <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-closethick"/>
+                                            </f:facet>
+                                        </p:panel>
+                                    </h:form>
+                                </p:dialog>
+                
+                                <p:dialog widgetVar="dlCancelTarefa" header="Confirmação">
+                                    <h:form id="frmDlCancelTarefa" acceptcharset="ISO-8859-1">
+                                        <p:panel>
+                                            <h:panelGrid columns="1" > 
+                                                <h:outputLabel value="Deseja Realmente Cancelar a Tarefa? " style="font-weight:bold ; font-size: small;"/><br/>                                            
+                                            </h:panelGrid>
+                                            <f:facet name="footer">
+                                                <p:commandButton actionListener="# {cadTarefaBean.cancelarTarefa()}" value="Sim" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-check" />
+                                                <p:commandButton onclick="PF('dlCancelTarefa').hide()" type="button" value="Não" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-closethick"/>
+                                            </f:facet>
+                                        </p:panel>
+                                    </h:form>
+                                </p:dialog>
+                
+                                <p:dialog widgetVar="dlAltTarefa" header="Alterar Tarefa">
+                                    <h:form id="frmDlAltTarefa" acceptcharset="ISO-8859-1">
+                                        <p:panel>
+                                            <h:panelGrid columns="2" style="margin: 0 auto;">
+                
+                                                <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
+                                                <h:outputLabel value="# {cadTarefaBean.objCadTarefa.cadTarefaPK.nrOsTarefa}" style="font-weight:bold ; font-size: medium"/>
+                
+                                                <h:outputLabel value="Sequencial: " style="font-weight:bold ; font-size: medium;"/>
+                                                <h:outputLabel id="priorCad" value="# {cadTarefaBean.objCadTarefa.cadTarefaPK.seqTarefa}" style="font-weight:bold ; font-size: medium;"/>
+                
+                                            </h:panelGrid>
+                                        </p:panel><br/>
+                
+                                        <p:panel>
+                                            <h:panelGrid columns="2" >                                               
+                
+                                                <h:outputLabel value="Setor Responsável:"/>
+                                                <p:selectOneMenu value="# {cadTarefaBean.objCadTarefa.setorResponTarefa}" id="setorAltDrop" filter="true" filterMatchMode="contains">
+                                                    <f:selectItem itemLabel="........................................" /> 
+                                                    <f:selectItems value="# {cadOsBean.listarSetorCad()}" var="setorAlt"  
+                                                                   itemLabel="# {setorAlt.get('nome')}" itemValue="# {setorAlt.get('codigo')}" />
+                                                </p:selectOneMenu>
+                
+                                                <h:outputLabel value="Colaborador Responsável:"/>
+                                                <p:selectOneMenu value="# {cadTarefaBean.objCadTarefa.funcResponTarefa}" id="ColabCadDrop" filter="true" filterMatchMode="contains">
+                                                    <f:selectItem itemLabel="........................................" />                       
+                                                </p:selectOneMenu>
+                
+                                                <h:outputLabel value="Solicitação:"/>
+                                                <p:inputTextarea value="# {cadTarefaBean.objCadTarefa.histTarefa}" rows="6" cols="33" counter="display" 
+                                                                 maxlength="512" counterTemplate="{0} Caracteres Restantes." autoResize="false" />
+                                                <br />
+                                                <h:outputText id="display" />
+                
+                                                <h:outputLabel value="Observações:"/>
+                                                <p:inputTextarea rows="6" cols="33" value="# {cadTarefaBean.objCadTarefa.obsTarefa}"/>
+                                            </h:panelGrid>
+                                            <f:facet name="footer">
+                                                <p:commandButton value="Salvar" actionListener="# {cadTarefaBean.alterarTarefa()}" update="@form :frmAnaliseOs" />
+                                                <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltTarefa').hide()" update="@form frmDlAltTarefa" />
+                                            </f:facet>
+                                        </p:panel>
+                                    </h:form>
+                                </p:dialog>-->
+
+            </p:layoutUnit>
+        </h:body>
+
+    </f:view>
+    <script>
+        function abrirPgRelatorio() {
+            window.open('http://#{request.serverName}:#{request.serverPort}/sindmepaOs/visualizarPDF.xhtml', '_blank');
+        }
+    </script>
+</html>
+

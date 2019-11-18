@@ -52,7 +52,9 @@
                 </f:facet>
             </p:panel>
 
-            <p:dataTable id="gridPrincipal" value="#{cadOsBean.gridPesquisa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+            <p:dataTable id="gridPrincipal" value="#{cadOsBean.gridPesquisa}" var="item" rows="8" 
+                         paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                         emptyMessage="Nenhum Registro Encontrado">
                 <f:facet name="header">
                     Protocolos 
                 </f:facet>
@@ -160,7 +162,8 @@
             <p:dataTable id="gridSecundario" value="#{cadOsBean.gridSecundario}" var="nota" rows="8" paginator="true" 
                          paginatorAlwaysVisible="false"  paginatorPosition="bottom"
                          rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
-                         rowIndexVar="rowIx">
+                         rowIndexVar="rowIx"
+                         emptyMessage="Nenhum Registro Encontrado">
                 <f:facet name="header">
                     Notas Cadastradas 
                 </f:facet>

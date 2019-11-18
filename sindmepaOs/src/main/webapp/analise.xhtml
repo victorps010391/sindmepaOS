@@ -37,7 +37,14 @@
                         <p:graphicImage library="imagesResources" name="loading.gif"/>
                     </p:panelGrid>
                 </p:dialog>
-            </div> 
+            </div>
+
+            <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true">
+                <p:panel>
+                    <h:outputText value="ANÁLISE DE PROTOCOLO" style="font-size: x-large; font-weight: bold; color: indianred; margin: 0 auto;"/>
+                </p:panel>                
+            </p:layoutUnit>
+            <br/>
             <p:layoutUnit position="center">               
                 <h:form id="frmAnaliseOs" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
                     <p:growl id="growl" showDetail="true"/>                     
@@ -94,7 +101,8 @@
                         <h:panelGrid columns="1" style="border: none !important;" >
                             <p:dataTable id="gridTarefa" var="tarefa" rows="8" paginator="true" 
                                          paginatorAlwaysVisible="false"  paginatorPosition="bottom"
-                                         value="#{cadAnaliseBean.tarefaAnalise}">
+                                         value="#{cadAnaliseBean.tarefaAnalise}"
+                                         emptyMessage="Nenhum Registro Encontrado">
                                 <f:facet name="header">
                                     Tarefas 
                                 </f:facet>
@@ -171,7 +179,8 @@
                             <p:dataTable id="gridNota" var="nota" rows="8" paginator="true" value="#{cadAnaliseBean.notaAnalise}" 
                                          paginatorAlwaysVisible="false"  paginatorPosition="bottom"
                                          rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
-                                         rowIndexVar="rowIx">
+                                         rowIndexVar="rowIx"
+                                         emptyMessage="Nenhum Registro Encontrado">
                                 <f:facet name="header">
                                     Notas Cadastradas 
                                     <p:commandButton icon="ui-icon ui-icon-arrowrefresh-1-s" title="recarregar tabela de notas"
@@ -323,7 +332,7 @@
                     <h:form id="frmDlCancelTarefa" acceptcharset="ISO-8859-1">
                         <p:panel>
                             <h:panelGrid columns="1" > 
-                                <h:outputLabel value="Deseja Realmente Cancelar o Protocolo? " style="font-weight:bold ; font-size: small;"/><br/>                                            
+                                <h:outputLabel value="Deseja Realmente Cancelar a Tarefa? " style="font-weight:bold ; font-size: small;"/><br/>                                            
                             </h:panelGrid>
                             <f:facet name="footer">
                                 <p:commandButton actionListener="#{cadTarefaBean.cancelarTarefa()}" value="Sim" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-check" />
@@ -349,7 +358,7 @@
 
                         <p:panel>
                             <h:panelGrid columns="2" >                                               
-                        
+
                                 <h:outputLabel value="Setor Responsável:"/>
                                 <p:selectOneMenu value="#{cadTarefaBean.objCadTarefa.setorResponTarefa}" id="setorAltDrop" filter="true" filterMatchMode="contains">
                                     <f:selectItem itemLabel="........................................" /> 

@@ -25,7 +25,8 @@
                         style=" width: 350px; border-width: thick;">                
                 <h:panelGrid columns="2" cellpadding="5">                     
                     <p:dataTable id="usuario" value="#{indexManager.usu}" var="item" rows="5" paginator="true" 
-                                 paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+                                 paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                                 emptyMessage="Nenhum Registro Encontrado">
                         <f:facet name="header">
                             Protocolos enviados para o seu setor
                         </f:facet>
@@ -41,7 +42,8 @@
 
                 <h:panelGrid columns="2" cellpadding="5" rendered="#{indexManager.gridDiretoria()}">                   
                     <p:dataTable id="diretor" var="item" value="#{indexManager.usuDiretor}"  rows="5" paginator="true" 
-                                 paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+                                 paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                                 emptyMessage="Nenhum Registro Encontrado">
                         <f:facet name="header">
                             Acompanhamento de protocolos enviados para outros setores
                         </f:facet>
