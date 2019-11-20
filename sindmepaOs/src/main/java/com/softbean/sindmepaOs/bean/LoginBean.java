@@ -79,7 +79,7 @@ public class LoginBean implements Serializable {
             if (session != null) {
                 session.setAttribute("usuario", getUsuario());
             }
-            indexManager.carregaGrid();
+            indexManager.carregaGrids();
             context.update(":frmIndex :frmDashboard");
             return "index";
         }
@@ -90,6 +90,8 @@ public class LoginBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         HttpSession session = (HttpSession) mensagem.getExternalContext().getSession(false);
         mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Você saiu do sistema."));
+        setCpfAcess(null);
+        setEmailAcess(null);
         session.invalidate();
         context.update(":frmLogin");
         return "login";

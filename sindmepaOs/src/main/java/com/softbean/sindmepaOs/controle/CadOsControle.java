@@ -38,7 +38,6 @@ public class CadOsControle implements Serializable {
     CadSetorFacade setorFacade;
     @Inject
     CadCategoriaFacade categoriaFacade;
-   
 
     public Boolean salvarOsControle(CadOs obj) {
         try {
@@ -50,12 +49,12 @@ public class CadOsControle implements Serializable {
             return false;
         }
     }
-    
-    public List<Map<String, Object>> usuDashboard(Integer cdSetor){
+
+    public List<Map<String, Object>> usuDashboard(Integer cdSetor) {
         return osFacade.usuDashboard(cdSetor);
     }
-    
-    public List<Map<String, Object>> usuDiretorDashboard(){
+
+    public List<Map<String, Object>> usuDiretorDashboard() {
         return osFacade.usuDiretorDashboard();
     }
 
@@ -108,5 +107,9 @@ public class CadOsControle implements Serializable {
 
     public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
         return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor);
+    }
+
+    public Integer validarFinalizacao(Integer os) {
+        return osFacade.validarFinalizacao(os);
     }
 }

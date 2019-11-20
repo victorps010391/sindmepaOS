@@ -5,6 +5,7 @@
  */
 package com.softbean.sindmepaOs.manager;
 
+import com.softbean.sindmepaOs.bean.CadAnaliseBean;
 import com.softbean.sindmepaOs.bean.CadFuncionarioBean;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -18,8 +19,7 @@ import javax.inject.Inject;
 @Named(value = "menuManager")
 @SessionScoped
 public class MenuManager implements Serializable {
-   
-            
+
     /**
      * Creates a new instance of MenuControle
      */
@@ -28,9 +28,16 @@ public class MenuManager implements Serializable {
 
     @Inject
     CadFuncionarioBean funcionarioBean;
+    @Inject
+    CadAnaliseBean analiseBean;
 
     public String menuCadFucionario() {
         funcionarioBean.limparCadastro();
         return "cadfuncionario.xhtml";
+    }
+
+    public String menuAnalise() {
+        analiseBean.pesquisarMenu();
+        return "cadanalise.xhtml";
     }
 }

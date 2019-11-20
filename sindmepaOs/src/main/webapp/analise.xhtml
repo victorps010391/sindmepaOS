@@ -79,25 +79,30 @@
                                 <h:outputLabel value="Resolução: " styleClass="tituloV"/>
                                 <h:outputLabel value="#{cadAnaliseBean.vdesc_final}" styleClass="conteudoV"/>
                             </h:panelGrid>
-                            <f:facet name="footer">                    
+                            <f:facet name="footer">     
+                                
                                 <p:commandButton value="Criar Tarefa" 
                                                  disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"
                                                  onclick="PF('dlCadTar').show()" 
-                                                 update=":frmDlCadTar"/>                    
+                                                 update=":frmDlCadTar"/> 
+                                
                                 <p:commandButton value="Criar Nota" 
                                                  disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"
                                                  onclick="PF('dlCadNotaAnalise').show()" 
                                                  update=":frmDlCadNotaAnalise"/>
+                                
                                 <p:commandButton value="Visualizar Dados do Solicitante" rendered="#{cadAnaliseBean.dadosSindicais()}" />
+                                
                                 <p:commandButton value="Resolver"
-                                                 actionListener="#{cadAnaliseBean.limparFinalização()}"
-                                                 onclick="PF('dlResolvOs').show()" 
-                                                 update=":frmDlResolvOs"
-                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>                                
+                                                 actionListener="#{cadAnaliseBean.limparFinalização()}"                                                 
+                                                 disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/> 
+                                
                                 <p:commandButton value="Voltar" action="#{cadAnaliseBean.voltarCadAnalise()}" style="float: right" />                    
                             </f:facet>
                         </p:panel>
+                        
                         <br/>
+                        
                         <h:panelGrid columns="1" style="border: none !important;" >
                             <p:dataTable id="gridTarefa" var="tarefa" rows="8" paginator="true" 
                                          paginatorAlwaysVisible="false"  paginatorPosition="bottom"
@@ -217,7 +222,25 @@
                             </p:dataTable>
                         </h:panelGrid>
                     </p:panel>  
-                </h:form>  
+                </h:form>
+
+                <p:dialog widgetVar="dlValida" header="SindmepaProtocol Informa">
+                    <h:form id="frmDlValida" acceptcharset="ISO-8859-1">
+                        <p:panel>
+                            <h:panelGrid columns="1" > 
+                                <h:outputLabel value="AVISO" style="font-weight:bold ; font-size: medium; color: red; "/><br/>
+                                <h:outputLabel value="Informamos que ainda existem tarefas abertas para este protocolo, para"
+                                               style="font-size: small; font-weight:bold"/> 
+                                <h:outputLabel value="você finalizar o mesmo é necessario que todas as tarefas estejam resolvidas."
+                                               style="font-size: small; font-weight:bold"/>
+                            </h:panelGrid>
+                            <f:facet name="footer">                                
+                                <p:commandButton onclick="PF('dlValida').hide()" type="button" value="Fechar" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-closethick"/>
+                            </f:facet>
+                        </p:panel>
+                    </h:form>
+                </p:dialog>
+
                 <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento">
                     <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
                         <p:panel>
@@ -321,7 +344,7 @@
                                                style="font-size: small; color: red; font-weight:bold"/>                       
                             </h:panelGrid>
                             <f:facet name="footer">
-                                <p:commandButton actionListener="#{cadTarefaBean.encaminharTarefa()}" value="Sim" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-check" />
+                                <p:commandButton actionListener="#{cadTarefaBean.encaminharTarefaOs()}" value="Sim" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-check" />
                                 <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-closethick"/>
                             </f:facet>
                         </p:panel>

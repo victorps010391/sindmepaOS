@@ -7,6 +7,7 @@ package com.softbean.sindmepaOs.manager;
 
 import com.softbean.sindmepaOs.bean.LoginBean;
 import com.softbean.sindmepaOs.controle.CadOsControle;
+import com.softbean.sindmepaOs.controle.CadTarefaControle;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -56,10 +57,13 @@ public class IndexManager implements Serializable {
     LoginBean loginBean;
     @Inject
     CadOsControle osControle;
-    
+    @Inject
+    CadTarefaControle tarefaControle;
+
     List<Map<String, Object>> usu;
+    List<Map<String, Object>> usuTarefa;
     List<Map<String, Object>> usuDiretor;
-        
+
     public String voltar() {
         RequestContext context = RequestContext.getCurrentInstance();
         carregaGrid();
@@ -70,16 +74,30 @@ public class IndexManager implements Serializable {
     public Boolean gridDiretoria() {
         return loginBean.getUsuario().getSetorFunc().getCdSetor() == 7;
     }
-    
-    public void carregaGrid(){
+
+    public void carregaGrid() {
         try {
             setUsu(osControle.usuDashboard(loginBean.getUsuario().getSetorFunc().getCdSetor()));
-            setUsuDiretor(osControle.usuDiretorDashboard());            
+            setUsuDiretor(osControle.usuDiretorDashboard());
         } catch (Exception e) {
-            System.out.println("Erro no metodo carregaGrid " +e.getMessage());
+            System.out.println("Erro no metodo carregaGrid " + e.getMessage());
             e.printStackTrace();
         }
-    } 
+    }
+
+    public void carregaGridTarefa() {
+        try {
+            setUsuTarefa(tarefaControle.usuDashboardTarefa(loginBean.getUsuario().getSetorFunc().getCdSetor()));
+        } catch (Exception e) {
+            System.out.println("Erro no metodo carregaGridTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void carregaGrids() {
+        carregaGrid();
+        carregaGridTarefa();
+    }
 
 //    public DashboardModel getModel() {
 //        return model;
@@ -88,6 +106,13 @@ public class IndexManager implements Serializable {
 //    public void setModel(DashboardModel model) {
 //        this.model = model;
 //    }
+    public List<Map<String, Object>> getUsuTarefa() {
+        return usuTarefa;
+    }
+
+    public void setUsuTarefa(List<Map<String, Object>> usuTarefa) {
+        this.usuTarefa = usuTarefa;
+    }
 
     public List<Map<String, Object>> getUsu() {
         return usu;

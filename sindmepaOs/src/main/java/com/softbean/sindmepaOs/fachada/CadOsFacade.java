@@ -426,7 +426,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         }
         return resultMaps;
     }
-
+        
     public List<Map<String, Object>> usuDiretorDashboard() {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
@@ -456,5 +456,22 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
             e.printStackTrace();
         }
         return resultMaps;
+    }
+
+    public Integer validarFinalizacao(Integer os) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(" select cast(count(*) as integer) as qtd from cad_os ");
+        sql.append(" where exists (select * from cad_tarefa where nr_os = cast(nr_os_tarefa as integer) and sit_tarefa in ('01','02','03','04')) ");
+        sql.append(" and nr_os = ").append(os);
+
+        try {
+            Query q = em.createNativeQuery(sql.toString());
+            return (Integer) q.getSingleResult();
+        } catch (Exception e) {
+            System.err.println("Erro no metodo validarFinalizacao " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 }

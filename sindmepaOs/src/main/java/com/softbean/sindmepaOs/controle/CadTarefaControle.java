@@ -32,8 +32,8 @@ public class CadTarefaControle implements Serializable {
     @Inject
     CadTarefaFacade tarefaFacade;
 
-    public List<Map<String, Object>> listarSetorTarefa() {
-        return tarefaFacade.listarSetorTarefa();
+    public List<Map<String, Object>> listarSetorTarefa(Integer cdSetor) {
+        return tarefaFacade.listarSetorTarefa(cdSetor);
     }
 
     public Boolean salvarTarefaControle(CadTarefa obj, CadTarefaPK objPk) {
@@ -79,6 +79,14 @@ public class CadTarefaControle implements Serializable {
     
     public List<Map<String, Object>> verTarefa(String nrOs, Integer seq){
         return tarefaFacade.verTarefa(nrOs, seq);
+    }
+    
+    public List<Map<String, Object>> listarSitFinalizacaoTarefa(){
+        return tarefaFacade.listarSitFinalizacaoTarefa();
+    }
+    
+    public List<Map<String, Object>> usuDashboardTarefa(Integer cdSetor){
+        return tarefaFacade.usuDashboardTarefa(cdSetor);
     }
 
 }

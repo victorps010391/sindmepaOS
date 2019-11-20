@@ -5,8 +5,14 @@
  */
 package com.softbean.sindmepaOs.bean;
 
+import com.softbean.sindmepaOs.controle.CadNotaControle;
+import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.controle.CadTarefaControle;
+import com.softbean.sindmepaOs.entidade.CadNota;
+import com.softbean.sindmepaOs.entidade.CadNotaPK;
+import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.CadTarefa;
+import com.softbean.sindmepaOs.entidade.CadTarefaPK;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -35,12 +41,33 @@ public class CadTarefaBean implements Serializable {
     @Inject
     CadTarefaControle tarefaControle;
     @Inject
+    CadOsControle osControle;
+    @Inject
+    CadNotaControle notaControle;
+    @Inject
     LoginBean loginBean;
     @Inject
     CadAnaliseBean analiseBean;
 
     CadTarefa ObjCadTarefa;
+    CadTarefaPK ObjCadTarefaPk;
+//    CadTarefa ObjSalvTarefa;
+//    CadTarefaPK ObjSalvTarefaPk;
+    CadOs ObjCadOs;
+    CadNota cadNotaObj;
+    CadNotaPK cadNotaObjPK;
+
     List<Map<String, Object>> ObjVerTarefa;
+    List<Map<String, Object>> listarTarefa;
+    List<Map<String, Object>> notaAnalise;
+    List<Map<String, Object>> listarFinalizacao;
+
+    Integer cdSetor;
+    String hisTarefa;
+    String obsTarefa;
+    String hisNota;
+    String sitFinal;
+    String descFinal;
 
     String VtarefaOs;
     String VtarefaPrioridade;
@@ -82,9 +109,12 @@ public class CadTarefaBean implements Serializable {
             }
             if (getVtarefaCdSit().equals("02")) {
                 context.execute("PF('dlConfirmTarefa').show()");
-                context.update(":frmDlConfirmTarefa");
+                context.update(":frmDlConfirmTarefa :gridTarefa :gridNota");
             } else {
-                context.update(":frmAnaliseTarefa");
+                limparCadastroNota();
+                limparCadastroTarefa();
+                pesquisarTarefa();
+                context.update(":frmAnaliseTarefa :gridTarefa :gridNota");
                 ret = "analisetarefa";
             }
         } catch (Exception e) {
@@ -107,7 +137,10 @@ public class CadTarefaBean implements Serializable {
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise da tarefa Iniciada com Sucesso."));
                 context.execute("PF('dlConfirmTarefa').hide()");
-                context.update(":frmAnaliseTarefa");
+                pesquisarTarefa();
+                limparCadastroNota();
+                limparCadastroTarefa();
+                context.update(":frmAnaliseTarefa :gridTarefa :gridNota");
                 return "analisetarefa";
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao iniciar Análise da tarefa."));
@@ -130,6 +163,27 @@ public class CadTarefaBean implements Serializable {
         }
     }
 
+    public void encaminharTarefaOs() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            getObjCadTarefa().setDtUltAtuTarefa(new Date());
+            getObjCadTarefa().setFuncUltAtuTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            getObjCadTarefa().setSitTarefa("02");
+
+            if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa Encaminhado Para Atendimento com Sucesso."));
+                context.execute("PF('dlConfirm').hide()");
+                pesquisarTarefaOs();
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Tarefa Para Atendimento."));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método encaminharTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public void encaminharTarefa() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
@@ -141,12 +195,60 @@ public class CadTarefaBean implements Serializable {
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa Encaminhado Para Atendimento com Sucesso."));
                 context.execute("PF('dlConfirm').hide()");
-                analiseBean.pesquisarTarefa();
+                pesquisarTarefa();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Tarefa Para Atendimento."));
             }
         } catch (Exception e) {
             System.out.println("Erro no método encaminharTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void salvarTarefaAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        setObjCadTarefa(null)/*limpar variavel*/;
+        try {
+            if (getObjCadTarefa().getCadTarefaPK() == null) {
+                setObjCadTarefaPk(new CadTarefaPK());
+                getObjCadTarefaPk().setNrOsTarefa(getVtarefaOs());
+                getObjCadTarefaPk().setSeqTarefa(tarefaControle.retornaSeqTarefa(Integer.parseInt(getVtarefaOs())));
+
+                setObjCadTarefa(new CadTarefa());
+                getObjCadTarefa().setDtAbertTarefa(new Date());
+                getObjCadTarefa().setFuncAbertTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getObjCadTarefa().setFuncResponTarefa(999);
+                getObjCadTarefa().setHistTarefa(getHisTarefa());
+                getObjCadTarefa().setObsTarefa(getObsTarefa());
+                getObjCadTarefa().setSetorAbertTarefa(loginBean.getUsuario().getSetorFunc().getCdSetor());
+                getObjCadTarefa().setSetorResponTarefa(getCdSetor());
+                getObjCadTarefa().setSitTarefa("01");
+                getObjCadTarefa().setDtUltAtuTarefa(new Date());
+                getObjCadTarefa().setFuncUltAtuTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+
+                setObjCadOs(null);
+                setObjCadOs(osControle.buscarOsControle(Integer.parseInt(getVtarefaOs())));
+                getObjCadOs().setSitOs("04");
+                getObjCadOs().setDtUltAtuOs(new Date());
+                getObjCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+
+                if (osControle.alterarOsControle(getObjCadOs())) {
+                    if (tarefaControle.salvarTarefaControle(getObjCadTarefa(), getObjCadTarefaPk())) {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Tarefa Realizado com Sucesso."));
+                        context.execute("PF('dlCadTarTarefa').hide()");
+                        pesquisarTarefa();
+                        limparCadastroTarefa();
+                        limparCadastroNota();
+                    } else {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Tarefa."));
+                    }
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Tarefa."));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método salvarTarefaAnalise Tarefa " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -160,9 +262,17 @@ public class CadTarefaBean implements Serializable {
             getObjCadTarefa().setSitTarefa("05");
             getObjCadTarefa().setDtFechaTarefa(new Date());
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
+                if (osControle.validarFinalizacao(Integer.parseInt(getVtarefaOs())) == 0) {
+                    setObjCadOs(null);
+                    setObjCadOs(osControle.buscarOsControle(Integer.parseInt(getVtarefaOs())));
+                    getObjCadOs().setSitOs("03");
+                    getObjCadOs().setDtUltAtuOs(new Date());
+                    getObjCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                    osControle.alterarOsControle(getObjCadOs());
+                }
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa Cancelado com Sucesso."));
                 context.execute("PF('dlCancelTarefa').hide()");
-                analiseBean.pesquisarTarefa();
+                pesquisarTarefa();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Cancelar Tarefa."));
             }
@@ -181,7 +291,7 @@ public class CadTarefaBean implements Serializable {
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Alteração da Tarefa Realizado com Sucesso."));
                 context.execute("PF('dlAltTarefa').hide()");
-                analiseBean.pesquisarTarefa();
+                pesquisarTarefa();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Alterar Tarefa."));
             }
@@ -191,12 +301,162 @@ public class CadTarefaBean implements Serializable {
         }
     }
 
+    public void salvarNotaAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            if (getCadNotaObj().getCadNotaPK() == null) {
+                setCadNotaObjPK(new CadNotaPK());
+                getCadNotaObjPK().setNrOsNota(Integer.parseInt(getVtarefaOs()));
+                getCadNotaObjPK().setSerialNota(notaControle.retornaSeqNota(Integer.parseInt(getVtarefaOs())));
+
+                setCadNotaObj(new CadNota());
+                getCadNotaObj().setHistNota(getHisNota());
+                getCadNotaObj().setDtRegiNota(new Date());
+                getCadNotaObj().setFuncRegiNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getCadNotaObj().setDtUltAtuNota(new Date());
+                getCadNotaObj().setFuncUltAtuNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+
+                if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
+                    context.update("@form :frmAnaliseTarefa");
+                    context.execute("PF('dlCadNotaAnalise').hide()");
+                    pesquisarNota();
+                    limparCadastroNota();
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));
+                    context.update("@form :frmAnaliseTarefa");
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void finalizarAnalise() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setObjCadTarefa(null)/*limpar variavel*/;
+            setObjCadTarefa(tarefaControle.buscarTarefaControle(getVtarefaOs(), getVtarefaCdCategoria()));
+            getObjCadTarefa().setFuncUltAtuTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            getObjCadTarefa().setDtUltAtuTarefa(new Date());
+            getObjCadTarefa().setFuncResponTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            getObjCadTarefa().setSitTarefa(getSitFinal());
+            getObjCadTarefa().setHistFechaTarefa(getDescFinal());
+            getObjCadTarefa().setDtFechaTarefa(new Date());
+            if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
+                if (osControle.validarFinalizacao(Integer.parseInt(getVtarefaOs())) == 0) {
+                    setObjCadOs(null);
+                    setObjCadOs(osControle.buscarOsControle(Integer.parseInt(getVtarefaOs())));
+                    getObjCadOs().setSitOs("03");
+                    getObjCadOs().setDtUltAtuOs(new Date());
+                    getObjCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                    osControle.alterarOsControle(getObjCadOs());
+                }
+                limparFinalização();
+                context.execute("PF('dlResolvOs').hide()");
+                analiseTarefa(getObjCadTarefa().getCadTarefaPK().getNrOsTarefa(), getObjCadTarefa().getCadTarefaPK().getSeqTarefa());
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa finalizada com sucesso."));
+            } else {
+                limparFinalização();
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar tarefa."));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método finalizarAnalise " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarNota() {
+        try {
+            setNotaAnalise(null);
+            setNotaAnalise(notaControle.gridSecundario(Integer.parseInt(getVtarefaOs())));
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarNota (TarefaBean)" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarTarefa() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        try {
+            setListarTarefa(null);
+            setListarTarefa(tarefaControle.gridTarefa(Integer.parseInt(getVtarefaOs()), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));            
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarTarefa (TarefaBean)" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarTarefaOs() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        try {
+            setListarTarefa(null);
+            setListarTarefa(tarefaControle.gridTarefa(analiseBean.getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
+            context.update(":frmAnaliseOs :gridNota :gridTarefa");
+        } catch (Exception e) {
+            System.out.println("Erro no método pesquisarTarefaOs (TarefaBean)" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void limparFinalização() {
+        setListarFinalizacao(null);
+        setSitFinal(null);
+        setDescFinal(null);
+    }
+
+    public void limparCadastroNota() {
+        setCadNotaObj(null);
+        setCadNotaObjPK(null);
+        setHisNota(null);
+    }
+
+    public void limparCadastroTarefa() {
+        setObjCadTarefa(null);
+        setObjCadTarefaPk(null);
+        setHisTarefa(null);
+        setObsTarefa(null);
+        setCdSetor(null);
+    }
+
     public String renderizarFinalizaçãoTarefa() {
         if ("06".equals(getVtarefaCdSit()) || "07".equals(getVtarefaCdSit())) {
             return "true";
         } else {
             return "false";
         }
+    }
+
+    public List<Map<String, Object>> listarFinalizacao() {
+        try {
+            setListarFinalizacao(tarefaControle.listarSitFinalizacaoTarefa());
+        } catch (Exception e) {
+            System.out.println("Erro no metodo listarFinalizacao " + e.getMessage());
+        }
+        return getListarFinalizacao();
+    }
+
+    public CadNota getCadNotaObj() {
+        if (cadNotaObj == null) {
+            cadNotaObj = new CadNota();
+        }
+        return cadNotaObj;
+    }
+
+    public void setCadNotaObj(CadNota cadNotaObj) {
+        this.cadNotaObj = cadNotaObj;
+    }
+
+    public CadNotaPK getCadNotaObjPK() {
+        if (cadNotaObjPK == null) {
+            cadNotaObjPK = new CadNotaPK();
+        }
+        return cadNotaObjPK;
+    }
+
+    public void setCadNotaObjPK(CadNotaPK cadNotaObjPK) {
+        this.cadNotaObjPK = cadNotaObjPK;
     }
 
     public CadTarefa getObjCadTarefa() {
@@ -210,12 +470,127 @@ public class CadTarefaBean implements Serializable {
         this.ObjCadTarefa = ObjCadTarefa;
     }
 
+//    public CadTarefa getObjSalvTarefa() {
+//        if (ObjSalvTarefa == null) {
+//            ObjSalvTarefa = new CadTarefa();
+//        }
+//        return ObjSalvTarefa;
+//    }
+//
+//    public void setObjSalvTarefa(CadTarefa ObjSalvTarefa) {
+//        this.ObjSalvTarefa = ObjSalvTarefa;
+//    }
+//
+//    public CadTarefaPK getObjSalvTarefaPk() {
+//        if (ObjSalvTarefaPk == null) {
+//            ObjSalvTarefaPk = new CadTarefaPK();
+//        }
+//        return ObjSalvTarefaPk;
+//    }
+//
+//    public void setObjSalvTarefaPk(CadTarefaPK ObjSalvTarefaPk) {
+//        this.ObjSalvTarefaPk = ObjSalvTarefaPk;
+//    }
+    public CadTarefaPK getObjCadTarefaPk() {
+        if (ObjCadTarefaPk == null) {
+            ObjCadTarefaPk = new CadTarefaPK();
+        }
+        return ObjCadTarefaPk;
+    }
+
+    public CadOs getObjCadOs() {
+        if (ObjCadOs == null) {
+            ObjCadOs = new CadOs();
+        }
+        return ObjCadOs;
+    }
+
+    public void setObjCadOs(CadOs ObjCadOs) {
+        this.ObjCadOs = ObjCadOs;
+    }
+
+    public void setObjCadTarefaPk(CadTarefaPK ObjCadTarefaPk) {
+        this.ObjCadTarefaPk = ObjCadTarefaPk;
+    }
+
+    public List<Map<String, Object>> getNotaAnalise() {
+        return notaAnalise;
+    }
+
+    public void setNotaAnalise(List<Map<String, Object>> notaAnalise) {
+        this.notaAnalise = notaAnalise;
+    }
+
     public List<Map<String, Object>> getObjVerTarefa() {
         return ObjVerTarefa;
     }
 
     public void setObjVerTarefa(List<Map<String, Object>> ObjVerTarefa) {
         this.ObjVerTarefa = ObjVerTarefa;
+    }
+
+    public List<Map<String, Object>> getListarTarefa() {
+        return listarTarefa;
+    }
+
+    public void setListarTarefa(List<Map<String, Object>> listarTarefa) {
+        this.listarTarefa = listarTarefa;
+    }
+
+    public List<Map<String, Object>> getListarFinalizacao() {
+        return listarFinalizacao;
+    }
+
+    public void setListarFinalizacao(List<Map<String, Object>> listarFinalizacao) {
+        this.listarFinalizacao = listarFinalizacao;
+    }
+
+    public String getSitFinal() {
+        return sitFinal;
+    }
+
+    public void setSitFinal(String sitFinal) {
+        this.sitFinal = sitFinal;
+    }
+
+    public String getDescFinal() {
+        return descFinal;
+    }
+
+    public void setDescFinal(String descFinal) {
+        this.descFinal = descFinal;
+    }
+
+    public String getHisNota() {
+        return hisNota;
+    }
+
+    public void setHisNota(String hisNota) {
+        this.hisNota = hisNota;
+    }
+
+    public Integer getCdSetor() {
+        return cdSetor;
+    }
+
+    public void setCdSetor(Integer cdSetor) {
+        this.cdSetor = cdSetor;
+    }
+
+    public String getHisTarefa() {
+        return hisTarefa;
+    }
+
+    public void setHisTarefa(String hisTarefa) {
+        this.hisTarefa = hisTarefa;
+    }
+
+    public String getObsTarefa() {
+        return obsTarefa;
+    }
+
+    public void setObsTarefa(String obsTarefa) {
+        this.obsTarefa = obsTarefa;
     }
 
     public String getVtarefaOs() {

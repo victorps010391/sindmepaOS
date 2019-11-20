@@ -34,13 +34,14 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
         super(CadTarefa.class);
     }
 
-    public List<Map<String, Object>> listarSetorTarefa() {
+    public List<Map<String, Object>> listarSetorTarefa(Integer cdSetor) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
         sql.append(" select cd_setor as codigo                   ");
         sql.append("        ,nm_setor as nome                    ");
         sql.append(" from cad_setor where usu_setor in ('I','A') ");
+        sql.append(" and cd_setor <> ").append(cdSetor);
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();
@@ -201,7 +202,7 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
         sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_abert_tarefa) as nome_setor                                       ");
         sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
         sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = (select categ_os from cad_os where nr_os = cast(nr_os_tarefa as integer))))) as prioridade ");
-        sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_abert_tarefa) as nome_abert                                    ");        
+        sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_abert_tarefa) as nome_abert                                    ");
         sql.append("        ,hist_tarefa                                                                                                              ");
         sql.append("        ,obs_tarefa                                                                                                               ");
         sql.append("        ,hist_fecha_tarefa                                                                                                        ");
@@ -234,6 +235,63 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
             }
         } catch (Exception e) {
             System.out.println("ERRO no método gridTarefa " + e.getMessage());
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> listarSitFinalizacaoTarefa() {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select cod_valor_detalhe as codigo ");
+        sql.append("        ,desc_detalhe as nome ");
+        sql.append(" from cad_detalhe ");
+        sql.append(" where cod_item_detalhe = 'SITTA' ");
+        sql.append(" and cod_valor_detalhe in ('06','07') ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("codigo", array[0]);
+                map.put("nome", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método listarSitAnaliseOs");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> usuDashboardTarefa(Integer cdSetor) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select count(*) as qtd ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITTA' and cod_valor_detalhe = sit_tarefa) as desc ");
+        sql.append(" from cad_tarefa ");
+        sql.append(" where setor_respon_tarefa = ").append(cdSetor);
+        sql.append(" and sit_tarefa <> '01' ");
+        sql.append(" group by sit_tarefa ");
+        sql.append(" order by sit_tarefa ");
+
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("qtd", array[0]);
+                map.put("desc", array[1]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método usuDashboard " + e.getMessage());
             e.printStackTrace();
         }
         return resultMaps;

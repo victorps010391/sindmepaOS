@@ -92,10 +92,12 @@ public class CadAnaliseBean implements Serializable {
 
     public String voltarCadAnalise() {
         try {
-            setGrid01(analiseControle.gridAnalise01(null, null, null));
-            setGrid02(analiseControle.gridAnalise02(null, null, null));
-            setGrid03(analiseControle.gridAnalise03(null, null, null));
-            setGridTarefa(tarefaControle.gridTarefaAtendimento(null, null));
+            RequestContext context = RequestContext.getCurrentInstance();
+            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            context.update("@form :frmCadAnalise");
             return "cadanalise";
 
         } catch (Exception e) {
@@ -165,7 +167,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public String analiseIniciada(Integer os) {
-        RequestContext context = RequestContext.getCurrentInstance();        
+        RequestContext context = RequestContext.getCurrentInstance();
         try {
             setVerOs(null);
             setVerOs(analiseControle.verOs(os));
@@ -223,6 +225,7 @@ public class CadAnaliseBean implements Serializable {
                 limparFinalização();
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar protocolo: " + getObjOs().getNrOs() + "."));
             }
+
         } catch (Exception e) {
             System.out.println("Erro no método finalizarAnalise " + e.getMessage());
             e.printStackTrace();
@@ -234,7 +237,7 @@ public class CadAnaliseBean implements Serializable {
         try {
             setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
-            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));            
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
@@ -242,10 +245,27 @@ public class CadAnaliseBean implements Serializable {
         }
     }
 
+    public void pesquisarMenu() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        try {
+            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            context.update("@form :frmCadAnalise");
+
+        } catch (Exception e) {
+            System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public void pesquisarNota() {
+        RequestContext context = RequestContext.getCurrentInstance();
         try {
             setNotaAnalise(null);
             setNotaAnalise(notaControle.gridSecundario(getVos()));
+            context.update(":frmAnaliseOs :gridNota :gridTarefa");
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarNota " + e.getMessage());
             e.printStackTrace();
@@ -253,9 +273,11 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void pesquisarTarefa() {
+        RequestContext context = RequestContext.getCurrentInstance();
         try {
             setTarefaAnalise(null);
             setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
+            context.update(":frmAnaliseOs :gridNota :gridTarefa");
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarTarefa " + e.getMessage());
             e.printStackTrace();
@@ -264,7 +286,7 @@ public class CadAnaliseBean implements Serializable {
 
     public List<Map<String, Object>> listarSetorTarefa() {
         try {
-            setSetorTarefa(tarefaControle.listarSetorTarefa());
+            setSetorTarefa(tarefaControle.listarSetorTarefa(loginBean.getUsuario().getSetorFunc().getCdSetor()));
         } catch (Exception e) {
             System.out.println("Erro no metodo listarSetorTarefa " + e.getMessage());
             e.printStackTrace();
@@ -386,9 +408,21 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void limparFinalização() {
-        setListarFinalizacao(null);
-        setSitFinal(null);
-        setDescFinal(null);
+        RequestContext context = RequestContext.getCurrentInstance();
+        try {
+            if (osControle.validarFinalizacao(getVos()) == 0) {
+                setListarFinalizacao(null);
+                setSitFinal(null);
+                setDescFinal(null);
+                context.execute("PF('dlResolvOs').show()");
+                context.update(":frmDlResolvOs");
+            } else {
+                context.execute("PF('dlValida').show()");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método limparFinalização (OS) " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void limparCadastroNota() {

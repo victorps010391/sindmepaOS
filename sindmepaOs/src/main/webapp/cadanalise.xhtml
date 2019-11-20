@@ -30,7 +30,9 @@
                     <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />                    
                 </f:facet>
             </p:panel>
+
             <br/>
+
             <p:fieldset legend="Protocolos Encaminhados Para Atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid red;" >                
                 <p:dataTable id="grid01" value="#{cadAnaliseBean.grid01}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
                              paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto"
@@ -87,8 +89,10 @@
                                          update=":frmDlConfirm"/>
                     </p:column>              
                 </p:dataTable>       
-            </p:fieldset>
+            </p:fieldset>  
+
             <br/>
+
             <p:fieldset legend="Tarefas Encaminhadas" toggleable="true" toggleSpeed="500" style="border:2px solid darkgrey;">                
                 <p:dataTable id="gridTarefa" value="#{cadAnaliseBean.gridTarefa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
                              paginatorPosition="bottom" liveResize="true" 
@@ -152,7 +156,9 @@
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>
+
             <br/>
+
             <p:fieldset legend="Protocolos Em atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid blue;">                
                 <p:dataTable id="grid02" value="#{cadAnaliseBean.grid02}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
                              paginatorPosition="bottom" liveResize="true" 
@@ -208,7 +214,9 @@
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>
+
             <br/>
+
             <p:fieldset legend="Protocolos Finalizados" toggleable="true" toggleSpeed="500" style="border:2px solid green;" collapsed="true">                
                 <p:dataTable id="grid03" value="#{cadAnaliseBean.grid03}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
                              paginatorPosition="bottom" liveResize="true" 
@@ -265,7 +273,7 @@
                                          update="@form"/>
                     </p:column>              
                 </p:dataTable>
-            </p:fieldset>
+            </p:fieldset>                                
         </h:form>
 
         <p:dialog widgetVar="dlConfirm" header="Confirmação">
