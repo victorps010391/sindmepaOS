@@ -60,22 +60,25 @@
                                     <h:outputLabel value="Setor Solicitante: " style="font-size: small; font-weight: bold; color: darkblue;"/>
                                     <h:outputLabel value="#{cadTarefaBean.vtarefasSetorAbertura}" styleClass="conteudoV"/>
                                     <h:outputLabel value="Solicitante: " style="font-size: small; font-weight: bold; color: darkblue;"/>
-                                    <h:outputLabel value="#{cadTarefaBean.vtarefaFuncAbert}" styleClass="conteudoV"/>
-                                    <h:outputLabel value="Solicitação: " style="font-size: small; font-weight: bold; color: darkblue;"/>
-                                    <h:outputLabel value="#{cadTarefaBean.vtarefaHistorico}" styleClass="conteudoV"/>
-                                    <h:outputLabel value="Observações: " style="font-size: small; font-weight: bold; color: darkblue;"/>
-                                    <h:outputLabel value="#{cadTarefaBean.vtarefaObservacao}" styleClass="conteudoV"/>
+                                    <h:outputLabel value="#{cadTarefaBean.vtarefaFuncAbert}" styleClass="conteudoV"/>                                    
                                     <h:outputLabel value="Data e Hora de Abertura: " style="font-size: small; font-weight: bold; color: darkblue;"/>
                                     <h:outputLabel value="#{cadTarefaBean.vtarefaDataHoraAbert}" styleClass="conteudoV"/>
                                 </h:panelGrid>
-                                <br/>
-                                <br/>
-                                <h:panelGrid columns="2" style="border: none !important;" rendered="#{cadTarefaBean.renderizarFinalizaçãoTarefa()}">
-                                    <h:outputLabel value="Data e Hora de Fechamento: " style="font-size: small; font-weight: bold; color: darkblue;"/>                                
-                                    <h:outputLabel value="#{cadTarefaBean.vtarefaDataHoraFecha}" styleClass="conteudoV"/>
-                                    <h:outputLabel value="Resolução: " style="font-size: small; font-weight: bold; color: darkblue;"/>
-                                    <h:outputLabel value="#{cadTarefaBean.vtarefaDescFinal}" styleClass="conteudoV"/>
+                                <h:panelGrid columns="1" style="border: none !important;">
+                                    <h:outputLabel value="Solicitação: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                    <p:inputTextarea rows="6" cols="100" value="#{cadTarefaBean.vtarefaHistorico}" readonly="true"/>                                    
+                                    <h:outputLabel value="Observações: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                    <p:inputTextarea rows="6" cols="100" value="#{cadTarefaBean.vtarefaObservacao}" readonly="true"/>                                    
                                 </h:panelGrid>
+                                <br/>
+                                <br/>
+                                <h:panelGrid columns="1" style="border: none !important;" rendered="#{cadTarefaBean.renderizarFinalizaçãoTarefa()}">
+                                    <h:outputLabel value="Data e Hora de Fechamento: " style="font-size: small; font-weight: bold; color: darkblue;"/>                      
+                                    <h:outputLabel value="#{cadAnaliseBean.vdata_hora_fecha}" styleClass="conteudoV"/>
+                                    <h:outputLabel value="Resolução: " style="font-size: small; font-weight: bold; color: darkblue;"/>
+                                    <p:inputTextarea rows="6" cols="100" value="#{cadTarefaBean.vtarefaDescFinal}" readonly="true"/>                                   
+                                </h:panelGrid>
+
                                 <f:facet name="footer">                    
                                     <p:commandButton value="Criar Tarefa" 
                                                      disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"
@@ -152,7 +155,10 @@
                                                         update=":frmDlAltTarefa"
                                                         disabled="#{!'01'.equals(tarefa.get('cd_sit_tarefa'))}"/>
 
-                                            <p:menuitem value="Detalhes" />
+                                            <p:menuitem value="Detalhes" 
+                                                        actionListener="#{cadTarefaBean.visualizar(tarefa.get('nr_os_tarefa'), tarefa.get('seq_tarefa'))}"
+                                                        onclick="PF('dlVerOs').show()" 
+                                                        update=":frmDlVerOs"/>
 
                                             <p:menuitem value="Anexos" 
                                                         url="cadanexo.xhtml" />
@@ -403,6 +409,61 @@
                             </p:panel>
                         </h:form>
                     </p:dialog>
+
+                    <p:dialog widgetVar="dlVerOs" header="Visualizar Informações da Tarefa Cadastrada" responsive="true" height="500">
+                        <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
+                            <p:panel header="DADOS DA TAREFA">                    
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Protocolo: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.nrOsTarefa}" />
+
+                                    <h:outputLabel value="Tarefa: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.nrTarefa}" />
+
+                                    <h:outputLabel value="Prioridade (protocolo): " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.prioridade}" />    
+
+                                    <h:outputLabel value="Status: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.sitTarefa}" />  
+                                </h:panelGrid>
+                            </p:panel><br/>  
+                            <p:panel header="DADOS DA ABERTURA">
+                                <h:panelGrid columns="2" >    
+                                    <h:outputLabel value="Data de Abertura: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.dataHoraAbert}" /> 
+
+                                    <h:outputLabel value="Setor de Abertura: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.nomeSetor}" />  
+
+                                    <h:outputLabel value="Aberto por: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.nomeAbert}" />                         
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" style="border: none !important;">
+                                    <h:outputLabel value="Solicitação: " style="font-weight:bold; "/>
+                                    <p:inputTextarea rows="4" cols="90" value="#{cadTarefaBean.objVerTa.histTarefa}" readonly="true"/>  
+
+                                    <h:outputLabel value="Observações: " style="font-weight:bold; "/>
+                                    <p:inputTextarea rows="4" cols="90" value="#{cadTarefaBean.objVerTa.obsTarefa}" readonly="true"/>  
+                                </h:panelGrid>
+                            </p:panel><br/>
+                            <p:panel header="DADOS DA RESOLUÇÃO">
+                                <h:panelGrid columns="2" >   
+                                    <h:outputLabel value="Setor Responsável: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.nomeSetorRespon}" />  
+
+                                    <h:outputLabel value="Colaborador Responsável: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.nomeRespon}" />  
+
+                                    <h:outputLabel value="Data da Resolução: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.dataHoraFecha}" />                         
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" style="border: none !important;">
+                                    <h:outputLabel value="Descrição da Resolução: " style="font-weight:bold; "/>
+                                    <p:inputTextarea rows="4" cols="90" value="#{cadTarefaBean.objVerTa.histFechaTarefa}" readonly="true"/>  
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:form>
+                    </p:dialog>        
                 </p:layoutUnit>
             </p:layout>
         </h:body>

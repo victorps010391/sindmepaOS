@@ -200,12 +200,14 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
         sql.append("        ,nr_os_tarefa                                                                                                             ");
         sql.append("        ,seq_tarefa                                                                                                               ");
         sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_abert_tarefa) as nome_setor                                       ");
-        sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
+        sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR'                                             ");
         sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = (select categ_os from cad_os where nr_os = cast(nr_os_tarefa as integer))))) as prioridade ");
         sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_abert_tarefa) as nome_abert                                    ");
         sql.append("        ,hist_tarefa                                                                                                              ");
         sql.append("        ,obs_tarefa                                                                                                               ");
         sql.append("        ,hist_fecha_tarefa                                                                                                        ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_tarefa) as nome_setor_respon                               ");
+        sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_respon_tarefa) as nome_respon                                  ");
         sql.append(" from cad_tarefa where nr_os_tarefa = cast (").append(nrOs).append(" as character varying(80000))");
         sql.append(" and seq_tarefa = ").append(seq);
         sql.append(" order by dt_abert_tarefa desc ");
@@ -231,6 +233,8 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
                 map.put("hist_tarefa", array[11]);
                 map.put("obs_tarefa", array[12]);
                 map.put("hist_fecha_tarefa", array[13]);
+                map.put("nome_setor_respon", array[14]);
+                map.put("nome_respon", array[15]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {

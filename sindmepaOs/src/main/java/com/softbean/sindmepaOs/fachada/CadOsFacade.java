@@ -38,7 +38,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
-        sql.append(" select nr_os as os 																										   ");
+        sql.append(" select nr_os as os 													   ");
         sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR'                                          ");
         sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade ");
         sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria                          ");
@@ -57,6 +57,9 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("               else (select nm_func from cad_funcionario where cd_func = func_abert_os)                                        ");
         sql.append("               end) as func_abert                                                                                              ");
         sql.append("        ,upper(desc_finalizacao_os) as desc_finalizacao                                                                        ");
+        sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_respon_os) as func_respon                                   ");
+        sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_finali_os) as func_finali                                   ");
+        sql.append("        ,(case when tipo_envio_os = 'I' then 'INTERNO' ELSE 'EXTERNO' END) as tipo_envio                                       ");
         sql.append(" from cad_os                                                                                                                   ");
         sql.append(" where nr_os = ").append(nrOs);
 
@@ -82,6 +85,9 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 map.put("cod_categoria", array[12]);
                 map.put("func_abert", array[13]);
                 map.put("desc_finalizacao", array[14]);
+                map.put("func_respon", array[15]);
+                map.put("func_finali", array[16]);
+                map.put("tipo_envio", array[17]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {

@@ -5,9 +5,11 @@
  */
 package com.softbean.sindmepaOs.bean;
 
+import com.softbean.sindmepaOs.controle.CadAnaliseControle;
 import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.entidade.CadOs;
+import com.softbean.sindmepaOs.entidade.CadOsVer;
 import com.softbean.sindmepaOs.entidade.CadSetor;
 import com.softbean.sindmepaOs.util.MailUtil;
 import javax.inject.Named;
@@ -39,6 +41,8 @@ public class CadOsBean implements Serializable {
     @Inject
     CadOsControle osControle;
     @Inject
+    CadAnaliseControle analiseControle;
+    @Inject
     CadNotaControle notaControle;
     @Inject
     MailUtil mailUtil;
@@ -51,6 +55,7 @@ public class CadOsBean implements Serializable {
 //  VARIAVEIS DE CADASTRO
     CadOs obCadOs;
     CadSetor cadSetorObj;
+    CadOsVer objVerOs;
 
     Integer nrOsCad;
     String priorCad;
@@ -63,6 +68,7 @@ public class CadOsBean implements Serializable {
     List<Map<String, Object>> sitCategListaCad;
     List<Map<String, Object>> setorResponsListaCad;
     List<Map<String, Object>> colabResponsCad;
+    List<Map<String, Object>> osVer;
 
 //  VARIAVEIS DE PESQUISA
     Integer nrOs;
@@ -151,12 +157,28 @@ public class CadOsBean implements Serializable {
 
     public void visualizar(Integer cod) {
         try {
-            setObCadOs(null)/*limpar variavel*/;
-            setObCadOs(osControle.buscarOsControle(cod));
-            setCadSetorObj(null)/*limpar variavel*/;
-            setCadSetorObj(osControle.buscarSetor(getObCadOs().getSetorResponOs().getCdSetor()));
-            setPriorAlt(null)/*limpar variavel*/;
-            setPriorAlt(osControle.retornaPrioridade(getObCadOs().getCategOs()));
+            setOsVer(null);//limpar variavel
+            setObjVerOs(null);//limpar variavel
+            setObjVerOs(new CadOsVer());
+
+            setOsVer(analiseControle.verOs(cod));
+            for (Map<String, Object> elemento : getOsVer()) {
+                getObjVerOs().setCategoria((String) elemento.get("categoria"));
+                getObjVerOs().setDataHoraAbert((String) elemento.get("data_hora_abert"));
+                getObjVerOs().setDataHoraFecha((String) elemento.get("data_hora_fecha"));
+                getObjVerOs().setDescFinalizacao((String) elemento.get("desc_finalizacao"));
+                getObjVerOs().setFuncAbert((String) elemento.get("func_abert"));
+                getObjVerOs().setFuncFinali((String) elemento.get("func_finali"));
+                getObjVerOs().setFuncRespon((String) elemento.get("func_respon"));
+                getObjVerOs().setHistorico((String) elemento.get("historico"));
+                getObjVerOs().setObservacao((String) elemento.get("observacao"));
+                getObjVerOs().setOs((Integer) elemento.get("os"));
+                getObjVerOs().setPrioridade((String) elemento.get("prioridade"));
+                getObjVerOs().setSetorAbertura((String) elemento.get("setor_abertura"));
+                getObjVerOs().setSetorResponsavel((String) elemento.get("setor_responsavel"));
+                getObjVerOs().setSit((String) elemento.get("sit"));
+                getObjVerOs().setTipoEnvio((String) elemento.get("tipo_envio"));
+            }
         } catch (Exception e) {
             System.out.println("Erro no método visualizar (OS) " + e.getMessage());
             e.printStackTrace();
@@ -375,6 +397,14 @@ public class CadOsBean implements Serializable {
         return getSitCategListaCad();
     }
 
+    public List<Map<String, Object>> getOsVer() {
+        return osVer;
+    }
+
+    public void setOsVer(List<Map<String, Object>> osVer) {
+        this.osVer = osVer;
+    }
+
     public CadOs getObCadOs() {
         if (obCadOs == null) {
             obCadOs = new CadOs();
@@ -579,6 +609,14 @@ public class CadOsBean implements Serializable {
 
     public void setSetAlt(Integer setAlt) {
         this.setAlt = setAlt;
+    }
+
+    public CadOsVer getObjVerOs() {
+        return objVerOs;
+    }
+
+    public void setObjVerOs(CadOsVer objVerOs) {
+        this.objVerOs = objVerOs;
     }
 
 }

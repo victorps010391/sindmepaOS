@@ -9,7 +9,7 @@
 
     <ui:define name="centro"> 
         <h:form id="frmCadOs" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-            
+
             <p:growl id="growl" showDetail="true"/>                                  
             <p:panel header="Cadastro de Protocolos" >
                 <h:panelGrid columns="2" >
@@ -48,7 +48,7 @@
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
                     <p:commandButton value="Novo Protocolo" onclick="PF('dlCadOs').show()" update="@form :frmDlCadOs"/>  
                     <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
-<!--                    <p:commandButton value="Enviar" actionListener="# {cadOsBean.enviarEmail()}" update="@form"/>                    -->
+                    <!--                    <p:commandButton value="Enviar" actionListener="# {cadOsBean.enviarEmail()}" update="@form"/>                    -->
                 </f:facet>
             </p:panel>
 
@@ -353,22 +353,64 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado">
+        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado" responsive="true" height="500">
             <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
-                <p:panel>                    
+                <p:panel header="DADOS DO PROTOCOLO">                    
                     <h:panelGrid columns="2">
                         <h:outputLabel value="Protocolo: " style="font-weight:bold; "/>
-                        <h:outputLabel value="#{cadOsBean.obCadOs.nrOs}" style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.os}" />
+
+                        <h:outputLabel value="Categoria: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.categoria}" />  
 
                         <h:outputLabel value="Prioridade: " style="font-weight:bold; "/>
-                        <h:outputLabel id="priorCad" value="#{cadOsBean.priorAlt}" style="font-weight:bold; "/>                                       </h:panelGrid>
-                </p:panel><br/>  
-                <p:panel>
-                    <h:panelGrid columns="2" >    
+                        <h:outputLabel value="#{cadOsBean.objVerOs.prioridade}" />    
 
+                        <h:outputLabel value="Tipo de Envio: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.tipoEnvio}" /> 
+
+                        <h:outputLabel value="Status: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.sit}" />  
+                    </h:panelGrid>
+                </p:panel><br/>  
+                <p:panel header="DADOS DA ABERTURA">
+                    <h:panelGrid columns="2" >    
+                        <h:outputLabel value="Data de Abertura: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.dataHoraAbert}" /> 
+
+                        <h:outputLabel value="Setor de Abertura: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.setorAbertura}" />  
+
+                        <h:outputLabel value="Aberto por: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.funcAbert}" />                         
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" style="border: none !important;">
+                        <h:outputLabel value="Solicitação: " style="font-weight:bold; "/>
+                        <p:inputTextarea rows="4" cols="90" value="#{cadOsBean.objVerOs.historico}" readonly="true"/>  
+
+                        <h:outputLabel value="Observações: " style="font-weight:bold; "/>
+                        <p:inputTextarea rows="4" cols="90" value="#{cadOsBean.objVerOs.observacao}" readonly="true"/>  
+                    </h:panelGrid>
+                </p:panel><br/>
+                <p:panel header="DADOS DA RESOLUÇÃO">
+                    <h:panelGrid columns="2" >   
+                        <h:outputLabel value="Setor Responsável: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.setorResponsavel}" />  
+
+                        <h:outputLabel value="Colaborador Responsável: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.funcRespon}" />  
+
+                        <h:outputLabel value="Resolvido por: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.funcFinali}" />  
+
+                        <h:outputLabel value="Data da Resolução: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.dataHoraFecha}" />                         
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" style="border: none !important;">
+                        <h:outputLabel value="Descrição da Resolução: " style="font-weight:bold; "/>
+                        <p:inputTextarea rows="4" cols="90" value="#{cadOsBean.objVerOs.descFinalizacao}" readonly="true"/>  
                     </h:panelGrid>
                 </p:panel>
-
             </h:form>
         </p:dialog>        
 

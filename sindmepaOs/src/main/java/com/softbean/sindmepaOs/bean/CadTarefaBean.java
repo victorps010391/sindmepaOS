@@ -11,8 +11,10 @@ import com.softbean.sindmepaOs.controle.CadTarefaControle;
 import com.softbean.sindmepaOs.entidade.CadNota;
 import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import com.softbean.sindmepaOs.entidade.CadOs;
+import com.softbean.sindmepaOs.entidade.CadOsVer;
 import com.softbean.sindmepaOs.entidade.CadTarefa;
 import com.softbean.sindmepaOs.entidade.CadTarefaPK;
+import com.softbean.sindmepaOs.entidade.CadTarefaVer;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -56,11 +58,13 @@ public class CadTarefaBean implements Serializable {
     CadOs ObjCadOs;
     CadNota cadNotaObj;
     CadNotaPK cadNotaObjPK;
+    CadTarefaVer objVerTa;
 
     List<Map<String, Object>> ObjVerTarefa;
     List<Map<String, Object>> listarTarefa;
     List<Map<String, Object>> notaAnalise;
     List<Map<String, Object>> listarFinalizacao;
+    List<Map<String, Object>> ObjVer;
 
     Integer cdSetor;
     String hisTarefa;
@@ -122,6 +126,35 @@ public class CadTarefaBean implements Serializable {
             e.printStackTrace();
         }
         return ret;
+    }
+
+    public void visualizar(String os, Integer seq) {
+        try {
+            setObjVer(null);//limpar variavel
+            setObjVerTa(null);//limpar variavel
+            setObjVerTa(new CadTarefaVer());
+
+            setObjVer(tarefaControle.verTarefa(os, seq));
+            for (Map<String, Object> elemento : getObjVer()) {
+                getObjVerTa().setDataHoraAbert((String) elemento.get("data_hora_abert"));
+                getObjVerTa().setDataHoraFecha((String) elemento.get("data_hora_fecha"));
+                getObjVerTa().setHistFechaTarefa((String) elemento.get("hist_fecha_tarefa"));
+                getObjVerTa().setHistTarefa((String) elemento.get("hist_tarefa"));
+                getObjVerTa().setNomeRespon((String) elemento.get("nome_respon"));
+                getObjVerTa().setNomeAbert((String) elemento.get("nome_abert"));
+                getObjVerTa().setNomeSetor((String) elemento.get("nome_setor"));
+                getObjVerTa().setNomeSetorRespon((String) elemento.get("nome_setor_respon"));
+                getObjVerTa().setNrOsTarefa((String) elemento.get("nr_os_tarefa"));
+                getObjVerTa().setNrTarefa((String) elemento.get("nr_tarefa"));
+                getObjVerTa().setObsTarefa((String) elemento.get("obs_tarefa"));
+                getObjVerTa().setPrioridade((String) elemento.get("prioridade"));
+                getObjVerTa().setSitTarefa((String) elemento.get("sit_tarefa"));
+                getObjVerTa().setSeqTarefa((Integer) elemento.get("seq_tarefa"));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método visualizar (Tarefa) " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public String iniciarAnaliseTarefa() {
@@ -448,6 +481,14 @@ public class CadTarefaBean implements Serializable {
         return getListarFinalizacao();
     }
 
+    public CadTarefaVer getObjVerTa() {
+        return objVerTa;
+    }
+
+    public void setObjVerTa(CadTarefaVer objVerTa) {
+        this.objVerTa = objVerTa;
+    }
+
     public CadNota getCadNotaObj() {
         if (cadNotaObj == null) {
             cadNotaObj = new CadNota();
@@ -530,6 +571,14 @@ public class CadTarefaBean implements Serializable {
 
     public void setNotaAnalise(List<Map<String, Object>> notaAnalise) {
         this.notaAnalise = notaAnalise;
+    }
+
+    public List<Map<String, Object>> getObjVer() {
+        return ObjVer;
+    }
+
+    public void setObjVer(List<Map<String, Object>> ObjVer) {
+        this.ObjVer = ObjVer;
     }
 
     public List<Map<String, Object>> getObjVerTarefa() {
