@@ -174,9 +174,9 @@ public class CadTarefaBean implements Serializable {
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa Encaminhado Para Atendimento com Sucesso."));
                 context.execute("PF('dlConfirm').hide()");
-                pesquisarTarefaOs();
+                analiseBean.pesquisarTarefa();
             } else {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Tarefa Para Atendimento."));
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao encaminhar Tarefa Para Atendimento."));
             }
         } catch (Exception e) {
             System.out.println("Erro no método encaminharTarefa " + e.getMessage());
@@ -381,29 +381,40 @@ public class CadTarefaBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         try {
             setListarTarefa(null);
-            setListarTarefa(tarefaControle.gridTarefa(Integer.parseInt(getVtarefaOs()), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));            
+            setListarTarefa(tarefaControle.gridTarefa(Integer.parseInt(getVtarefaOs()), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarTarefa (TarefaBean)" + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public void pesquisarTarefaOs() {
+//    public void pesquisarTarefaOs() {
+//        RequestContext context = RequestContext.getCurrentInstance();
+//        try {
+//            tarefaControle.setListarTarefa(null);
+//            setListarTarefa(tarefaControle.gridTarefa(analiseBean.getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
+//            context.update(":frmAnaliseOs :gridNota :gridTarefa");
+//        } catch (Exception e) {
+//            System.out.println("Erro no método pesquisarTarefaOs (TarefaBean)" + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
+    public void limparFinalização() {
         RequestContext context = RequestContext.getCurrentInstance();
         try {
-            setListarTarefa(null);
-            setListarTarefa(tarefaControle.gridTarefa(analiseBean.getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
-            context.update(":frmAnaliseOs :gridNota :gridTarefa");
+            if (tarefaControle.validarFinalizacaoTarefa(getVtarefaOs(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()) == 0) {
+                setListarFinalizacao(null);
+                setSitFinal(null);
+                setDescFinal(null);
+                context.execute("PF('dlResolvOs').show()");
+                context.update(":frmDlResolvOs");
+            } else {
+                context.execute("PF('dlValida').show()");
+            }
         } catch (Exception e) {
-            System.out.println("Erro no método pesquisarTarefaOs (TarefaBean)" + e.getMessage());
+            System.out.println("Erro no método limparFinalização (Tarefa) " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    public void limparFinalização() {
-        setListarFinalizacao(null);
-        setSitFinal(null);
-        setDescFinal(null);
     }
 
     public void limparCadastroNota() {

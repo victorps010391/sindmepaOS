@@ -88,5 +88,9 @@ public class CadTarefaControle implements Serializable {
     public List<Map<String, Object>> usuDashboardTarefa(Integer cdSetor){
         return tarefaFacade.usuDashboardTarefa(cdSetor);
     }
+    
+    public Integer validarFinalizacaoTarefa(String os, Integer cdFunc){
+        return tarefaFacade.validarFinalizacaoTarefa(os, cdFunc);
+    }
 
 }

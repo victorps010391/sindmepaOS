@@ -297,4 +297,22 @@ public class CadTarefaFacade extends AbstractFacade<CadTarefa> {
         return resultMaps;
     }
 
+    public Integer validarFinalizacaoTarefa(String os, Integer cdFunc) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(" select cast(count(*) as integer) ");
+        sql.append(" from cad_tarefa ");
+        sql.append(" where nr_os_tarefa = '").append(os).append("'");
+        sql.append(" and func_abert_tarefa = ").append(cdFunc);
+        sql.append(" and sit_tarefa in ('01','02','03') ");
+        try {
+            Query q = em.createNativeQuery(sql.toString());
+            return (Integer) q.getSingleResult();
+        } catch (Exception e) {
+            System.err.println("Erro no metodo validarFinalizacaoTarefa " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

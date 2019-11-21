@@ -426,7 +426,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         }
         return resultMaps;
     }
-        
+
     public List<Map<String, Object>> usuDiretorDashboard() {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;

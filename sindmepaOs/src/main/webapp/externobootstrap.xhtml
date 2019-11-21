@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml"    
+             xmlns:h="http://java.sun.com/jsf/html"      
+             xmlns:f="http://java.sun.com/jsf/core"      
+             xmlns:ui="http://java.sun.com/jsf/facelets"     
+             template="templatebootstrap.xhtml">
+
+    <ui:define name="css"></ui:define>
+
+    <ui:define name="body">
+        <h1>Hello World</h1>
+        <hr />
+        <h:form>
+            <div>
+                <h:commandLink class="btn btn-success">Button</h:commandLink>
+                <h:commandLink class="btn btn-primary">Button</h:commandLink>
+                <h:commandLink class="btn btn-danger">Button</h:commandLink>
+                <h:commandLink class="btn btn-dark">Button</h:commandLink>
+            </div>
+
+            <br/>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />                
+            </div>
+
+            <br/>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">First and last name</span>
+                </div>
+                <input type="text" aria-label="First name" class="form-control" />
+                <input type="text" aria-label="Last name" class="form-control" />
+            </div>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="javascript"></ui:define>
+</ui:decorate>
