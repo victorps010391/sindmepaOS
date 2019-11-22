@@ -305,7 +305,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public String dadosSindicais() {
-        if (getVcod_categoria() == 7 && getVcod_setor_abertura() == 0) {
+        if (getVcod_categoria() == 0 && getVcod_setor_abertura() == 0) {
             return "true";
         } else {
             return "false";
