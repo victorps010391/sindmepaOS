@@ -11,7 +11,6 @@ import com.softbean.sindmepaOs.controle.CadTarefaControle;
 import com.softbean.sindmepaOs.entidade.CadNota;
 import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import com.softbean.sindmepaOs.entidade.CadOs;
-import com.softbean.sindmepaOs.entidade.CadOsVer;
 import com.softbean.sindmepaOs.entidade.CadTarefa;
 import com.softbean.sindmepaOs.entidade.CadTarefaPK;
 import com.softbean.sindmepaOs.entidade.CadTarefaVer;
@@ -388,6 +387,7 @@ public class CadTarefaBean implements Serializable {
                 }
                 limparFinalização();
                 context.execute("PF('dlResolvOs').hide()");
+                visualizar(getObjCadTarefa().getCadTarefaPK().getNrOsTarefa(), getObjCadTarefa().getCadTarefaPK().getSeqTarefa());
                 analiseTarefa(getObjCadTarefa().getCadTarefaPK().getNrOsTarefa(), getObjCadTarefa().getCadTarefaPK().getSeqTarefa());
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa finalizada com sucesso."));
             } else {

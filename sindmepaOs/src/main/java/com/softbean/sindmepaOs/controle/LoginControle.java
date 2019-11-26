@@ -35,12 +35,18 @@ public class LoginControle implements PhaseListener {
         NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
         boolean paginaLogin = viewId.lastIndexOf("login") > -1;
 
-        if (existeUsuarioLogado() && paginaLogin) {
+        if (existeUsuarioLogado() && paginaLogin) {            
+            if (getUsuario().getSenhaFunc().equals(util.converteParaMd5("102030"))){
+                
+            }
+            
             nh.handleNavigation(facesContext, null, "index");
-        } else if (!existeUsuarioLogado() && !paginaLogin) {
+        } else if (!existeUsuarioLogado() && !paginaLogin) {                                    
             nh.handleNavigation(facesContext, null, "login");
         }
     }
+    
+    public
 
     public boolean existeUsuarioLogado() {
         return (((CadFuncionario) getAtributoSessao("usuario")) != null);

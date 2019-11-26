@@ -91,6 +91,9 @@
                                                      onclick="PF('dlCadNotaAnalise').show()" 
                                                      update=":frmDlCadNotaAnalise"/>
 
+                                    <p:commandButton value="Anexos" 
+                                                     disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>
+
                                     <p:commandButton value="Visualizar Dados do Solicitante" rendered="#{cadAnaliseBean.dadosSindicais()}" />
 
                                     <p:commandButton value="Resolver"
@@ -420,13 +423,13 @@
                                 <h:panelGrid columns="2">
                                     <h:outputLabel value="Protocolo: " style="font-weight:bold; "/>
                                     <h:outputLabel value="#{cadTarefaBean.objVerTa.nrOsTarefa}" />
-                                    
-                                     <h:outputLabel value="Tarefa: " style="font-weight:bold; "/>
-                                     <h:outputLabel value="#{cadTarefaBean.objVerTa.nrTarefa}" />
-                                 
+
+                                    <h:outputLabel value="Tarefa: " style="font-weight:bold; "/>
+                                    <h:outputLabel value="#{cadTarefaBean.objVerTa.nrTarefa}" />
+
                                     <h:outputLabel value="Prioridade (protocolo): " style="font-weight:bold; "/>
                                     <h:outputLabel value="#{cadTarefaBean.objVerTa.prioridade}" />    
-                                    
+
                                     <h:outputLabel value="Status: " style="font-weight:bold; "/>
                                     <h:outputLabel value="#{cadTarefaBean.objVerTa.sitTarefa}" />  
                                 </h:panelGrid>
@@ -457,7 +460,7 @@
 
                                     <h:outputLabel value="Colaborador Responsável: " style="font-weight:bold; "/>
                                     <h:outputLabel value="#{cadTarefaBean.objVerTa.nomeRespon}" />  
-                                  
+
                                     <h:outputLabel value="Data da Resolução: " style="font-weight:bold; "/>
                                     <h:outputLabel value="#{cadTarefaBean.objVerTa.dataHoraFecha}" />                         
                                 </h:panelGrid>

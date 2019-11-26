@@ -109,6 +109,10 @@ public class CadOsControle implements Serializable {
         return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor);
     }
 
+    public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
+        return osFacade.gridPrincipalOs(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor);
+    }
+
     public Integer validarFinalizacao(Integer os) {
         return osFacade.validarFinalizacao(os);
     }

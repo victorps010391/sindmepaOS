@@ -74,7 +74,7 @@
                                 <br/>
                                 <h:panelGrid columns="1" style="border: none !important;" rendered="#{cadTarefaBean.renderizarFinalizaçãoTarefa()}">
                                     <h:outputLabel value="Data e Hora de Fechamento: " style="font-size: small; font-weight: bold; color: darkblue;"/>                      
-                                    <h:outputLabel value="#{cadAnaliseBean.vdata_hora_fecha}" styleClass="conteudoV"/>
+                                    <h:outputLabel value="#{cadTarefaBean.vtarefaDataHoraFecha}" styleClass="conteudoV"/>
                                     <h:outputLabel value="Resolução: " style="font-size: small; font-weight: bold; color: darkblue;"/>
                                     <p:inputTextarea rows="6" cols="100" value="#{cadTarefaBean.vtarefaDescFinal}" readonly="true"/>                                   
                                 </h:panelGrid>
@@ -83,18 +83,21 @@
                                     <p:commandButton value="Criar Tarefa" 
                                                      disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"
                                                      onclick="PF('dlCadTarTarefa').show()" 
-                                                     update=":frmDlCadTarTarefa"/>   
-
-                                    <p:commandButton value="Voltar" action="#{cadAnaliseBean.voltarCadAnalise()}" style="float: right" /> 
+                                                     update=":frmDlCadTarTarefa"/>                   
 
                                     <p:commandButton value="Criar Nota" 
                                                      disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"
                                                      onclick="PF('dlCadNotaAnalise').show()" 
                                                      update=":frmDlCadNotaAnalise"/>   
 
+                                    <p:commandButton value="Anexos" 
+                                                     disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"/>                   
+
                                     <p:commandButton value="Resolver"
                                                      actionListener="#{cadTarefaBean.limparFinalização()}"                                                     
-                                                     disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"/>                                
+                                                     disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"/>           
+
+                                    <p:commandButton value="Voltar" action="#{cadAnaliseBean.voltarCadAnalise()}" style="float: right" /> 
 
                                 </f:facet>
                             </p:panel>

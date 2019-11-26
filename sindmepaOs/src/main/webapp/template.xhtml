@@ -38,25 +38,26 @@
                     </p:panelGrid>
                 </p:dialog>
             </div>            
-            <!--            <h:form enctype="multipart/form-data">-->                       
-            <p:layout fullPage="true">
+            <!--            <h:form enctype="multipart/form-data">-->                        
+            <div>
+                <p:layout>                                     
+                    <p:layoutUnit position="north" resizable="true" size="80" > 
+                        <h:outputText value="Usuário: #{loginBean.usuario.nmFunc}" styleClass="conteudoV"/> <br/>
+                        <h:outputText value="Setor: #{loginBean.usuario.setorFunc.nmSetor}" styleClass="conteudoV"/> 
+                    </p:layoutUnit>
 
-                <p:layoutUnit position="north" size="80" resizable="true" closable="true" collapsible="true">                                                                                                                                   
-                </p:layoutUnit>
-                <!--                <p:layoutUnit position="south" size="40" closable="true" collapsible="true">
-                                    
-                                </p:layoutUnit>-->
-                <p:layoutUnit position="west" header="Esconder" collapsible="true">
-                    <ui:insert name="menu">
-                        <ui:include src="/menu.xhtml"></ui:include>
-                    </ui:insert>                                      
-                </p:layoutUnit>
+                    <p:layoutUnit position="west" header="Esconder" collapsible="true">                  
+                        <ui:insert name="menu">
+                            <ui:include src="/menu.xhtml"></ui:include>
+                        </ui:insert>                       
+                    </p:layoutUnit>
 
-                <p:layoutUnit position="center">                    
-                    <ui:insert name="centro"></ui:insert>                    
-                </p:layoutUnit>
+                    <p:layoutUnit position="center">                                        
+                        <ui:insert name="centro"></ui:insert>                    
+                    </p:layoutUnit>
 
-            </p:layout>
+                </p:layout>
+            </div>
             <!--</h:form>-->
         </h:body>
 

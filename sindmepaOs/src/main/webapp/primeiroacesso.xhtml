@@ -44,28 +44,31 @@
                 <p:layoutUnit position="center">                    
                     <h:form id="frmPrimeiroAcesso" acceptcharset="ISO-8859-1" >
                         <p:growl id="growl" showDetail="true"/>
-                        <p:panel style="width:300px; margin-left:auto; margin-right:auto;" header="Alteração de Senha (Primeiro Acesso)">
-                            <h:panelGrid columns="2" style="font-size: medium; font-weight:bold" > 
-                                <h:outputLabel value="Seu CPF: "/>
-                                <p:inputText value="#{loginBean.cpfAcess}" />                                         
-                            </h:panelGrid>
-                            <p:spacer height="10" />
+                        <p:panel style="width:400px; margin-left:auto; margin-right:auto;" header="Alteração de Senha (Primeiro Acesso)">
+                            <p:panel style="border: none !important;">
+                                <h:panelGrid columns="2" style="font-size: medium; font-weight:bold" > 
+                                    <h:outputLabel value="CPF: "/>
+                                    <h:outputLabel value="#{loginBean.usuAltSenhaObj.cadFuncionarioPK.cpfFunc}" />                                         
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel>
+                                <h:panelGrid columns="2">                   
+                                    <h:outputLabel value="Sua nova senha: "/>
+                                    <p:password value="#{loginBean.senhaAcess}" required="true" />
 
-                            <h:panelGrid columns="2" id="matchGrid" cellpadding="5">                   
-                                <h:outputLabel for="pwd1" value="Sua nova senha: "/>
-                                <p:password id="pwd1" value="#{loginBean.emailAcess}" match="pwd2" required="true" />
+                                    <h:outputLabel value="Repita a nova senha: " />
+                                    <p:password value="#{loginBean.repetirSenhaAcess}" required="true" />
+                                </h:panelGrid>
 
-                                <h:outputLabel for="pwd2" value="Repita a nova senha: " />
-                                <p:password id="pwd2" value="#{loginBean.emailAcess}" required="true" />
-                            </h:panelGrid>
-
-                            <f:facet name="footer">
-                                <p:commandButton 
-                                    value="Alterar" 
-                                    icon="ui-icon ui-icon-check" 
-                                    style="font-size: small; font-weight:bold"
-                                    update="@form :frmLogin"/>                                
-                            </f:facet>
+                                <f:facet name="footer">
+                                    <p:commandButton 
+                                        value="Alterar" 
+                                        icon="ui-icon ui-icon-check" 
+                                        style="font-size: small; font-weight:bold"
+                                        action="#{loginBean.alterarSenha()}"
+                                        update="@form :frmPrimeiroAcesso"/>                                
+                                </f:facet>
+                            </p:panel>
                         </p:panel>
                     </h:form>                
                 </p:layoutUnit>

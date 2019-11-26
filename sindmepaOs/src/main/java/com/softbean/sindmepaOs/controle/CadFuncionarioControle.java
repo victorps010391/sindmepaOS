@@ -53,8 +53,8 @@ public class CadFuncionarioControle implements Serializable {
         return funcionarioFacade.verificaCpfCadastrado(cpf);
     }
 
-    public CadFuncionario validaAcesso(String cpf, String email) {
-        return funcionarioFacade.validaAcesso(cpf, email);
+    public CadFuncionario validaAcesso(String cpf, String senha) {
+        return funcionarioFacade.validaAcesso(cpf, senha);
     }
 
     public List<Map<String, Object>> listarSetorPesq() {

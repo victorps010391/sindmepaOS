@@ -48,19 +48,27 @@
                     <h:form id="frmLogin" acceptcharset="ISO-8859-1">
                         <p:growl id="growl" showDetail="true"/>
                         <p:panel style="width:300px; margin-left:auto; margin-right:auto;">
+                            <p:panel style="border: none !important;  text-align : center;">
+                                <p:graphicImage library="imagesResources" name="loginProtocol.png"/><br/>
+                                <h:outputLabel value="GERENCIAMENTO DE PROTOCOLOS" style="font-size: x-large; font-weight:bold; color: #076e11;"/>
+                            </p:panel>
+                            <br/>
+                            <br/>
                             <h:panelGrid columns="2" style="font-size: medium; font-weight:bold" > 
                                 <h:outputLabel value="CPF: "/>
                                 <p:inputText value="#{loginBean.cpfAcess}" />          
-                                <h:outputLabel value="E-mail: "/>
-                                <p:inputText value="#{loginBean.emailAcess}" />
+                                <h:outputLabel value="Senha: "/>
+                                <p:password value="#{loginBean.senha}"/>
                             </h:panelGrid>
-                            <f:facet name="footer">
-                                <p:commandButton action="#{loginBean.logar()}" 
-                                                 value="Acessar" 
-                                                 icon="ui-icon ui-icon-check" 
-                                                 style="font-size: small; font-weight:bold"
-                                                 update="@form :frmLogin"/> 
-                                <p:commandButton value="Teste" action="externobootstrap" style="float: right" />
+                            <f:facet name="footer" >
+                                <p:panel style="border: none !important;  text-align : center;">
+                                    <p:commandButton action="#{loginBean.logar()}" 
+                                                     value="Acessar" 
+                                                     icon="ui-icon ui-icon-check" 
+                                                     style="font-size: small; font-weight:bold; align-self: center;"
+                                                     update="@form :frmLogin"/> 
+                                </p:panel>
+                                <!--                                <p:commandButton value="Teste" action="externobootstrap" style="float: right" />-->
                             </f:facet>
                         </p:panel>
                     </h:form>                

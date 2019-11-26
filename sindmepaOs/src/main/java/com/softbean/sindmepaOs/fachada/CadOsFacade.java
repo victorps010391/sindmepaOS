@@ -258,6 +258,68 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
         sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade  ");
         sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor ");        
+        sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert ");
+        sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha ");
+        sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as sit ");
+        sql.append("        ,sit_os as cd_sit ");
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_abert_os) as setor_abert ");
+        sql.append(" from cad_os ");
+        sql.append(" where 1=1 ");
+
+        if (usuSetor != 7) {
+            sql.append(" and setor_abert_os = ").append(usuSetor);
+        }
+
+        if (nrOs != null) {
+            sql.append(" and nr_os = ").append(nrOs);
+        }
+        if (codCateg != null) {
+            sql.append(" and categ_os = ").append(codCateg);
+        }
+        if (codSetor != null) {
+            sql.append(" and setor_respon_os = ").append(codSetor);
+        }
+        if (codFuncRespon != null) {
+            sql.append(" and func_respon_os = ").append(codFuncRespon);
+        }
+        if (sit != null) {
+            sql.append(" and sit_os = '").append(sit).append("'");
+        }
+        sql.append(" order by dt_abert_os desc ");
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("os", array[0]);
+                map.put("prioridade", array[1]);
+                map.put("categoria", array[2]);
+                map.put("setor", array[3]);
+                map.put("data_hora_abert", array[4]);
+                map.put("data_hora_fecha", array[5]);
+                map.put("sit", array[6]);
+                map.put("cd_sit", array[7]);
+                map.put("setor_abert", array[8]);
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método gridPrincipal (OS)");
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
+    public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select nr_os as os ");
+        sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
+        sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade  ");
+        sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria ");
         sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor ");
         sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert ");
         sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha ");
@@ -265,10 +327,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,sit_os as cd_sit ");
         sql.append(" from cad_os ");
         sql.append(" where 1=1 ");
-
-        if (usuSetor != 7) {
-            sql.append(" and setor_abert_os = ").append(usuSetor);
-        }
+        sql.append(" and setor_abert_os = ").append(usuSetor);
 
         if (nrOs != null) {
             sql.append(" and nr_os = ").append(nrOs);

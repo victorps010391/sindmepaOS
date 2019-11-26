@@ -9,15 +9,7 @@
 
     <ui:define name="centro">
 
-        <h:form id="frmIndex" acceptcharset="ISO-8859-1">
-            <p:panel>
-                <p:panelGrid>
-                    <h:outputText value="Seja Bem-vindo #{loginBean.usuario.nmFunc}!"/> 
-                </p:panelGrid>
-            </p:panel>
-            <br/>
-            <br/>
-
+        <h:form id="frmIndex" acceptcharset="ISO-8859-1"> 
             <p:fieldset id="protocolos" 
                         legend="Protocolos" 
                         toggleable="true" 
@@ -30,7 +22,7 @@
                         <f:facet name="header">
                             Protocolos enviados para o seu setor
                         </f:facet>
-                        <p:column headerText="QUANTIDADE">
+                        <p:column headerText="QUANTIDADE" style="text-align: center;">
                             <h:outputText value="#{item.get('qtd')}" />
                         </p:column>
 
@@ -49,8 +41,8 @@
                         <f:facet name="header">
                             Acompanhamento de protocolos enviados para outros setores
                         </f:facet>
-                        <p:column headerText="QUANTIDADE">
-                            <h:outputText value="#{item.get('qtd')}" />
+                        <p:column headerText="QUANTIDADE" style="text-align: center;">
+                            <h:outputText value="#{item.get('qtd')}"/>
                         </p:column>
 
                         <p:column headerText="STATUS">
@@ -78,7 +70,7 @@
                         <f:facet name="header">
                             Tarefas enviadas para o seu setor
                         </f:facet>
-                        <p:column headerText="QUANTIDADE">
+                        <p:column headerText="QUANTIDADE" style="text-align: center;">
                             <h:outputText value="#{item.get('qtd')}" />
                         </p:column>
 
