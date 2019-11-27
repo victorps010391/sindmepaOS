@@ -6,11 +6,13 @@
 package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
+import com.softbean.sindmepaOs.util.Util;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -24,8 +26,13 @@ public class LoginControle implements PhaseListener {
      */
     public LoginControle() {
     }
-    
-     private FacesContext facesContext;
+
+    @Inject
+    Util util;
+
+    CadFuncionario objUsuario;
+
+    private FacesContext facesContext;
 
     @Override
     public void afterPhase(PhaseEvent event) {
@@ -35,18 +42,12 @@ public class LoginControle implements PhaseListener {
         NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
         boolean paginaLogin = viewId.lastIndexOf("login") > -1;
 
-        if (existeUsuarioLogado() && paginaLogin) {            
-            if (getUsuario().getSenhaFunc().equals(util.converteParaMd5("102030"))){
-                
-            }
-            
+        if (existeUsuarioLogado() && paginaLogin) {
             nh.handleNavigation(facesContext, null, "index");
-        } else if (!existeUsuarioLogado() && !paginaLogin) {                                    
+        } else if (!existeUsuarioLogado() && !paginaLogin) {
             nh.handleNavigation(facesContext, null, "login");
         }
     }
-    
-    public
 
     public boolean existeUsuarioLogado() {
         return (((CadFuncionario) getAtributoSessao("usuario")) != null);
@@ -69,5 +70,13 @@ public class LoginControle implements PhaseListener {
     public PhaseId getPhaseId() {
         return PhaseId.RESTORE_VIEW;
     }
-    
+
+    public CadFuncionario getObjUsuario() {
+        return objUsuario;
+    }
+
+    public void setObjUsuario(CadFuncionario objUsuario) {
+        this.objUsuario = objUsuario;
+    }
+
 }

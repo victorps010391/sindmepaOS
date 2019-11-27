@@ -55,13 +55,6 @@ public class CadFuncionarioBean implements Serializable {
     List<Map<String, Object>> setorResponsFunc;
     
     
-//    public void senha(){
-//        System.out.println("::::::::: SENHA MD5 ::::: " +util.converteParaMd5("102030"));
-//        if("4badaee57fed5610012a296273158f5f".equals(util.converteParaMd5("102030"))){
-//            System.out.println("SENHAS IGUAIS!");
-//        }
-//    }
-    
     public void salvarCadFuncionario() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();

@@ -42,8 +42,10 @@
             <div>
                 <p:layout>                                     
                     <p:layoutUnit position="north" resizable="true" size="80" > 
-                        <h:outputText value="Usuário: #{loginBean.usuario.nmFunc}" styleClass="conteudoV"/> <br/>
-                        <h:outputText value="Setor: #{loginBean.usuario.setorFunc.nmSetor}" styleClass="conteudoV"/> 
+                        <p:panel style="border: none !important;">
+                            <h:outputText value="Usuário: #{loginBean.usuario.nmFunc}" styleClass="conteudoV"/><br/> 
+                            <h:outputText value="Setor: #{loginBean.usuario.setorFunc.nmSetor}" styleClass="conteudoV"/> 
+                        </p:panel>
                     </p:layoutUnit>
 
                     <p:layoutUnit position="west" header="Esconder" collapsible="true">                  

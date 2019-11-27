@@ -84,5 +84,25 @@
             <p:draggable for="protocolos"  grid="20,40" />
             <p:poll interval="360" listener="#{indexManager.carregaGrids()}" update="@form :frmIndex" />
         </h:form>
+
+        <p:dialog widgetVar="dlSenhaPadrao" header="SindmepaProtocol Informa">
+            <h:form id="frmDlSenhaPadrao" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="1" > 
+                        <h:outputLabel value="AVISO" style="font-weight:bold ; font-size: medium; color: red; "/><br/>
+                        <h:outputLabel value="Informamos que sua senha de acesso ainda é a padrão em nosso sistema"
+                                       style="font-size: small; font-weight:bold"/> 
+                        <h:outputLabel value="para a segurança de suas informações, recomendamos que você altere sua senha"
+                                       style="font-size: small; font-weight:bold"/>
+                        <h:outputLabel value="clicando no botão abaixo ou indo no menu ALTERAR SENHA"
+                                       style="font-size: small; font-weight:bold"/>
+                    </h:panelGrid>
+                    <f:facet name="footer">                                
+                        <p:commandButton onclick="PF('dlValida').hide()" type="button" value="Alterar senha" icon="ui-icon ui-icon-closethick"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
     </ui:define>
 </ui:composition>

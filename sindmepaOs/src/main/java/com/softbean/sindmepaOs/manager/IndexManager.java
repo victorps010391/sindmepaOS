@@ -8,6 +8,7 @@ package com.softbean.sindmepaOs.manager;
 import com.softbean.sindmepaOs.bean.LoginBean;
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.controle.CadTarefaControle;
+import com.softbean.sindmepaOs.util.Util;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -59,6 +60,8 @@ public class IndexManager implements Serializable {
     CadOsControle osControle;
     @Inject
     CadTarefaControle tarefaControle;
+    @Inject
+    Util util;
 
     List<Map<String, Object>> usu;
     List<Map<String, Object>> usuTarefa;
@@ -94,7 +97,11 @@ public class IndexManager implements Serializable {
         }
     }
 
-    public void carregaGrids() {
+    public void carregaGrids() {        
+        RequestContext context = RequestContext.getCurrentInstance();
+        if (loginBean.getUsuario().getSenhaFunc().equals(util.converteParaMd5("102030"))) {           
+            context.execute("PF('dlSenhaPadrao').show()");
+        }
         carregaGrid();
         carregaGridTarefa();
     }

@@ -58,47 +58,36 @@ public class LoginBean implements Serializable {
             HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             if (session != null) {
                 session.setAttribute("usuario", getUsuario());
-            }
-            indexManager.carregaGrids();
-            context.update(":frmIndex :frmDashboard");
+            }      
+            indexManager.carregaGrids();            
+            context.update(":frmIndex :frmDlSenhaPadrao");
             return "index";
         }
     }
 
-//    lse if (getUsuario().getSenhaFunc().equals(util.converteParaMd5("102030"))) {
-//            setUsuAltSenhaObj(null);
-//            setUsuAltSenhaObj(funcionarioControle.retornaUsuario(getUsuario().getCadFuncionarioPK().getCpfFunc(), util.converteParaMd5(getSenha())));
-//            context.update(":frmPrimeiroAcesso");
-//            return "primeiroacesso";
-//
-//        } 
     public String alterarSenha() {
         FacesContext mensagem = FacesContext.getCurrentInstance();
         RequestContext context = RequestContext.getCurrentInstance();
-        String ret = "primeiroacesso";
-        return ret;
-//        if (!getSenhaAcess().equals(getRepetirSenhaAcess())) {
-//            if (getUsuAltSenhaObj() != null) {
-//                getUsuAltSenhaObj().setSenhaFunc(getSenhaAcess());
-//                getUsuAltSenhaObj().setDtUltAtuFunc(new Date());
-//                getUsuAltSenhaObj().setFuncUltAtuFunc(999);
-//
-//                if (funcionarioControle.alterarSenha(getUsuAltSenhaObj())) {
-//                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepProtocol Informa:", "Senha alterada com sucesso. acesse o sistema com sua nova senha."));
-//                    limparPrimeiroAcesso();
-//                    context.update(":frmLogin");
-//                    ret = "login";
-//                } else {
-//                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Ocorreu um erro ao tentarmos alterar sua senha."));                    
-//                }
-//            }
-//            return ret;
-//
-//        } else {
-//            System.out.println("Entrou no if senhas iguais");
-//            mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Erro ao Validar Senha (Senhas Diferentes)."));
-//            return ret;
-//        }
+        String ret = null;
+        if (!getSenhaAcess().equals(getRepetirSenhaAcess())) {
+            if (getUsuAltSenhaObj() != null) {
+                getUsuAltSenhaObj().setSenhaFunc(getSenhaAcess());
+                getUsuAltSenhaObj().setDtUltAtuFunc(new Date());
+                getUsuAltSenhaObj().setFuncUltAtuFunc(999);
+
+                if (funcionarioControle.alterarSenha(getUsuAltSenhaObj())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepProtocol Informa:", "Senha alterada com sucesso. acesse o sistema com sua nova senha."));
+                    limparPrimeiroAcesso();
+
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Ocorreu um erro ao tentarmos alterar sua senha."));
+                }
+            }
+            return ret;
+        } else {
+            mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Erro ao Validar Senha (Senhas Diferentes)."));
+            return ret;
+        }
     }
 
     public String logOff() {
@@ -113,8 +102,7 @@ public class LoginBean implements Serializable {
         return "login";
     }
 
-    public void limparPrimeiroAcesso() {
-        setUsuAltSenhaObj(null);
+    public void limparPrimeiroAcesso() {        
         setSenhaAcess(null);
         setRepetirSenhaAcess(null);
     }

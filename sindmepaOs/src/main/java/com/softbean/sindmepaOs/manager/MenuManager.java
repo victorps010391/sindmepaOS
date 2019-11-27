@@ -44,6 +44,11 @@ public class MenuManager implements Serializable {
         return "cadanalise.xhtml";
     }
 
+    public String menuAlterarSenha() {
+        loginBean.limparPrimeiroAcesso();
+        return "alterarsenha.xhtml";
+    }
+
     public Boolean menuAcompanhamento() {
         return loginBean.getUsuario().getSetorFunc().getCdSetor() == 7;
     }
