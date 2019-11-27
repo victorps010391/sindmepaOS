@@ -45,7 +45,7 @@ public class MenuManager implements Serializable {
     }
 
     public String menuAlterarSenha() {
-        loginBean.limparPrimeiroAcesso();
+        funcionarioBean.limparPrimeiroAcesso();
         return "alterarsenha.xhtml";
     }
 

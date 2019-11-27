@@ -98,12 +98,13 @@ public class IndexManager implements Serializable {
     }
 
     public void carregaGrids() {        
-        RequestContext context = RequestContext.getCurrentInstance();
-        if (loginBean.getUsuario().getSenhaFunc().equals(util.converteParaMd5("102030"))) {           
-            context.execute("PF('dlSenhaPadrao').show()");
-        }
+        RequestContext context = RequestContext.getCurrentInstance();        
         carregaGrid();
         carregaGridTarefa();
+    }
+    
+    public boolean validaAvisoPrimeiroAcesso(){
+        return loginBean.getUsuario().getSenhaFunc().equals(util.converteParaMd5("102030"));
     }
 
 //    public DashboardModel getModel() {
