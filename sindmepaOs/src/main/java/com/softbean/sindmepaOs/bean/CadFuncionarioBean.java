@@ -121,32 +121,27 @@ public class CadFuncionarioBean implements Serializable {
 
     }
 
-    public void alterarSenha() {
+    public String alterarSenha() {
         FacesContext mensagem = FacesContext.getCurrentInstance();
-        RequestContext context = RequestContext.getCurrentInstance();
+        String ret = null;
         setUsuAltSenhaObj(null);
         setUsuAltSenhaObj(funcionarioControle.retornaUsuario(loginBean.getUsuario().getCadFuncionarioPK().getCpfFunc(), util.converteParaMd5("102030")));
-        System.out.println(":::::::: SENHA :::::: " + getSenhaAcess());
-        System.out.println(":::::::: SENHA :::::: " + getRepetirSenhaAcess());
-        System.out.println(":::::::: SENHA :::::: " + getUsuAltSenhaObj().getSenhaFunc());
-        if (getSenhaAcess().equals(getRepetirSenhaAcess())) {
-            System.out.println(":::::::: IF SENHAS DIFERENTES :::::: ");
+        if (!getSenhaAcess().equals(getRepetirSenhaAcess())) {
             mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Erro ao Validar Senha (Senhas Diferentes)."));
-            context.update(":frmPrimeiroAcesso");
+
         } else if (getUsuAltSenhaObj() != null) {
-            System.out.println(":::::::: IF SENHAS IGUAIS :::::: ");
             getUsuAltSenhaObj().setSenhaFunc(util.converteParaMd5(getSenhaAcess()));
             getUsuAltSenhaObj().setDtUltAtuFunc(new Date());
             getUsuAltSenhaObj().setFuncUltAtuFunc(999);
             if (funcionarioControle.alterarSenha(getUsuAltSenhaObj())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepProtocol Informa:", "Senha alterada com sucesso. acesse o sistema com sua nova senha."));
-                context.update(":frmPrimeiroAcesso");
-                limparPrimeiroAcesso();               
+                limparPrimeiroAcesso();
+                ret = loginBean.logOff();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Ocorreu um erro ao tentarmos alterar sua senha."));
-                context.update(":frmPrimeiroAcesso");
             }
         }
+        return ret;
     }
 
     public void limparPrimeiroAcesso() {

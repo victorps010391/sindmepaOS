@@ -75,4 +75,8 @@ public class CadFuncionarioControle implements Serializable {
             return false;
         }
     }
+
+    public CadFuncionario retornaUsuarioSolicitacaoSenha(String cpf) {
+        return funcionarioFacade.retornaUsuarioSolicitacaoSenha(cpf);
+    }
 }

@@ -8,10 +8,13 @@ package com.softbean.sindmepaOs.bean;
 import com.softbean.sindmepaOs.controle.CadFuncionarioControle;
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
 import com.softbean.sindmepaOs.manager.IndexManager;
+import com.softbean.sindmepaOs.util.MailUtil;
 import com.softbean.sindmepaOs.util.Util;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -38,9 +41,12 @@ public class LoginBean implements Serializable {
     Util util;
     @Inject
     IndexManager indexManager;
+    @Inject
+    MailUtil mailUtil;
 
-    String cpfAcess, senha;
+    String cpfAcess, senha, cpfSolicitacao, novaSenha;
     CadFuncionario usuario;
+    CadFuncionario usuarioSolicitacaoSenha;
 
     public String logar() {
         FacesContext mensagem = FacesContext.getCurrentInstance();
@@ -63,6 +69,78 @@ public class LoginBean implements Serializable {
         }
     }
 
+    public void solicitarAlteraSenha() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setUsuarioSolicitacaoSenha(null);//limpar variavel
+            setNovaSenha(null);//limpar variavel
+            setUsuarioSolicitacaoSenha(funcionarioControle.retornaUsuarioSolicitacaoSenha(getCpfSolicitacao()));
+            setNovaSenha(util.randomSenha());
+
+            getUsuarioSolicitacaoSenha().setSenhaFunc(util.converteParaMd5(getNovaSenha()));
+            getUsuarioSolicitacaoSenha().setFuncUltAtuFunc(999);
+            getUsuarioSolicitacaoSenha().setDtUltAtuFunc(new Date());
+
+            if (funcionarioControle.alterarSenha(getUsuarioSolicitacaoSenha())) {
+                if (enviarEmailNovaSenha(getUsuarioSolicitacaoSenha().getEmailFunc(), getNovaSenha(), getUsuarioSolicitacaoSenha())) {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Solicitação realizada com sucesso, enviamos um e-mail com sua nova senha."));
+                    context.execute("PF('dlSolicitarSenha').hide()");
+                    context.update(":frmLogin");
+                } else {
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));
+                    context.execute("PF('dlSolicitarSenha').hide()");
+                    context.update(":frmLogin");
+                }
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));
+                context.execute("PF('dlSolicitarSenha').hide()");
+                context.update(":frmLogin");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro no método solicitarAlteraSenha() " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public Boolean enviarEmailNovaSenha(String emailDestinatario, String novaSenha, CadFuncionario obj) {
+
+        try {
+            String assunto = "Solicitação de nova senha";
+
+            SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
+
+            StringBuilder corpoEmailAbertura = new StringBuilder();
+            corpoEmailAbertura.append("<p style='font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;'>SINDMEPA informa,<br />");
+            corpoEmailAbertura.append("Sua senha foi alterada com sucesso, segue nova senha de acesso ao sistema: <br /><br />");
+            corpoEmailAbertura.append("<strong>Usuário: </strong>");
+            corpoEmailAbertura.append(obj.getNmFunc());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>nova senha: </strong>");
+            corpoEmailAbertura.append(novaSenha);
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Para sua maior segurança sugerimos trocar a senha após acesso.");
+            corpoEmailAbertura.append("<br /><br />");
+            corpoEmailAbertura.append("<i>Email Enviado automaticamente pelo sistema ");
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Data: ");
+            corpoEmailAbertura.append(formate.format(new Date()));
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Softbean ©");
+            corpoEmailAbertura.append("</i></p>");
+
+            mailUtil.enviar(assunto, emailDestinatario, corpoEmailAbertura.toString());
+
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("Erro no método  enviarEmailNovaSenha " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public String logOff() {
         FacesContext mensagem = FacesContext.getCurrentInstance();
         RequestContext context = RequestContext.getCurrentInstance();
@@ -73,6 +151,14 @@ public class LoginBean implements Serializable {
         session.invalidate();
         context.update(":frmLogin");
         return "login";
+    }
+
+    public String getNovaSenha() {
+        return novaSenha;
+    }
+
+    public void setNovaSenha(String novaSenha) {
+        this.novaSenha = novaSenha;
     }
 
     public String getCpfAcess() {
@@ -98,4 +184,21 @@ public class LoginBean implements Serializable {
     public void setUsuario(CadFuncionario usuario) {
         this.usuario = usuario;
     }
+
+    public CadFuncionario getUsuarioSolicitacaoSenha() {
+        return usuarioSolicitacaoSenha;
+    }
+
+    public void setUsuarioSolicitacaoSenha(CadFuncionario usuarioSolicitacaoSenha) {
+        this.usuarioSolicitacaoSenha = usuarioSolicitacaoSenha;
+    }
+
+    public String getCpfSolicitacao() {
+        return cpfSolicitacao;
+    }
+
+    public void setCpfSolicitacao(String cpfSolicitacao) {
+        this.cpfSolicitacao = cpfSolicitacao;
+    }
+
 }

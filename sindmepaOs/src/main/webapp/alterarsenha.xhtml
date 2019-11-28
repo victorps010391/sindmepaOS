@@ -7,33 +7,38 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://java.sun.com/jsf/core">    
 
-    <ui:define name="centro">                    
-        <h:form id="frmPrimeiroAcesso" acceptcharset="ISO-8859-1" >
+    <ui:define name="centro">
+        <h:form id="frmAltSenha" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
             <p:growl id="growl" showDetail="true"/>
             <p:panel header="Alteração de Senha">
-                <p:panel style="border: none !important;">
-                    <h:panelGrid columns="2" style="font-size: small; font-weight:bold" > 
-                        <h:outputLabel value="CPF: "/>
-                        <h:outputLabel value="#{loginBean.usuario.cadFuncionarioPK.cpfFunc}" />                                         
-                    </h:panelGrid>
-                </p:panel>
-                <p:panel>
-                    <h:panelGrid columns="2">                   
-                        <h:outputLabel value="Sua nova senha: "/>
-                        <p:password value="#{cadFuncionarioBean.senhaAcess}" required="true" />
+                <br/>
+                <h:panelGrid columns="2" style="font-size: small; font-weight:bold; border: none !important;" > 
+                    <h:outputLabel value="CPF: "/>
+                    <h:outputLabel value="#{loginBean.usuario.cadFuncionarioPK.cpfFunc}" />     
+                    <h:outputLabel value="Usuário: "/>
+                    <h:outputLabel value="#{loginBean.usuario.nmFunc}" />    
+                    <h:outputLabel value="Setor: "/>
+                    <h:outputLabel value="#{loginBean.usuario.setorFunc.nmSetor}" />   
+                </h:panelGrid>
+                <br/>
+                <h:panelGrid columns="2">                   
+                    <h:outputLabel value="Sua nova senha: "/>
+                    <p:password value="#{cadFuncionarioBean.senhaAcess}"/>
 
-                        <h:outputLabel value="Repita a nova senha: " />
-                        <p:password value="#{cadFuncionarioBean.repetirSenhaAcess}" required="true" />
-                    </h:panelGrid>
+                    <h:outputLabel value="Repita a nova senha: " />
+                    <p:password value="#{cadFuncionarioBean.repetirSenhaAcess}"/>
+                </h:panelGrid>
 
-                    <f:facet name="footer">
-                        <p:commandButton 
-                            value="Alterar" 
-                            icon="ui-icon ui-icon-check"                             
-                            actionListener="#{cadFuncionarioBean.alterarSenha()}" />                                
-                    </f:facet>
-                </p:panel>
+                <f:facet name="footer">
+                    <p:commandButton 
+                        value="Alterar"                                                    
+                        action="#{cadFuncionarioBean.alterarSenha()}" 
+                        update="@form :frmAltSenha"/>     
+
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
+                </f:facet>
             </p:panel>
-        </h:form>                
+        </h:form>      
+
     </ui:define>
 </ui:composition>

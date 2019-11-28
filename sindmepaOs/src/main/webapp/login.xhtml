@@ -67,11 +67,35 @@
                                                      icon="ui-icon ui-icon-check" 
                                                      style="font-size: small; font-weight:bold; align-self: center;"
                                                      update="@form :frmLogin"/> 
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <p:commandButton value="Solicitar nova senha" 
+                                                     onclick="PF('dlSolicitarSenha').show()" 
+                                                     update="frmDlSolicitarSenha" 
+                                                     style="font-weight:bold; align-self: center;"/>
                                 </p:panel>
                                 <!--                                <p:commandButton value="Teste" action="externobootstrap" style="float: right" />-->
                             </f:facet>
                         </p:panel>
-                    </h:form>                
+                    </h:form>  
+
+                    <p:dialog widgetVar="dlSolicitarSenha" header="Solicitação de nova senha" modal="true" appendTo="@(body)"
+                              style="font-size: large; font-weight:bold">
+                        <h:form id="frmDlSolicitarSenha" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                            <p:panel style="text-align : center;">
+                                <h:panelGrid columns="2" style="font-size: medium; font-weight:bold">
+                                    <h:outputLabel value="CPF: "/>
+                                    <p:inputText value="#{loginBean.cpfSolicitacao}" />                                              
+                                </h:panelGrid>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Solicitar" actionListener="#{loginBean.solicitarAlteraSenha()}"/>
+                                    <p:commandButton value="Cancelar" onclick="PF('dlSolicitarSenha').hide()" />
+                                </f:facet>
+                            </p:panel>
+                        </h:form>
+                    </p:dialog>
                 </p:layoutUnit>
 
             </p:layout>
