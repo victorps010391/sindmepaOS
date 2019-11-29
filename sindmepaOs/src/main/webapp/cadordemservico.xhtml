@@ -45,14 +45,14 @@
                 </h:panelGrid>
                 <h:panelGrid columns="4">
                     <h:outputLabel value="Data de abertura entre: "/>
-                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniAbert}" />
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniAbertOs}" />
                     <h:outputLabel value=" e "/>
-                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimAbert}" />     
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimAbertOs}" />     
                     
                     <h:outputLabel value="Data de fechamento entre: "/>
-                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniFecha}" />
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniFechaOs}" />
                     <h:outputLabel value=" e "/>
-                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimFecha}" />     
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimFechaOs}" />     
                 </h:panelGrid>
                 
                 
@@ -148,7 +148,7 @@
                                     update=":frmDlVerOs"/>
 
                         <p:menuitem value="Anexos" 
-                                    url="cadanexo.xhtml"
+                                    action="#{cadAnexoBean.paginaAnexo(item.get('os'))}"
                                     disabled="#{'06'.equals(item.get('cd_sit'))}"/>
 
                         <p:menuitem value="Encaminhar para Atendimento"

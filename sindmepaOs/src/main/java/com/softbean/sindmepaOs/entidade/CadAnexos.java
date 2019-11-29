@@ -6,6 +6,7 @@
 package com.softbean.sindmepaOs.entidade;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -14,23 +15,30 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Entity
 @Table(name = "cad_anexos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CadAnexos.findAll", query = "SELECT c FROM CadAnexos c")
-    , @NamedQuery(name = "CadAnexos.findByIdAnexo", query = "SELECT c FROM CadAnexos c WHERE c.cadAnexosPK.idAnexo = :idAnexo")
-    , @NamedQuery(name = "CadAnexos.findBySeqAnexo", query = "SELECT c FROM CadAnexos c WHERE c.cadAnexosPK.seqAnexo = :seqAnexo")
-    , @NamedQuery(name = "CadAnexos.findByExtArqAnexo", query = "SELECT c FROM CadAnexos c WHERE c.extArqAnexo = :extArqAnexo")
-    , @NamedQuery(name = "CadAnexos.findByNmArqAnexo", query = "SELECT c FROM CadAnexos c WHERE c.nmArqAnexo = :nmArqAnexo")})
+    @NamedQuery(name = "CadAnexos.findAll", query = "SELECT c FROM CadAnexos c"),
+    @NamedQuery(name = "CadAnexos.findByCodOsAnexo", query = "SELECT c FROM CadAnexos c WHERE c.cadAnexosPK.codOsAnexo = :codOsAnexo"),
+    @NamedQuery(name = "CadAnexos.findBySeqAnexo", query = "SELECT c FROM CadAnexos c WHERE c.cadAnexosPK.seqAnexo = :seqAnexo"),
+    @NamedQuery(name = "CadAnexos.findByExtArqAnexo", query = "SELECT c FROM CadAnexos c WHERE c.extArqAnexo = :extArqAnexo"),
+    @NamedQuery(name = "CadAnexos.findByNmArqAnexo", query = "SELECT c FROM CadAnexos c WHERE c.nmArqAnexo = :nmArqAnexo"),
+    @NamedQuery(name = "CadAnexos.findByPagArqAnexo", query = "SELECT c FROM CadAnexos c WHERE c.pagArqAnexo = :pagArqAnexo"),
+    @NamedQuery(name = "CadAnexos.findByDtRegiAnexo", query = "SELECT c FROM CadAnexos c WHERE c.dtRegiAnexo = :dtRegiAnexo"),
+    @NamedQuery(name = "CadAnexos.findByFuncRegiAnexo", query = "SELECT c FROM CadAnexos c WHERE c.funcRegiAnexo = :funcRegiAnexo"),
+    @NamedQuery(name = "CadAnexos.findByDtUltAtuAnexo", query = "SELECT c FROM CadAnexos c WHERE c.dtUltAtuAnexo = :dtUltAtuAnexo"),
+    @NamedQuery(name = "CadAnexos.findByFuncUltAtuAnexo", query = "SELECT c FROM CadAnexos c WHERE c.funcUltAtuAnexo = :funcUltAtuAnexo")})
 public class CadAnexos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +59,19 @@ public class CadAnexos implements Serializable {
     @Size(min = 1, max = 2147483647)
     @Column(name = "nm_arq_anexo")
     private String nmArqAnexo;
+    @Size(max = 2147483647)
+    @Column(name = "pag_arq_anexo")
+    private String pagArqAnexo;
+    @Column(name = "dt_regi_anexo")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtRegiAnexo;
+    @Column(name = "func_regi_anexo")
+    private Integer funcRegiAnexo;
+    @Column(name = "dt_ult_atu_anexo")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtUltAtuAnexo;
+    @Column(name = "func_ult_atu_anexo")
+    private Integer funcUltAtuAnexo;
 
     public CadAnexos() {
     }
@@ -66,8 +87,8 @@ public class CadAnexos implements Serializable {
         this.nmArqAnexo = nmArqAnexo;
     }
 
-    public CadAnexos(int idAnexo, int seqAnexo) {
-        this.cadAnexosPK = new CadAnexosPK(idAnexo, seqAnexo);
+    public CadAnexos(int codOsAnexo, int seqAnexo) {
+        this.cadAnexosPK = new CadAnexosPK(codOsAnexo, seqAnexo);
     }
 
     public CadAnexosPK getCadAnexosPK() {
@@ -100,6 +121,46 @@ public class CadAnexos implements Serializable {
 
     public void setNmArqAnexo(String nmArqAnexo) {
         this.nmArqAnexo = nmArqAnexo;
+    }
+
+    public String getPagArqAnexo() {
+        return pagArqAnexo;
+    }
+
+    public void setPagArqAnexo(String pagArqAnexo) {
+        this.pagArqAnexo = pagArqAnexo;
+    }
+
+    public Date getDtRegiAnexo() {
+        return dtRegiAnexo;
+    }
+
+    public void setDtRegiAnexo(Date dtRegiAnexo) {
+        this.dtRegiAnexo = dtRegiAnexo;
+    }
+
+    public Integer getFuncRegiAnexo() {
+        return funcRegiAnexo;
+    }
+
+    public void setFuncRegiAnexo(Integer funcRegiAnexo) {
+        this.funcRegiAnexo = funcRegiAnexo;
+    }
+
+    public Date getDtUltAtuAnexo() {
+        return dtUltAtuAnexo;
+    }
+
+    public void setDtUltAtuAnexo(Date dtUltAtuAnexo) {
+        this.dtUltAtuAnexo = dtUltAtuAnexo;
+    }
+
+    public Integer getFuncUltAtuAnexo() {
+        return funcUltAtuAnexo;
+    }
+
+    public void setFuncUltAtuAnexo(Integer funcUltAtuAnexo) {
+        this.funcUltAtuAnexo = funcUltAtuAnexo;
     }
 
     @Override

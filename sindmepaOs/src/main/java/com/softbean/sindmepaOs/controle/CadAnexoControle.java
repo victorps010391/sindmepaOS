@@ -12,6 +12,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 /**
@@ -45,8 +46,8 @@ public class CadAnexoControle implements Serializable {
         }
     }
 
-    public List<CadAnexos> gridPrincipal(String nome, Integer cod) {
-        return anexosFacade.gridPrincipal(nome, cod);
+    public List<CadAnexos> gridPrincipal(String nome, Integer cod, Integer os) {
+        return anexosFacade.gridPrincipal(nome, cod, os);
     }
 
     public Boolean excluirControle(CadAnexos obj) {
@@ -61,5 +62,13 @@ public class CadAnexoControle implements Serializable {
             return false;
         }
     }
+    
+    public Integer retornaSeqAnexo(Integer cod){
+        return anexosFacade.retornaSeqAnexo(cod);
+    }
+    
+     public List<Map<String, Object>> InfoAnexo(Integer nrOs){
+         return anexosFacade.InfoAnexo(nrOs);
+     }
 
 }

@@ -13,33 +13,34 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Victor
+ * @author admin
  */
 @Embeddable
 public class CadAnexosPK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_anexo")
-    private int idAnexo;
+    @Column(name = "cod_os_anexo")
+    private int codOsAnexo;
     @Basic(optional = false)
+    @NotNull
     @Column(name = "seq_anexo")
     private int seqAnexo;
 
     public CadAnexosPK() {
     }
 
-    public CadAnexosPK(int idAnexo, int seqAnexo) {
-        this.idAnexo = idAnexo;
+    public CadAnexosPK(int codOsAnexo, int seqAnexo) {
+        this.codOsAnexo = codOsAnexo;
         this.seqAnexo = seqAnexo;
     }
 
-    public int getIdAnexo() {
-        return idAnexo;
+    public int getCodOsAnexo() {
+        return codOsAnexo;
     }
 
-    public void setIdAnexo(int idAnexo) {
-        this.idAnexo = idAnexo;
+    public void setCodOsAnexo(int codOsAnexo) {
+        this.codOsAnexo = codOsAnexo;
     }
 
     public int getSeqAnexo() {
@@ -53,7 +54,7 @@ public class CadAnexosPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idAnexo;
+        hash += (int) codOsAnexo;
         hash += (int) seqAnexo;
         return hash;
     }
@@ -65,7 +66,7 @@ public class CadAnexosPK implements Serializable {
             return false;
         }
         CadAnexosPK other = (CadAnexosPK) object;
-        if (this.idAnexo != other.idAnexo) {
+        if (this.codOsAnexo != other.codOsAnexo) {
             return false;
         }
         if (this.seqAnexo != other.seqAnexo) {
@@ -76,7 +77,7 @@ public class CadAnexosPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softbean.sindmepaOs.entidade.CadAnexosPK[ idAnexo=" + idAnexo + ", seqAnexo=" + seqAnexo + " ]";
+        return "com.softbean.sindmepaOs.entidade.CadAnexosPK[ codOsAnexo=" + codOsAnexo + ", seqAnexo=" + seqAnexo + " ]";
     }
     
 }

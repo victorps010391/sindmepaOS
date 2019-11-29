@@ -319,7 +319,6 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
 
         sql.append(" order by dt_abert_os desc ");
         try {
-            System.out.println("SQL :::::: " + sql.toString());
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();
             resultMaps = new ArrayList<>();
@@ -344,7 +343,16 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
+    public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor,
+            Integer codFuncRespon, String sit, Integer usuSetor,
+            Date dtIni, Date dtFim, Date dtIniFecha, Date dtFimFecha) {
+
+        java.sql.Date dtIniSql = dtIni == null ? null : new java.sql.Date(dtIni.getTime());
+        java.sql.Date dtFimSql = dtFim == null ? null : new java.sql.Date(dtFim.getTime());
+
+        java.sql.Date dtIniSqlFecha = dtIniFecha == null ? null : new java.sql.Date(dtIniFecha.getTime());
+        java.sql.Date dtFimSqlFecha = dtFimFecha == null ? null : new java.sql.Date(dtFimFecha.getTime());
+
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
@@ -376,6 +384,28 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         if (sit != null) {
             sql.append(" and sit_os = '").append(sit).append("'");
         }
+        
+        
+        if (dtIni != null && dtFim != null) {
+            sql.append(" and dt_abert_os between ").append("'").append(dtIniSql).append("' and '").append(dtFimSql).append("'");
+        }
+        if (dtIni != null && dtFim == null) {
+            sql.append(" and dt_abert_os between ").append("'").append(dtIniSql).append("' and ").append("(select max(dt_abert_os) from cad_os)");
+        }
+        if (dtIni == null && dtFim != null) {
+            sql.append(" and dt_abert_os between ").append(" '1990-01-01 00:00:00' ").append(" AND '").append(dtFimSql).append("'");
+        }
+
+        if (dtIniFecha != null && dtFimFecha != null) {
+            sql.append(" and dt_fecha_os between ").append("'").append(dtIniSqlFecha).append("' and '").append(dtFimSqlFecha).append("'");
+        }
+        if (dtIniFecha != null && dtFimFecha == null) {
+            sql.append(" and dt_fecha_os between ").append("'").append(dtIniSqlFecha).append("' and ").append("(select max(dt_fecha_os) from cad_os)");
+        }
+        if (dtIniFecha == null && dtFimFecha != null) {
+            sql.append(" and dt_fecha_os between ").append(" '1990-01-01 00:00:00' ").append(" and '").append(dtFimSqlFecha).append("'");
+        }
+
         sql.append(" order by dt_abert_os desc ");
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
