@@ -225,7 +225,8 @@
                             </h:panelGrid>                                                
                         </p:panel>  
                     </h:form>  
-                    <p:dialog widgetVar="dlValida" header="SindmepaProtocol Informa">
+                    
+                    <p:dialog widgetVar="dlValida" header="SindmepaProtocol Informa" modal="true" appendTo="@(body)">
                         <h:form id="frmDlValida" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="1" > 
@@ -242,7 +243,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento">
+                    <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento" modal="true" appendTo="@(body)">
                         <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
                             <p:panel>
                                 <h:panelGrid columns="2" >                                                                      
@@ -269,7 +270,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlCadNotaAnalise" header="Cadastrar Nota">
+                    <p:dialog widgetVar="dlCadNotaAnalise" header="Cadastrar Nota" modal="true" appendTo="@(body)">
                         <h:form id="frmDlCadNotaAnalise" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="2">
@@ -293,7 +294,7 @@
                     </p:dialog>
 
 
-                    <p:dialog widgetVar="dlCadTarTarefa" header="Cadastrar Tarefa">
+                    <p:dialog widgetVar="dlCadTarTarefa" header="Cadastrar Tarefa" modal="true" appendTo="@(body)">
                         <h:form id="frmDlCadTarTarefa" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -337,7 +338,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlConfirm" header="Confirmação">
+                    <p:dialog widgetVar="dlConfirm" header="Confirmação" modal="true" appendTo="@(body)">
                         <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="1" > 
@@ -353,7 +354,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlCancelTarefa" header="Confirmação">
+                    <p:dialog widgetVar="dlCancelTarefa" header="Confirmação" modal="true" appendTo="@(body)">
                         <h:form id="frmDlCancelTarefa" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="1" > 
@@ -367,7 +368,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlAltTarefa" header="Alterar Tarefa">
+                    <p:dialog widgetVar="dlAltTarefa" header="Alterar Tarefa" modal="true" appendTo="@(body)">
                         <h:form id="frmDlAltTarefa" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -413,7 +414,8 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlVerOs" header="Visualizar Informações da Tarefa Cadastrada" responsive="true" height="500">
+                    <p:dialog widgetVar="dlVerOs" header="Visualizar Informações da Tarefa Cadastrada" responsive="true" height="500"
+                              modal="true" appendTo="@(body)">
                         <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
                             <p:panel header="DADOS DA TAREFA">                    
                                 <h:panelGrid columns="2">

@@ -30,7 +30,7 @@
                 </h:panelGrid>
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadCategoriaBean.pesquisa()}" update="gridPrincipal" ajax="false"/>                    
-                    <p:commandButton value="Limpar" actionListener="#{cadCategoriaBean.limparPesquisa()}" update="frmCadCateg" ajax="false"/>                    
+                    <p:commandButton value="Limpar" actionListener="#{cadCategoriaBean.limparPesquisa()}" update=":frmCadCateg" ajax="false"/>                    
                     <p:commandButton value="Nova Categoria" actionListener="#{cadCategoriaBean.limparCadastro()}" onclick="PF('dlCadCateg').show()" update=":frmDlCadCateg"/>  
                     <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
                 </f:facet>
@@ -85,7 +85,7 @@
             </p:dataTable>   
         </h:form>
 
-        <p:dialog widgetVar="dlCadCateg" header="Cadastrar Categoria">
+        <p:dialog widgetVar="dlCadCateg" header="Cadastrar Categoria" modal="true" appendTo="@(body)">
             <h:form id="frmDlCadCateg" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
                 <p:panel>
                     <h:panelGrid columns="2" >
@@ -115,7 +115,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlAltCateg" header="Alterar Categoria">
+        <p:dialog widgetVar="dlAltCateg" header="Alterar Categoria" modal="true" appendTo="@(body)">
             <h:form id="frmDlAltCateg" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
                 <p:panel>
                     <h:panelGrid columns="2" >

@@ -43,6 +43,19 @@
                                        itemLabel="#{sitPesq.get('nome')}" itemValue="#{sitPesq.get('codigo')}" />
                     </p:selectOneMenu>
                 </h:panelGrid>
+                <h:panelGrid columns="4">
+                    <h:outputLabel value="Data de abertura entre: "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniAbert}" />
+                    <h:outputLabel value=" e "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimAbert}" />     
+                    
+                    <h:outputLabel value="Data de fechamento entre: "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniFecha}" />
+                    <h:outputLabel value=" e "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimFecha}" />     
+                </h:panelGrid>
+                
+                
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisarOs()}" update="gridPrincipal"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
@@ -220,7 +233,7 @@
             </p:dataTable>           
         </h:form>
 
-        <p:dialog widgetVar="dlCancelOs" header="Confirmação">
+        <p:dialog widgetVar="dlCancelOs" header="Confirmação" modal="true" appendTo="@(body)">
             <h:form id="frmDlCancelOs" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="1" > 
@@ -234,7 +247,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlConfirm" header="Confirmação">
+        <p:dialog widgetVar="dlConfirm" header="Confirmação" modal="true" appendTo="@(body)">
             <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="1" > 
@@ -250,7 +263,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo">
+        <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo" modal="true" appendTo="@(body)">
             <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -300,7 +313,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlAltOs" header="Alterar Protocolo">
+        <p:dialog widgetVar="dlAltOs" header="Alterar Protocolo" modal="true" appendTo="@(body)">
             <h:form id="frmDlAltOs" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -353,7 +366,8 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado" responsive="true" height="500">
+        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado" responsive="true" height="500"
+                  modal="true" appendTo="@(body)">
             <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
                 <p:panel header="DADOS DO PROTOCOLO">                    
                     <h:panelGrid columns="2">
@@ -414,7 +428,7 @@
             </h:form>
         </p:dialog>        
 
-        <p:dialog widgetVar="dlCadNota" header="Cadastrar Nota">
+        <p:dialog widgetVar="dlCadNota" header="Cadastrar Nota" modal="true" appendTo="@(body)">
             <h:form id="frmDlCadNota" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="2">

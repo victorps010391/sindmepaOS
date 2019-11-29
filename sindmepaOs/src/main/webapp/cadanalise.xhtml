@@ -93,6 +93,64 @@
 
             <br/>
 
+            <p:fieldset legend="Protocolos Em atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid blue;">                
+                <p:dataTable id="grid02" value="#{cadAnaliseBean.grid02}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
+                             paginatorPosition="bottom" liveResize="true" 
+                             resizableColumns="true" tableStyle="width: auto" 
+                             emptyMessage="Nenhum Registro Encontrado">
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Nr. do Protocolo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('os')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Prioridade"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('prioridade')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Categoria"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('categoria')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Abertura"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_abert')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Fechamento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_fecha')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('sit')}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>                        
+                        <p:commandButton value="Análise" update="@form" action="#{cadAnaliseBean.analiseIniciada(item.get('os'))}"/>
+                    </p:column>              
+                </p:dataTable>
+            </p:fieldset>
+
+            <br/>
+
             <p:fieldset legend="Tarefas Encaminhadas" toggleable="true" toggleSpeed="500" style="border:2px solid darkgrey;">                
                 <p:dataTable id="gridTarefa" value="#{cadAnaliseBean.gridTarefa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
                              paginatorPosition="bottom" liveResize="true" 
@@ -158,63 +216,6 @@
             </p:fieldset>
 
             <br/>
-
-            <p:fieldset legend="Protocolos Em atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid blue;">                
-                <p:dataTable id="grid02" value="#{cadAnaliseBean.grid02}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
-                             paginatorPosition="bottom" liveResize="true" 
-                             resizableColumns="true" tableStyle="width: auto" 
-                             emptyMessage="Nenhum Registro Encontrado">
-                    <p:column style="text-align: center;">
-                        <f:facet name="header">
-                            <h:outputText value="Nr. do Protocolo"/>
-                        </f:facet>
-                        <h:outputText value="#{item.get('os')}"/>
-                    </p:column>
-
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="Prioridade"/>
-                        </f:facet>
-                        <h:outputText value="#{item.get('prioridade')}"/>
-                    </p:column>
-
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="Categoria"/>
-                        </f:facet>
-                        <h:outputText value="#{item.get('categoria')}"/>
-                    </p:column>
-
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="Dt. e Hr. de Abertura"/>
-                        </f:facet>
-                        <h:outputText value="#{item.get('data_hora_abert')}"/>
-                    </p:column>
-
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="Dt. e Hr. de Fechamento"/>
-                        </f:facet>
-                        <h:outputText value="#{item.get('data_hora_fecha')}"/>
-                    </p:column>
-
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="Situação"/>
-                        </f:facet>
-                        <h:outputText value="#{item.get('sit')}"/>
-                    </p:column>
-
-                    <p:column style="text-align: center;">
-                        <f:facet name="header">
-                            <h:outputText value="Ações"/>
-                        </f:facet>                        
-                        <p:commandButton value="Análise" update="@form" action="#{cadAnaliseBean.analiseIniciada(item.get('os'))}"/>
-                    </p:column>              
-                </p:dataTable>
-            </p:fieldset>
-
             <br/>
 
             <p:fieldset legend="Protocolos Finalizados" toggleable="true" toggleSpeed="500" style="border:2px solid green;" collapsed="true">                
@@ -276,7 +277,7 @@
             </p:fieldset>                                
         </h:form>
 
-        <p:dialog widgetVar="dlConfirm" header="Confirmação">
+        <p:dialog widgetVar="dlConfirm" header="Confirmação" modal="true" appendTo="@(body)">
             <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="1" > 
@@ -292,7 +293,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlConfirmTarefa" header="Confirmação">
+        <p:dialog widgetVar="dlConfirmTarefa" header="Confirmação" modal="true" appendTo="@(body)">
             <h:form id="frmDlConfirmTarefa" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="1" > 

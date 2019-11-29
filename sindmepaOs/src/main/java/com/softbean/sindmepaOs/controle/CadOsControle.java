@@ -14,6 +14,7 @@ import com.softbean.sindmepaOs.fachada.CadSetorFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -105,8 +106,10 @@ public class CadOsControle implements Serializable {
         return osFacade.listarSituaPesq();
     }
 
-    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
-        return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor);
+    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, 
+            Integer codFuncRespon, String sit, Integer usuSetor,
+            Date dtIni, Date dtFim, Date dtIniFecha, Date dtFimFecha) {
+        return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor, dtIni, dtFim, dtIniFecha, dtFimFecha);
     }
 
     public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {

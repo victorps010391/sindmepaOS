@@ -7,6 +7,7 @@ package com.softbean.sindmepaOs.fachada;
 
 import com.softbean.sindmepaOs.entidade.CadOs;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -250,7 +251,16 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
+    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor,
+            Integer codFuncRespon, String sit, Integer usuSetor,
+            Date dtIni, Date dtFim, Date dtIniFecha, Date dtFimFecha) {
+
+        java.sql.Date dtIniSql = dtIni == null ? null : new java.sql.Date(dtIni.getTime());
+        java.sql.Date dtFimSql = dtFim == null ? null : new java.sql.Date(dtFim.getTime());
+
+        java.sql.Date dtIniSqlFecha = dtIniFecha == null ? null : new java.sql.Date(dtIniFecha.getTime());
+        java.sql.Date dtFimSqlFecha = dtFimFecha == null ? null : new java.sql.Date(dtFimFecha.getTime());
+
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
@@ -258,7 +268,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,upper((select desc_detalhe from cad_detalhe where cod_item_detalhe = 'PRIOR' ");
         sql.append("         and cod_valor_detalhe = (select cod_prior_categoria from cad_categoria where id_categoria = categ_os))) as prioridade  ");
         sql.append("        ,upper((select desc_categoria from cad_categoria where id_categoria = categ_os)) as categoria ");
-        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor ");        
+        sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setor ");
         sql.append("        ,TO_CHAR(dt_abert_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_abert_os, 'HH24:MI:SS') as data_hora_abert ");
         sql.append("        ,TO_CHAR(dt_fecha_os, 'DD/MM/YYYY')||' '||TO_CHAR(dt_fecha_os, 'HH24:MI:SS') as data_hora_fecha ");
         sql.append("        ,(select desc_detalhe from cad_detalhe where cod_item_detalhe = 'SITOS' and cod_valor_detalhe = sit_os) as sit ");
@@ -286,8 +296,30 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         if (sit != null) {
             sql.append(" and sit_os = '").append(sit).append("'");
         }
+
+        if (dtIni != null && dtFim != null) {
+            sql.append(" and dt_abert_os between ").append("'").append(dtIniSql).append("' and '").append(dtFimSql).append("'");
+        }
+        if (dtIni != null && dtFim == null) {
+            sql.append(" and dt_abert_os between ").append("'").append(dtIniSql).append("' and ").append("(select max(dt_abert_os) from cad_os)");
+        }
+        if (dtIni == null && dtFim != null) {
+            sql.append(" and dt_abert_os between ").append(" '1990-01-01 00:00:00' ").append(" AND '").append(dtFimSql).append("'");
+        }
+
+        if (dtIniFecha != null && dtFimFecha != null) {
+            sql.append(" and dt_fecha_os between ").append("'").append(dtIniSqlFecha).append("' and '").append(dtFimSqlFecha).append("'");
+        }
+        if (dtIniFecha != null && dtFimFecha == null) {
+            sql.append(" and dt_fecha_os between ").append("'").append(dtIniSqlFecha).append("' and ").append("(select max(dt_fecha_os) from cad_os)");
+        }
+        if (dtIniFecha == null && dtFimFecha != null) {
+            sql.append(" and dt_fecha_os between ").append(" '1990-01-01 00:00:00' ").append(" and '").append(dtFimSqlFecha).append("'");
+        }
+
         sql.append(" order by dt_abert_os desc ");
         try {
+            System.out.println("SQL :::::: " + sql.toString());
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();
             resultMaps = new ArrayList<>();

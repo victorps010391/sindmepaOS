@@ -125,7 +125,8 @@ public class CadFuncionarioBean implements Serializable {
         FacesContext mensagem = FacesContext.getCurrentInstance();
         String ret = null;
         setUsuAltSenhaObj(null);
-        setUsuAltSenhaObj(funcionarioControle.retornaUsuario(loginBean.getUsuario().getCadFuncionarioPK().getCpfFunc(), util.converteParaMd5("102030")));
+        setUsuAltSenhaObj(funcionarioControle.retornaUsuario(loginBean.getUsuario().getCadFuncionarioPK().getCpfFunc(), 
+                                                             loginBean.getUsuario().getSenhaFunc()));
         if (!getSenhaAcess().equals(getRepetirSenhaAcess())) {
             mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Erro ao Validar Senha (Senhas Diferentes)."));
 

@@ -43,6 +43,19 @@
                                        itemLabel="#{sitPesq.get('nome')}" itemValue="#{sitPesq.get('codigo')}" />
                     </p:selectOneMenu>
                 </h:panelGrid>
+
+                <h:panelGrid columns="4">
+                    <h:outputLabel value="Data de abertura entre: "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniAbert}" />
+                    <h:outputLabel value=" e "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimAbert}" />     
+
+                    <h:outputLabel value="Data de fechamento entre: "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniFecha}" />
+                    <h:outputLabel value=" e "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimFecha}" />     
+                </h:panelGrid>
+
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisar()}" update="gridPrincipal"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                                                  
@@ -203,7 +216,8 @@
             </p:dataTable>           
         </h:form>
 
-        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado" responsive="true" height="500">
+        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado" responsive="true" height="500"
+                  modal="true" appendTo="@(body)">
             <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
                 <p:panel header="DADOS DO PROTOCOLO">                    
                     <h:panelGrid columns="2">
@@ -242,7 +256,7 @@
                         <p:inputTextarea rows="4" cols="90" value="#{cadOsBean.objVerOs.observacao}" readonly="true"/>  
                     </h:panelGrid>
                 </p:panel><br/>
-                <p:panel header="DADOS DA RESOLUÇÃO">
+                <p:panel header="DADOS DO ATENDIMENTO / RESOLUÇÃO">
                     <h:panelGrid columns="2" >   
                         <h:outputLabel value="Setor Responsável: " style="font-weight:bold; "/>
                         <h:outputLabel value="#{cadOsBean.objVerOs.setorResponsavel}" />  

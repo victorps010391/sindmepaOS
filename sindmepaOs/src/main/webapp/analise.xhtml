@@ -230,12 +230,12 @@
                         </p:panel>  
                     </h:form>
 
-                    <p:dialog widgetVar="dlValida" header="SindmepaProtocol Informa">
+                    <p:dialog widgetVar="dlValida" header="SindmepaProtocol Informa" modal="true" appendTo="@(body)">
                         <h:form id="frmDlValida" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="1" > 
                                     <h:outputLabel value="AVISO" style="font-weight:bold ; font-size: medium; color: red; "/><br/>
-                                    <h:outputLabel value="Informamos que ainda existem tarefas pendentes de solusção para este protocolo, para"
+                                    <h:outputLabel value="Informamos que ainda existem tarefas pendentes de solução para este protocolo, para"
                                                    style="font-size: small; font-weight:bold"/> 
                                     <h:outputLabel value="você finalizar o mesmo é necessario que todas as tarefas estejam resolvidas."
                                                    style="font-size: small; font-weight:bold"/>
@@ -247,7 +247,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento">
+                    <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento" modal="true" appendTo="@(body)">
                         <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
                             <p:panel>
                                 <h:panelGrid columns="2" >                                                                      
@@ -274,7 +274,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlCadNotaAnalise" header="Cadastrar Nota">
+                    <p:dialog widgetVar="dlCadNotaAnalise" header="Cadastrar Nota" modal="true" appendTo="@(body)">
                         <h:form id="frmDlCadNotaAnalise" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="2">
@@ -297,7 +297,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlCadTar" header="Cadastrar Tarefa">
+                    <p:dialog widgetVar="dlCadTar" header="Cadastrar Tarefa" modal="true" appendTo="@(body)">
                         <h:form id="frmDlCadTar" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -341,7 +341,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlConfirm" header="Confirmação">
+                    <p:dialog widgetVar="dlConfirm" header="Confirmação" modal="true" appendTo="@(body)">
                         <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="1" > 
@@ -357,11 +357,11 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlCancelTarefa" header="Confirmação">
+                    <p:dialog widgetVar="dlCancelTarefa" header="Confirmação" modal="true" appendTo="@(body)">
                         <h:form id="frmDlCancelTarefa" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="1" > 
-                                    <h:outputLabel value="Deseja Realmente Cancelar a Tarefa? " style="font-weight:bold ; font-size: small;"/><br/>                                            
+                                    <h:outputLabel value="Deseja Realmente Cancelar a Tarefa? " style="font-weight:bold ; font-size: medium;"/><br/>                                            
                                 </h:panelGrid>
                                 <f:facet name="footer">
                                     <p:commandButton actionListener="#{cadTarefaBean.cancelarTarefa()}" value="Sim" update="@form :frmAnaliseOs" icon="ui-icon ui-icon-check" />
@@ -371,7 +371,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlAltTarefa" header="Alterar Tarefa">
+                    <p:dialog widgetVar="dlAltTarefa" header="Alterar Tarefa" modal="true" appendTo="@(body)">
                         <h:form id="frmDlAltTarefa" acceptcharset="ISO-8859-1">
                             <p:panel>
                                 <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -417,7 +417,8 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlVerOs" header="Visualizar Informações da Tarefa Cadastrada" responsive="true" height="500">
+                    <p:dialog widgetVar="dlVerOs" header="Visualizar Informações da Tarefa Cadastrada" responsive="true" height="500"
+                              modal="true" appendTo="@(body)">
                         <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
                             <p:panel header="DADOS DA TAREFA">                    
                                 <h:panelGrid columns="2">

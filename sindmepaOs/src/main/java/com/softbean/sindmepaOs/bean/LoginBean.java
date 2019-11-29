@@ -68,40 +68,54 @@ public class LoginBean implements Serializable {
             return "index";
         }
     }
+    
+    public void limpaCpf(){
+        setCpfSolicitacao(null);
+    }
 
-    public void solicitarAlteraSenha() {
+    public String solicitarAlteraSenha() {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
+        String ret = "login";
         try {
             setUsuarioSolicitacaoSenha(null);//limpar variavel
-            setNovaSenha(null);//limpar variavel
-            setUsuarioSolicitacaoSenha(funcionarioControle.retornaUsuarioSolicitacaoSenha(getCpfSolicitacao()));
-            setNovaSenha(util.randomSenha());
+            setNovaSenha(null);//limpar variavel           
+            if (funcionarioControle.retornaUsuarioSolicitacaoSenha(getCpfSolicitacao()) != null) {
+                setUsuarioSolicitacaoSenha(funcionarioControle.retornaUsuarioSolicitacaoSenha(getCpfSolicitacao()));
+                setNovaSenha(util.randomSenha());
 
-            getUsuarioSolicitacaoSenha().setSenhaFunc(util.converteParaMd5(getNovaSenha()));
-            getUsuarioSolicitacaoSenha().setFuncUltAtuFunc(999);
-            getUsuarioSolicitacaoSenha().setDtUltAtuFunc(new Date());
+                getUsuarioSolicitacaoSenha().setSenhaFunc(util.converteParaMd5(getNovaSenha()));
+                getUsuarioSolicitacaoSenha().setFuncUltAtuFunc(999);
+                getUsuarioSolicitacaoSenha().setDtUltAtuFunc(new Date());
 
-            if (funcionarioControle.alterarSenha(getUsuarioSolicitacaoSenha())) {
-                if (enviarEmailNovaSenha(getUsuarioSolicitacaoSenha().getEmailFunc(), getNovaSenha(), getUsuarioSolicitacaoSenha())) {
-                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Solicitação realizada com sucesso, enviamos um e-mail com sua nova senha."));
-                    context.execute("PF('dlSolicitarSenha').hide()");
-                    context.update(":frmLogin");
+                if (funcionarioControle.alterarSenha(getUsuarioSolicitacaoSenha())) {
+                    if (enviarEmailNovaSenha(getUsuarioSolicitacaoSenha().getEmailFunc(), getNovaSenha(), getUsuarioSolicitacaoSenha())) {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Solicitação realizada com sucesso, enviamos um e-mail com sua nova senha."));                        
+                        context.execute("PF('dlSolicitarSenha').hide()");
+
+                    } else {
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));                        
+                        context.execute("PF('dlSolicitarSenha').hide()");
+
+                    }
                 } else {
-                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));                    
                     context.execute("PF('dlSolicitarSenha').hide()");
-                    context.update(":frmLogin");
+
                 }
             } else {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Usuário não encontrado."));               
                 context.execute("PF('dlSolicitarSenha').hide()");
-                context.update(":frmLogin");
+
             }
 
         } catch (Exception e) {
             System.out.println("Erro no método solicitarAlteraSenha() " + e.getMessage());
             e.printStackTrace();
+            ret = null;
         }
+
+        return ret;
     }
 
     public Boolean enviarEmailNovaSenha(String emailDestinatario, String novaSenha, CadFuncionario obj) {
