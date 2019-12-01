@@ -72,7 +72,7 @@ public class CadAnexoBean implements Serializable {
     }
 
     public void pesquisarAnexo() {
-        try {            
+        try {
             setGridPesquisaAnexo(anexosControle.gridPrincipal(getNome(), getCod(), getCodOsAnexo()));
             info(getCodOsAnexo());
         } catch (Exception e) {
@@ -90,6 +90,10 @@ public class CadAnexoBean implements Serializable {
         setInfomacoes(null);
     }
 
+    public String paginaAnexoTarefa(String tarOs) {
+        return paginaAnexo(Integer.parseInt(tarOs));
+    }
+
     public String paginaAnexo(Integer codOs) {
         setCodOsAnexo(null);//limpar variavel
         setPaginaAnterior(null);// limpar variavel
@@ -100,6 +104,10 @@ public class CadAnexoBean implements Serializable {
         setGridPesquisaAnexo(anexosControle.gridPrincipal("", null, codOs));
         RequestContext.getCurrentInstance().update(":frmCadAnexo");
         return "cadanexo.xhtml";
+    }
+
+    public String voltarAnexo() {
+        return getPaginaAnterior();
     }
 
     public void uploadAnexo(FileUploadEvent evento) throws IOException {
@@ -147,27 +155,29 @@ public class CadAnexoBean implements Serializable {
     public void excluirAnexo(CadAnexos obj) {
         try {
             if (anexosControle.excluirControle(obj)) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaOS Informa:", "Anexo Excluido com Sucesso."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Anexo Excluido com Sucesso."));
                 setGridPesquisaAnexo(null);
                 setGridPesquisaAnexo(anexosControle.gridPrincipal("", null, obj.getCadAnexosPK().getCodOsAnexo()));
+                info(obj.getCadAnexosPK().getCodOsAnexo());
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaOS Informa:", "Erro ao Excluir Anexo."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Excluir Anexo."));
             }
         } catch (Exception e) {
             System.out.println("ERRO no método excluirAnexo");
             e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaOS Informa:", "Erro ao Excluir Anexo."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Excluir Anexo."));
         }
     }
 
     public void salvar() {
         RequestContext context = RequestContext.getCurrentInstance();
         if (anexosControle.salvarControle(getObjAnexo(), getObjAnexoPk())) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaOS Informa:", "Cadastro do Anexo " + getObjAnexo().getNmArqAnexo() + " Realizado Com Sucesso."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro do Anexo " + getObjAnexo().getNmArqAnexo() + " Realizado Com Sucesso."));
             setGridPesquisaAnexo(anexosControle.gridPrincipal(getObjAnexo().getNmArqAnexo(), getObjAnexo().getCadAnexosPK().getSeqAnexo(), getObjAnexo().getCadAnexosPK().getCodOsAnexo()));
+            info(getObjAnexo().getCadAnexosPK().getCodOsAnexo());
             context.execute("PF('dlCadAnex').hide()");
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ADM Monobloco Informa:", "Não Foi Possivel Realizar o Cadastro do Anexo."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Não Foi Possivel Realizar o Cadastro do Anexo."));
         }
     }
 

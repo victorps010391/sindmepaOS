@@ -91,6 +91,7 @@
                                                      update=":frmDlCadNotaAnalise"/>   
 
                                     <p:commandButton value="Anexos" 
+                                                     action="#{cadAnexoBean.paginaAnexoTarefa(cadTarefaBean.vtarefaOs)}"
                                                      disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"/>                   
 
                                     <p:commandButton value="Resolver"
@@ -164,7 +165,8 @@
                                                         update=":frmDlVerOs"/>
 
                                             <p:menuitem value="Anexos" 
-                                                        url="cadanexo.xhtml" />
+                                                        action="#{cadAnexoBean.paginaAnexoTarefa(tarefa.get('nr_os_tarefa'))}" 
+                                                        disabled="#{'06'.equals(cadTarefaBean.vtarefaCdSit) || '07'.equals(cadTarefaBean.vtarefaCdSit)}"/>
 
                                             <p:menuitem value="Encaminhar para Atendimento"                                                     
                                                         actionListener="#{cadTarefaBean.buscarEncaminharTarefa(tarefa.get('nr_os_tarefa'), tarefa.get('seq_tarefa'))}"
@@ -246,7 +248,7 @@
                     <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento" modal="true" appendTo="@(body)">
                         <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
                             <p:panel>
-                                <h:panelGrid columns="2" >                                                                      
+                                <h:panelGrid columns="1" >                                                                      
                                     <h:outputLabel value="Situação do Resolvido:"/>
                                     <p:selectOneMenu value="#{cadTarefaBean.sitFinal}" id="sitResolvDrop" filter="true" filterMatchMode="contains">
                                         <f:selectItem itemLabel="........................................" />
@@ -254,7 +256,7 @@
                                                        itemLabel="#{sitResolv.get('nome')}" itemValue="#{sitResolv.get('codigo')}" />
                                     </p:selectOneMenu>
                                 </h:panelGrid>
-
+                                <br/>
                                 <h:panelGrid columns="1" > 
                                     <h:outputLabel value="Descrição do Resolvido:" styleClass="conteudoV"/>
                                     <p:inputTextarea value="#{cadTarefaBean.descFinal}" rows="6" cols="33" counter="display" 

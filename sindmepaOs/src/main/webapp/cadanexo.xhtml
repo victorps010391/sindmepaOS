@@ -1,96 +1,140 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<ui:composition template="/template.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">    
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="centro"> 
-        <h:form id="frmCadAnexo" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-            <p:messages id="messages" showDetail="true" closable="true"/>                                  
-            <p:panel header="Anexos" >
-                <br/>
-                <h:panelGrid columns="2" >
-                    <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
-                    <h:outputLabel value="#{cadAnexoBean.codOsAnexo}" style="font-size: medium;"/>
-                </h:panelGrid>
-                <br/>
-                <br/>               
-                <h:panelGrid columns="2" >
-                    <h:outputLabel value="Código: "/>
-                    <p:inputText value="#{cadAnexoBean.cod}">
-                        <f:convertNumber type="number"/>
-                    </p:inputText>
-                    <h:outputLabel value="Nome: "/>
-                    <p:inputText value="#{cadAnexoBean.nome}" />
-
-                </h:panelGrid>
-                <f:facet name="footer">                    
-                    <p:commandButton value="Pesquisar" actionListener="#{cadAnexoBean.pesquisarAnexo()}" update="gridPrincipalAnexo" />                    
-                    <p:commandButton value="Limpar" actionListener="#{cadAnexoBean.limparPesquisaAnexo()}" update="frmCadAnexo" />                    
-                    <p:commandButton value="Novo Anexo" onclick="PF('dlCadAnex').show()" update=":frmDlCadAnex"/>                      
-                </f:facet>
-            </p:panel>
-
-            <p:dataTable id="gridPrincipalAnexo" value="#{cadAnexoBean.gridPesquisaAnexo}" var="item" rows="8" 
-                         paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom"
-                         emptyMessage="Nenhum Registro Encontrado">
-                <f:facet name="header">
-                    Anexos Cadastrados
-                </f:facet>
-                <p:column style="text-align: center; width: 5%" >
-                    <f:facet name="header">
-                        <h:outputText value="Código"/>
+    <f:view contentType="text/html"> 
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>SINDMEPA - Gerenciamento de Protocolos</title>
+            </f:facet>            
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.min.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
+            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" /> 
+            <link type="text/css" rel="stylesheet" href="theme/estilos.css" /> 
+        </h:head>
+        <h:body>
+            <div id="messages" style="display: block;">
+                <p:ajaxStatus style="display:none;margin-bottom:2em;height:24px;">
+                    <f:facet name="start">
+                        <h:outputLabel value="Processando"/>
+                        <p:graphicImage library="imagesResources" name="loading.gif"/>
                     </f:facet>
-                    <h:outputText value="#{item.cadAnexosPK.seqAnexo}"/>
-                </p:column>
+                </p:ajaxStatus>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Nome do Arquivo"/>
-                    </f:facet>
-                    <h:outputText value="#{item.nmArqAnexo}"/>
-                </p:column>
+                <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Data e Hora de Registro"/>
-                    </f:facet>
-                    <h:outputText value="#{cadAnexoBean.dtRegistro}"/>
-                </p:column>
+                <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:panelGrid columns="1" style="width:100%; height:100%;">
+                        <h:outputLabel value="Processando" style="font-size: medium; font-weight:bold"/>
+                        <p:graphicImage library="imagesResources" name="loading.gif"/>
+                    </p:panelGrid>
+                </p:dialog>
+            </div>
+            <p:layout fullPage="true">              
+                <p:layoutUnit position="center">
+                    <h:form id="frmCadAnexo" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                        <p:messages id="messages" showDetail="true" closable="true"/>                                  
+                        <p:panel header="Anexos" >
+                            <br/>
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="Protocolo: " style="font-weight:bold ; font-size: medium;"/>
+                                <h:outputLabel value="#{cadAnexoBean.codOsAnexo}" style="font-size: medium;"/>
+                            </h:panelGrid>
+                            <br/>
+                            <br/>               
+                            <h:panelGrid columns="2" >
+                                <h:outputLabel value="Código: "/>
+                                <p:inputText value="#{cadAnexoBean.cod}">
+                                    <f:convertNumber type="number"/>
+                                </p:inputText>
+                                <h:outputLabel value="Nome: "/>
+                                <p:inputText value="#{cadAnexoBean.nome}" />
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Usuario que Registrou"/>
-                    </f:facet>
-                    <h:outputText value="#{cadAnexoBean.usuRegistro}"/>
-                </p:column>
+                            </h:panelGrid>
+                            <f:facet name="footer">                    
+                                <p:commandButton value="Pesquisar" actionListener="#{cadAnexoBean.pesquisarAnexo()}" update="gridPrincipalAnexo" />                    
+                                <p:commandButton value="Limpar" actionListener="#{cadAnexoBean.limparPesquisaAnexo()}" update="frmCadAnexo" />                    
+                                <p:commandButton value="Novo Anexo" onclick="PF('dlCadAnex').show()" update=":frmDlCadAnex"/>                    
 
-                <p:column style="text-align: center; width: 5%">
-                    <f:facet name="header">
-                        <h:outputText value="Ação"/>
-                    </f:facet>              
-                    <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
-                    <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
-                        <p:menuitem value="Download" ajax="false">
-                            <p:fileDownload  value="#{cadAnexoBean.downloadAnexo(item)}" />
-                        </p:menuitem>
-                        <p:menuitem value="Excluir" actionListener="#{cadAnexoBean.excluirAnexo(item)}" ajax="false" update="gridPrincipal"/>
-                    </p:tieredMenu>
-                </p:column>                
-            </p:dataTable>            
-        </h:form>
+                                <p:commandButton value="Voltar" action="#{cadAnexoBean.voltarAnexo()}" style="float: right" /> 
+                            </f:facet>
+                        </p:panel>
 
-        <p:dialog widgetVar="dlCadAnex" header="Cadastrar Anexo">
-            <h:form id="frmDlCadAnex" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-                <p:panel>
-                    <br/>                     
-                    <p:separator/>
-                    <p:fileUpload label="Arquivo" auto="false" update="@form :frmCadAnexo" multiple="false" fileUploadListener="#{cadAnexoBean.uploadAnexo}"  />
-                </p:panel>
-            </h:form>
-        </p:dialog>
-    </ui:define>
-</ui:composition>
+                        <p:dataTable id="gridPrincipalAnexo" value="#{cadAnexoBean.gridPesquisaAnexo}" var="item" rows="8" 
+                                     paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                                     emptyMessage="Nenhum Registro Encontrado">
+                            <f:facet name="header">
+                                Anexos Cadastrados
+                            </f:facet>
+                            <p:column style="text-align: center; width: 5%" >
+                                <f:facet name="header">
+                                    <h:outputText value="Código"/>
+                                </f:facet>
+                                <h:outputText value="#{item.cadAnexosPK.seqAnexo}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nome do Arquivo"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nmArqAnexo}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Data e Hora de Registro"/>
+                                </f:facet>
+                                <h:outputText value="#{cadAnexoBean.dtRegistro}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Usuario que Registrou"/>
+                                </f:facet>
+                                <h:outputText value="#{cadAnexoBean.usuRegistro}"/>
+                            </p:column>
+
+                            <p:column style="text-align: center; width: 5%">
+                                <f:facet name="header">
+                                    <h:outputText value="Ação"/>
+                                </f:facet>              
+                                <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
+                                <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">
+                                    <p:menuitem value="Download" ajax="false">
+                                        <p:fileDownload  value="#{cadAnexoBean.downloadAnexo(item)}" />
+                                    </p:menuitem>
+                                    <p:menuitem value="Excluir" actionListener="#{cadAnexoBean.excluirAnexo(item)}" ajax="false" update="gridPrincipal"/>
+                                </p:tieredMenu>
+                            </p:column>                
+                        </p:dataTable>            
+                    </h:form>
+
+                    <p:dialog widgetVar="dlCadAnex" header="Cadastrar Anexo" modal="true" appendTo="@(body)">
+                        <h:form id="frmDlCadAnex" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                            <p:panel>
+                                <br/>                     
+                                <p:separator/>
+                                <p:fileUpload label="Arquivo" auto="false" update="@form :frmCadAnexo" multiple="false" fileUploadListener="#{cadAnexoBean.uploadAnexo}"  />
+                            </p:panel>
+                        </h:form>
+                    </p:dialog>
+
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+    </f:view>
+    <script>
+        function abrirPgRelatorio() {
+            window.open('http://#{request.serverName}:#{request.serverPort}/sindmepaOs/visualizarPDF.xhtml', '_blank');
+        }
+    </script>
+</html>

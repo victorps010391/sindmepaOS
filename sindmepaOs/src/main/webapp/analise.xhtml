@@ -91,7 +91,8 @@
                                                      onclick="PF('dlCadNotaAnalise').show()" 
                                                      update=":frmDlCadNotaAnalise"/>
 
-                                    <p:commandButton value="Anexos" 
+                                    <p:commandButton value="Anexos"
+                                                     action="#{cadAnexoBean.paginaAnexo(cadAnaliseBean.vos)}"
                                                      disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>
 
                                     <p:commandButton value="Visualizar Dados do Solicitante" rendered="#{cadAnaliseBean.dadosSindicais()}" />
@@ -168,7 +169,9 @@
                                                         update=":frmDlVerOs"/>
 
                                             <p:menuitem value="Anexos" 
-                                                        url="cadanexo.xhtml" />
+                                                        url="cadanexo.xhtml" 
+                                                        action="#{cadAnexoBean.paginaAnexoTarefa(tarefa.get('nr_os_tarefa'))}"
+                                                        disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>
 
                                             <p:menuitem value="Encaminhar para Atendimento"                                                     
                                                         actionListener="#{cadTarefaBean.buscarEncaminharTarefa(tarefa.get('nr_os_tarefa'), tarefa.get('seq_tarefa'))}"
@@ -250,7 +253,7 @@
                     <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento" modal="true" appendTo="@(body)">
                         <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
                             <p:panel>
-                                <h:panelGrid columns="2" >                                                                      
+                                <h:panelGrid columns="1" >                                                                      
                                     <h:outputLabel value="Situação do Resolvido:"/>
                                     <p:selectOneMenu value="#{cadAnaliseBean.sitFinal}" id="sitResolvDrop" filter="true" filterMatchMode="contains">
                                         <f:selectItem itemLabel="........................................" />
@@ -258,7 +261,7 @@
                                                        itemLabel="#{sitResolv.get('nome')}" itemValue="#{sitResolv.get('codigo')}" />
                                     </p:selectOneMenu>
                                 </h:panelGrid>
-
+                                <br/>
                                 <h:panelGrid columns="1" > 
                                     <h:outputLabel value="Descrição do Resolvido:" styleClass="conteudoV"/>
                                     <p:inputTextarea value="#{cadAnaliseBean.descFinal}" rows="6" cols="33" counter="display" 
