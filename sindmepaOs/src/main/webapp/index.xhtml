@@ -11,6 +11,11 @@
 
         <h:form id="frmIndex" acceptcharset="ISO-8859-1"> 
 
+            <p:panel style="border: none !important;">                            
+                <h:outputText value="Usuário: #{loginBean.usuario.nmFunc}" styleClass="conteudoV"/><br/> 
+                <h:outputText value="Setor: #{loginBean.usuario.setorFunc.nmSetor}" styleClass="conteudoV"/> 
+            </p:panel>                                                     
+
             <p:fieldset id="aviso" 
                         legend="AVISOS" 
                         toggleable="true" 

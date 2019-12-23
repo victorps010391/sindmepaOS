@@ -32,7 +32,7 @@
                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                    <p:panelGrid columns="1" style="width:100%; height:100%;">
+                    <p:panelGrid columns="1" style="width:100%; height:100%; text-align : center;">
                         <h:outputLabel value="Processando" style="font-size: medium; font-weight:bold"/>
                         <p:graphicImage library="imagesResources" name="loading.gif"/>
                     </p:panelGrid>
@@ -40,17 +40,14 @@
             </div>            
             <!--            <h:form enctype="multipart/form-data">-->                        
             <div>
-                <p:layout fullPage="true">                                     
-                    <p:layoutUnit position="north" resizable="true" size="80" >
-                        <h:form id="frmCabecalho" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-                            <p:panel style="border: none !important;">                            
-                                <h:outputText value="Usuário: #{loginBean.usuario.nmFunc}" styleClass="conteudoV"/><br/> 
-                                <h:outputText value="Setor: #{loginBean.usuario.setorFunc.nmSetor}" styleClass="conteudoV"/> 
-                            </p:panel>
-                        </h:form>
-                    </p:layoutUnit>
+                <p:layout fullPage="true">                                         
+                    <p:layoutUnit position="north" size="85" >                        
+                        <p:panel style="border: none !important;">   
+                            <p:graphicImage library="imagesResources" name="titulo.png"/>
+                        </p:panel>                                                   
+                    </p:layoutUnit>                                        
 
-                    <p:layoutUnit position="west" header="Esconder" collapsible="true">                  
+                    <p:layoutUnit position="west">                  
                         <ui:insert name="menu">
                             <ui:include src="/menu.xhtml"></ui:include>
                         </ui:insert>                       
@@ -70,7 +67,7 @@
         function abrirPgRelatorio() {
             window.open('http://#{request.serverName}:#{request.serverPort}/sindmepaOs/visualizarPDF.xhtml', '_blank');
         }
-        
+
         function voltarGenerico() {
             history.back();
         }

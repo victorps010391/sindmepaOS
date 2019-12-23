@@ -133,7 +133,7 @@ public class LoginBean implements Serializable {
             corpoEmailAbertura.append("<br />");
             corpoEmailAbertura.append("<strong>nova senha: </strong>");
             corpoEmailAbertura.append(novaSenha);
-            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<br /><br />");
             corpoEmailAbertura.append("Para sua maior segurança sugerimos trocar a senha após acesso.");
             corpoEmailAbertura.append("<br /><br />");
             corpoEmailAbertura.append("<i>Email Enviado automaticamente pelo sistema ");

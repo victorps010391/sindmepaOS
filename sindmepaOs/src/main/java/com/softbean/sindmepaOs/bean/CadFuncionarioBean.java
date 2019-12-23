@@ -20,7 +20,6 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -57,8 +56,7 @@ public class CadFuncionarioBean implements Serializable {
 
     List<Map<String, Object>> setorResponsFunc;
 
-    public void salvarCadFuncionario() {
-        RequestContext context = RequestContext.getCurrentInstance();
+    public void salvarCadFuncionario() {        
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             if (getObjFunc().getCadFuncionarioPK() == null) {
@@ -82,7 +80,7 @@ public class CadFuncionarioBean implements Serializable {
                         if (util.CPFcorreto(getCpf())) {
                             if (funcionarioControle.salvarFuncioControle(getObjFunc(), getObjfuncPK())) {
                                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Funcionário Realizado com Sucesso."));
-                                limparCadastro();
+                                limparCadastro();                                
                             } else {
                                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Funcionário."));
                             }

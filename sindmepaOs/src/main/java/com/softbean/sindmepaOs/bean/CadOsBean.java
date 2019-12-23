@@ -317,13 +317,16 @@ public class CadOsBean implements Serializable {
             SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
 
             StringBuilder corpoEmailAbertura = new StringBuilder();
-            corpoEmailAbertura.append("<p style='font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;'>SINDMEPA informa,<br />");
+            corpoEmailAbertura.append("<p style='font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;'>SindmepaProtocol informa,<br />");
             corpoEmailAbertura.append("Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />");
             corpoEmailAbertura.append("<strong>Número do protocolo: </strong>");
             corpoEmailAbertura.append(obj.getOs());
             corpoEmailAbertura.append("<br />");
             corpoEmailAbertura.append("<strong>Categoria: </strong>");
             corpoEmailAbertura.append(obj.getCategoria());
+            corpoEmailAbertura.append("<br />");                       
+            corpoEmailAbertura.append("<strong>Setor Responsável: </strong>");
+            corpoEmailAbertura.append(obj.getSetorResponsavel());
             corpoEmailAbertura.append("<br />");            
             corpoEmailAbertura.append("<strong>Prioridade: </strong>");
             corpoEmailAbertura.append(obj.getPrioridade());
