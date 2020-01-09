@@ -93,6 +93,7 @@ public class CadExternoBean implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
+            
             //Informações de Endereço
             setEnderecoObj(null);
             setEnderecoObj(new Endereco());
@@ -131,7 +132,9 @@ public class CadExternoBean implements Serializable {
                     getCadOs().setNrOs(cadOsControle.retornaNrOs());
                     getCadOs().setCategOs(getCategoria());
                     setObjSetor(null);
-                    setObjSetor(cadOsControle.buscarSetor(0));
+                    System.out.println("OBJSETOR: " + getSetor());
+                    setObjSetor(cadOsControle.buscarSetor(getSetor()));
+                    System.out.println("OBJSETOR DEPOIS: " + getSetor());
                     getCadOs().setSetorAbertOs(getObjSetor());
                     getCadOs().setSetorResponOs(getObjSetor());
                     getCadOs().setDtAbertOs(new Date());

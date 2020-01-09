@@ -38,7 +38,7 @@ public class CadExternoFacade extends AbstractFacade<CadExterno> {
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
         sql.append(" select cd_setor as codigo, nm_setor as setor from cad_setor         ");
-        sql.append("       where usu_setor = 'E' ");
+        sql.append("       where usu_setor = 'A' ");
         
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
