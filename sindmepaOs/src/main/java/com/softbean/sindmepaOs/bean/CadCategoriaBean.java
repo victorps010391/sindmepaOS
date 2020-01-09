@@ -10,9 +10,13 @@ import com.softbean.sindmepaOs.entidade.CadCategoria;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -30,12 +34,15 @@ public class CadCategoriaBean implements Serializable {
 
     @Inject
     CadCategoriaControle categoriaControle;
+    @Inject
+    LoginBean loginBean;
 
     CadCategoria obj;
 
     Integer codCateg;
     String nomeCateg;
     String tipoCateg;
+    Character usuExt;
 
     Integer codCategPesq;
     String nomeCategPesq;
@@ -54,7 +61,7 @@ public class CadCategoriaBean implements Serializable {
 
     public void buscarCategoriaBean(Integer cod) {
         try {
-            setObj(categoriaControle.buscarCategoria(cod));            
+            setObj(categoriaControle.buscarCategoria(cod));
         } catch (Exception e) {
             System.out.println("Erro no método buscarCategoriaBean");
             e.printStackTrace();
@@ -67,6 +74,12 @@ public class CadCategoriaBean implements Serializable {
         setNomeCategPesq(null);
         setGridPesquisa(null);
     }
+    
+        public void limparCadastro() {        
+        setTipoCateg(null);
+        setNomeCateg(null);
+        setUsuExt(null);
+    }
 
     public List<Map<String, Object>> listarTipoCateg() {
         try {
@@ -75,6 +88,69 @@ public class CadCategoriaBean implements Serializable {
             System.out.println("Erro no método listarTipoCateg");
         }
         return getTipoCategLista();
+    }
+
+    public void salvar() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            setObj(null);//limpar variavel
+            setObj(new CadCategoria());
+            getObj().setCodPriorCategoria(getTipoCateg());
+            getObj().setDescCategoria(getNomeCateg().toUpperCase());
+            getObj().setDtRegCategoria(new Date());
+            getObj().setDtUltAtuCategoria(new Date());
+            getObj().setUsuRegCateg(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            getObj().setUsuUltAtuCategoria(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            getObj().setUsuCategoria(getUsuExt());
+            if (categoriaControle.salvarCategoria(getObj())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Categoria salva com sucesso."));
+                setGridPesquisa(categoriaControle.gridPrincipal(getNomeCateg(), getCodCateg(), getTipoCateg()));
+                context.execute("PF('dlCadCateg').hide()");
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao salvar categoria"));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método salvar (categoria) " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void buscarCategoria(Integer cod) {
+        try {
+            setObj(null);//limpar variavel
+            setObj(categoriaControle.buscarCategoria(cod));
+        } catch (Exception e) {
+            System.out.println("Erro o método buscarCategoria " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void alterarCategoria() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        try {
+            getObj().setDtUltAtuCategoria(new Date());
+            getObj().setUsuUltAtuCategoria(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+            if (categoriaControle.alterarCategoria(getObj())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Categoria alterada com sucesso."));
+                setGridPesquisa(categoriaControle.gridPrincipal(getObj().getDescCategoria(), getObj().getIdCategoria(), getObj().getCodPriorCategoria()));
+                context.execute("PF('dlAltCateg').hide()");
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao alterar categoria"));
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método alterarCategoria " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public Character getUsuExt() {
+        return usuExt;
+    }
+
+    public void setUsuExt(Character usuExt) {
+        this.usuExt = usuExt;
     }
 
     public CadCategoria getObj() {

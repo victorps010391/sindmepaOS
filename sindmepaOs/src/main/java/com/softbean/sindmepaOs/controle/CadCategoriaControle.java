@@ -45,4 +45,26 @@ public class CadCategoriaControle implements Serializable {
     public CadCategoria buscarCategoria(Integer cod) {
         return cadCategoriaFacade.find(cod);
     }
+
+    public Boolean salvarCategoria(CadCategoria obj) {
+        try {
+            cadCategoriaFacade.create(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método salvarCategoria " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Boolean alterarCategoria(CadCategoria obj) {
+        try {
+            cadCategoriaFacade.edit(obj);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Erro no método alterarCategoria " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

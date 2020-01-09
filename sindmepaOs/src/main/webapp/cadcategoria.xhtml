@@ -30,13 +30,15 @@
                 </h:panelGrid>
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadCategoriaBean.pesquisa()}" update="gridPrincipal" ajax="false"/>                    
-                    <p:commandButton value="Limpar" actionListener="#{cadCategoriaBean.limparPesquisa()}" update="frmCadCateg" ajax="false"/>                    
-                    <p:commandButton value="Novo Setor" onclick="PF('dlCadCateg').show()" update="frmDlCadCateg"/>  
-                    <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
+                    <p:commandButton value="Limpar" actionListener="#{cadCategoriaBean.limparPesquisa()}" update=":frmCadCateg" ajax="false"/>                    
+                    <p:commandButton value="Nova Categoria" actionListener="#{cadCategoriaBean.limparCadastro()}" onclick="PF('dlCadCateg').show()" update=":frmDlCadCateg"/>  
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
                 </f:facet>
             </p:panel>
 
-            <p:dataTable id="gridPrincipal" value="#{cadCategoriaBean.gridPesquisa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+            <p:dataTable id="gridPrincipal" value="#{cadCategoriaBean.gridPesquisa}" var="item" rows="8" 
+                         paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                         emptyMessage="Nenhum Registro Encontrado">
                 <f:facet name="header">
                     Categorias Cadastradas
                 </f:facet>
@@ -75,58 +77,71 @@
                     <p:commandButton id="acoes" icon="ui-icon-triangle-2-n-s"/>
                     <p:tieredMenu overlay="true" trigger="acoes" my="left top" at="left bottom">                        
                         <p:menuitem value="Alterar" 
-                                    actionListener="#{cadCategoriaBean.buscarSetorBean(item.get('codigo'))}" 
+                                    actionListener="#{cadCategoriaBean.buscarCategoria(item.get('codigo'))}" 
                                     onclick="PF('dlAltCateg').show()" 
                                     update=":frmDlAltCateg"/>                         
                     </p:tieredMenu>
                 </p:column>
-            </p:dataTable>
-
-            <p:dialog widgetVar="dlCadCateg" header="Cadastrar Setor">
-                <h:form id="frmDlCadCateg" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-                    <p:panel>
-                        <h:panelGrid columns="2" >
-
-                            <h:outputLabel value="Nome: "/>
-                            <p:inputText value="#{cadCategoriaBean.nomeCateg}" />
-
-                            <h:outputLabel value="Prioridade:"/>
-                            <p:selectOneMenu id="categDropPesq" value="#{cadCategoriaBean.tipoCategPesq}">                    
-                                <f:selectItem itemLabel="........................................" />    
-                                <f:selectItems value="#{cadCategoriaBean.listarTipoCateg()}" var="categ"  
-                                               itemLabel="#{categ.get('nome')}" itemValue="#{categ.get('codigo')}" />
-                            </p:selectOneMenu>
-                            
-                        </h:panelGrid>
-                        <f:facet name="footer">
-                            <p:commandButton value="Salvar" actionListener="#{cadSetorBean.salvarSetorBean()}" update="@form :frmCadCateg" />
-                            <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadCateg').hide()" update="@form :frmCadCateg" />
-                        </f:facet>
-                    </p:panel>
-                </h:form>
-            </p:dialog>
+            </p:dataTable>   
         </h:form>
 
-        <p:dialog widgetVar="dlAltCateg" header="Alterar Setor">
-            <h:form id="frmDlAltCateg" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+        <p:dialog widgetVar="dlCadCateg" header="Cadastrar Categoria" modal="true" appendTo="@(body)">
+            <h:form id="frmDlCadCateg" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
                 <p:panel>
                     <h:panelGrid columns="2" >
-                        <h:outputLabel value="Código: "/>
-                        <h:outputLabel value="#{cadSetorBean.objSetor.cdSetor}" />                            
 
                         <h:outputLabel value="Nome: "/>
-                        <p:inputText value="#{cadSetorBean.objSetor.nmSetor}" />
+                        <p:inputText value="#{cadCategoriaBean.nomeCateg}" />
 
-                        <p:outputLabel for="sit" value="Situação: " />
-                        <p:selectOneRadio id="sit" value="#{cadSetorBean.sitSetorAlt}" >
-                            <f:selectItem itemLabel="Ativo" itemValue="01" />
-                            <f:selectItem itemLabel="Inativo" itemValue="02" />                                
+                        <h:outputLabel value="Prioridade:"/>
+                        <p:selectOneMenu id="categDropPesq" value="#{cadCategoriaBean.tipoCateg}">                    
+                            <f:selectItem itemLabel="........................................" />    
+                            <f:selectItems value="#{cadCategoriaBean.listarTipoCateg()}" var="categ"  
+                                           itemLabel="#{categ.get('nome')}" itemValue="#{categ.get('codigo')}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="ext" value="Uso externo ? " />
+                        <p:selectOneRadio id="ext" value="#{cadCategoriaBean.usuExt}" >
+                            <f:selectItem itemLabel="SIM" itemValue="E" />
+                            <f:selectItem itemLabel="NÂO" itemValue="N" />                                
                         </p:selectOneRadio>
 
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <p:commandButton value="Alterar" actionListener="#{cadSetorBean.alterarSetorBean()}" update="@form :frmDlAltCateg :frmCadCateg" />
-                        <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltCateg').hide()" update="@form :frmDlAltCateg :frmCadCateg" />
+                        <p:commandButton value="Salvar" actionListener="#{cadCategoriaBean.salvar()}" update="@form :frmCadCateg" />
+                        <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadCateg').hide()" update="@form :frmCadCateg" />
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="dlAltCateg" header="Alterar Categoria" modal="true" appendTo="@(body)">
+            <h:form id="frmDlAltCateg" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                <p:panel>
+                    <h:panelGrid columns="2" >
+                        <h:outputLabel value="Código: "/>
+                        <h:outputLabel value="#{cadCategoriaBean.obj.idCategoria}" />                            
+
+                        <h:outputLabel value="Nome: "/>
+                        <p:inputText value="#{cadCategoriaBean.obj.descCategoria}" />
+
+                        <h:outputLabel value="Prioridade:"/>
+                        <p:selectOneMenu id="categDropAlt" value="#{cadCategoriaBean.obj.codPriorCategoria}">                    
+                            <f:selectItem itemLabel="........................................" />    
+                            <f:selectItems value="#{cadCategoriaBean.listarTipoCateg()}" var="categ"  
+                                           itemLabel="#{categ.get('nome')}" itemValue="#{categ.get('codigo')}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="extAlt" value="Uso externo ? " />
+                        <p:selectOneRadio id="extAlt" value="#{cadCategoriaBean.obj.usuCategoria}" >
+                            <f:selectItem itemLabel="SIM" itemValue="E" />
+                            <f:selectItem itemLabel="NÂO" itemValue="N" />                                
+                        </p:selectOneRadio>
+
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton value="Alterar" actionListener="#{cadCategoriaBean.alterarCategoria()}" update="@form :frmCadCateg" />
+                        <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltCateg').hide()" update="@form :frmCadCateg" />
                     </f:facet>
                 </p:panel>
             </h:form>

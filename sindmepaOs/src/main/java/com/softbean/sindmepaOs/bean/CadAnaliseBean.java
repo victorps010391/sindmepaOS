@@ -60,6 +60,7 @@ public class CadAnaliseBean implements Serializable {
     List<Map<String, Object>> grid01;
     List<Map<String, Object>> grid02;
     List<Map<String, Object>> grid03;
+    List<Map<String, Object>> gridTarefa;
     List<Map<String, Object>> priorListaPesq;
     List<Map<String, Object>> verOs;
     List<Map<String, Object>> listarFinalizacao;
@@ -91,9 +92,12 @@ public class CadAnaliseBean implements Serializable {
 
     public String voltarCadAnalise() {
         try {
-            setGrid01(analiseControle.gridAnalise01(null, null, null));
-            setGrid02(analiseControle.gridAnalise02(null, null, null));
-            setGrid03(analiseControle.gridAnalise03(null, null, null));
+            RequestContext context = RequestContext.getCurrentInstance();
+            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            context.update("@form :frmCadAnalise");
             return "cadanalise";
 
         } catch (Exception e) {
@@ -148,7 +152,7 @@ public class CadAnaliseBean implements Serializable {
                 setNotaAnalise(null);
                 setTarefaAnalise(null);
                 setNotaAnalise(notaControle.gridSecundario(getVos()));
-                setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+                setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
                 context.update(":frmAnaliseOs :gridNota :gridTarefa");
                 return "analise";
             } else {
@@ -163,7 +167,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public String analiseIniciada(Integer os) {
-        RequestContext context = RequestContext.getCurrentInstance();        
+        RequestContext context = RequestContext.getCurrentInstance();
         try {
             setVerOs(null);
             setVerOs(analiseControle.verOs(os));
@@ -187,7 +191,7 @@ public class CadAnaliseBean implements Serializable {
             setNotaAnalise(null);
             setTarefaAnalise(null);
             setNotaAnalise(notaControle.gridSecundario(getVos()));
-            setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+            setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
             limparCadastroNota();
             limparCadastroTarefa();
             context.update(":frmAnaliseOs :gridNota :gridTarefa");
@@ -221,6 +225,7 @@ public class CadAnaliseBean implements Serializable {
                 limparFinalização();
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar protocolo: " + getObjOs().getNrOs() + "."));
             }
+
         } catch (Exception e) {
             System.out.println("Erro no método finalizarAnalise " + e.getMessage());
             e.printStackTrace();
@@ -233,6 +238,22 @@ public class CadAnaliseBean implements Serializable {
             setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
+        } catch (Exception e) {
+            System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisarMenu() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        try {
+            setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
+            context.update("@form :frmCadAnalise");
+
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
             e.printStackTrace();
@@ -240,9 +261,11 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void pesquisarNota() {
+        RequestContext context = RequestContext.getCurrentInstance();
         try {
             setNotaAnalise(null);
             setNotaAnalise(notaControle.gridSecundario(getVos()));
+            context.update(":frmAnaliseOs :gridNota :gridTarefa");
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarNota " + e.getMessage());
             e.printStackTrace();
@@ -250,9 +273,11 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void pesquisarTarefa() {
+        RequestContext context = RequestContext.getCurrentInstance();
         try {
             setTarefaAnalise(null);
-            setTarefaAnalise(tarefaControle.gridTarefa(getVos()));
+            setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
+            context.update(":frmAnaliseOs :gridNota :gridTarefa");
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarTarefa " + e.getMessage());
             e.printStackTrace();
@@ -261,7 +286,7 @@ public class CadAnaliseBean implements Serializable {
 
     public List<Map<String, Object>> listarSetorTarefa() {
         try {
-            setSetorTarefa(tarefaControle.listarSetorTarefa());
+            setSetorTarefa(tarefaControle.listarSetorTarefa(loginBean.getUsuario().getSetorFunc().getCdSetor()));
         } catch (Exception e) {
             System.out.println("Erro no metodo listarSetorTarefa " + e.getMessage());
             e.printStackTrace();
@@ -280,7 +305,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public String dadosSindicais() {
-        if (getVcod_categoria() == 7 && getVcod_setor_abertura() == 0) {
+        if (getVcod_categoria() == 0 && getVcod_setor_abertura() == 0) {
             return "true";
         } else {
             return "false";
@@ -307,10 +332,10 @@ public class CadAnaliseBean implements Serializable {
                 setObjTarefa(new CadTarefa());
                 getObjTarefa().setDtAbertTarefa(new Date());
                 getObjTarefa().setFuncAbertTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
-                getObjTarefa().setFuncResponTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getObjTarefa().setFuncResponTarefa(999);
                 getObjTarefa().setHistTarefa(getDescTarefa());
                 getObjTarefa().setObsTarefa(getDescObsTarefa());
-                getObjTarefa().setSetorAbertTarefa(0);
+                getObjTarefa().setSetorAbertTarefa(loginBean.getUsuario().getSetorFunc().getCdSetor());
                 getObjTarefa().setSetorResponTarefa(getCdSetorTarefa());
                 getObjTarefa().setSitTarefa("01");
                 getObjTarefa().setDtUltAtuTarefa(new Date());
@@ -379,12 +404,25 @@ public class CadAnaliseBean implements Serializable {
         setGrid01(null);
         setGrid02(null);
         setGrid03(null);
+        setGridTarefa(null);
     }
 
     public void limparFinalização() {
-        setListarFinalizacao(null);
-        setSitFinal(null);
-        setDescFinal(null);
+        RequestContext context = RequestContext.getCurrentInstance();
+        try {
+            if (osControle.validarFinalizacao(getVos()) == 0) {
+                setListarFinalizacao(null);
+                setSitFinal(null);
+                setDescFinal(null);
+                context.execute("PF('dlResolvOs').show()");
+                context.update(":frmDlResolvOs");
+            } else {
+                context.execute("PF('dlValida').show()");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro no método limparFinalização (OS) " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void limparCadastroNota() {
@@ -515,6 +553,14 @@ public class CadAnaliseBean implements Serializable {
 
     public void setListarFinalizacao(List<Map<String, Object>> listarFinalizacao) {
         this.listarFinalizacao = listarFinalizacao;
+    }
+
+    public List<Map<String, Object>> getGridTarefa() {
+        return gridTarefa;
+    }
+
+    public void setGridTarefa(List<Map<String, Object>> gridTarefa) {
+        this.gridTarefa = gridTarefa;
     }
 
     public List<Map<String, Object>> getGrid03() {

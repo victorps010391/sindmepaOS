@@ -17,9 +17,24 @@ and open the template in the editor.
 .tituloV{
     font-size: small;
     font-weight: bold;
-    color: indianred    
+    color: indianred;    
+}
+.tituloTarefaV{
+    font-size: small;
+    font-weight: bold;
+    color: darkblue;    
 }
 .conteudoV{
     font-size: small;
-    font-weight: bold;       
+    font-weight: bold;  
+    width: 100px;
+    white-space: normal;    
 }
+.cabecalhoAnalise{
+    font-size: xx-large;
+    font-weight: bold;
+    color: indianred;
+    align-content: center;
+}
+
+

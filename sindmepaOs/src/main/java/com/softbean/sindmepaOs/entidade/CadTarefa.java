@@ -41,6 +41,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CadTarefa.findByObsTarefa", query = "SELECT c FROM CadTarefa c WHERE c.obsTarefa = :obsTarefa")})
 public class CadTarefa implements Serializable {
 
+    @Size(max = 512)
+    @Column(name = "hist_fecha_tarefa")
+    private String histFechaTarefa;
+
     @Size(max = 2)
     @Column(name = "sit_tarefa")
     private String sitTarefa;
@@ -225,6 +229,14 @@ public class CadTarefa implements Serializable {
 
     public void setFuncUltAtuTarefa(Integer funcUltAtuTarefa) {
         this.funcUltAtuTarefa = funcUltAtuTarefa;
+    }
+
+    public String getHistFechaTarefa() {
+        return histFechaTarefa;
+    }
+
+    public void setHistFechaTarefa(String histFechaTarefa) {
+        this.histFechaTarefa = histFechaTarefa;
     }
     
 }

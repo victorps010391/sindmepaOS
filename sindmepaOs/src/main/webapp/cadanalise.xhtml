@@ -10,7 +10,7 @@
     <ui:define name="centro"> 
         <h:form id="frmCadAnalise" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
             <p:growl id="growl" showDetail="true"/>                                  
-            <p:panel header="Análise de Protocolos" >
+            <p:panel header="Análise de Protocolos e Tarefas" >
                 <h:panelGrid columns="2" >
                     <h:outputLabel value="Número do Protocolo: "/>
                     <p:inputText value="#{cadAnaliseBean.nrOs}">
@@ -25,15 +25,18 @@
                     </p:selectOneMenu>                 
                 </h:panelGrid>                             
                 <f:facet name="footer">                    
-                    <p:commandButton value="Pesquisar" actionListener="#{cadAnaliseBean.pesquisar()}" update="grid01 grid02 grid03"/>                    
+                    <p:commandButton value="Pesquisar" actionListener="#{cadAnaliseBean.pesquisar()}" update="grid01 grid02 grid03 gridTarefa"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadAnaliseBean.limparPesquisa()}" update="frmCadAnalise"/>                                                                    
-                    <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />                    
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />                    
                 </f:facet>
             </p:panel>
+
             <br/>
+
             <p:fieldset legend="Protocolos Encaminhados Para Atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid red;" >                
                 <p:dataTable id="grid01" value="#{cadAnaliseBean.grid01}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
-                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto">
+                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto"
+                             emptyMessage="Nenhum Registro Encontrado">
                     <p:column style="text-align: center;">
                         <f:facet name="header">
                             <h:outputText value="Nr. do Protocolo"/>
@@ -85,12 +88,16 @@
                                          onclick="PF('dlConfirm').show()" 
                                          update=":frmDlConfirm"/>
                     </p:column>              
-                </p:dataTable>
-            </p:fieldset>
+                </p:dataTable>       
+            </p:fieldset>  
+
             <br/>
+
             <p:fieldset legend="Protocolos Em atendimento" toggleable="true" toggleSpeed="500" style="border:2px solid blue;">                
                 <p:dataTable id="grid02" value="#{cadAnaliseBean.grid02}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
-                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto" >
+                             paginatorPosition="bottom" liveResize="true" 
+                             resizableColumns="true" tableStyle="width: auto" 
+                             emptyMessage="Nenhum Registro Encontrado">
                     <p:column style="text-align: center;">
                         <f:facet name="header">
                             <h:outputText value="Nr. do Protocolo"/>
@@ -141,10 +148,81 @@
                     </p:column>              
                 </p:dataTable>
             </p:fieldset>
+
             <br/>
+
+            <p:fieldset legend="Tarefas Encaminhadas" toggleable="true" toggleSpeed="500" style="border:2px solid darkgrey;">                
+                <p:dataTable id="gridTarefa" value="#{cadAnaliseBean.gridTarefa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
+                             paginatorPosition="bottom" liveResize="true" 
+                             resizableColumns="true" tableStyle="width: auto"
+                             emptyMessage="Nenhum Registro Encontrado">
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Nr. do Protocolo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('nr_os_tarefa')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nr. da Tarefa"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('nr_tarefa')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Prioridade"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('prioridade')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Setor Abert."/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('nome_setor')}"/>
+                    </p:column>                    
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Abertura"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_abert')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Dt. e Hr. de Fechamento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('data_hora_fecha')}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Situação"/>
+                        </f:facet>
+                        <h:outputText value="#{item.get('sit_tarefa')}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>                        
+                        <p:commandButton value="Análise" 
+                                         action="#{cadTarefaBean.analiseTarefa(item.get('nr_os_tarefa'),item.get('seq_tarefa'))}"/>
+                    </p:column>              
+                </p:dataTable>
+            </p:fieldset>
+
+            <br/>
+            <br/>
+
             <p:fieldset legend="Protocolos Finalizados" toggleable="true" toggleSpeed="500" style="border:2px solid green;" collapsed="true">                
                 <p:dataTable id="grid03" value="#{cadAnaliseBean.grid03}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  
-                             paginatorPosition="bottom" liveResize="true" resizableColumns="true" tableStyle="width: auto" >
+                             paginatorPosition="bottom" liveResize="true" 
+                             resizableColumns="true" tableStyle="width: auto" 
+                             emptyMessage="Nenhum Registro Encontrado">
                     <p:column style="text-align: center;">
                         <f:facet name="header">
                             <h:outputText value="Nr. do Protocolo"/>
@@ -196,10 +274,10 @@
                                          update="@form"/>
                     </p:column>              
                 </p:dataTable>
-            </p:fieldset>
+            </p:fieldset>                                
         </h:form>
 
-        <p:dialog widgetVar="dlConfirm" header="Confirmação">
+        <p:dialog widgetVar="dlConfirm" header="Confirmação" modal="true" appendTo="@(body)">
             <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="1" > 
@@ -210,6 +288,22 @@
                     <f:facet name="footer">
                         <p:commandButton action="#{cadAnaliseBean.iniciarAnalise()}" value="Sim" update="@form :frmCadAnalise" icon="ui-icon ui-icon-check" />
                         <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmCadAnalise" icon="ui-icon ui-icon-closethick"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="dlConfirmTarefa" header="Confirmação" modal="true" appendTo="@(body)">
+            <h:form id="frmDlConfirmTarefa" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="1" > 
+                        <h:outputLabel value="Iniciar Análise da Tarefa? " style="font-weight:bold ; font-size: medium;"/><br/>
+                        <h:outputLabel value="IMPORTANTE: Informamos que após inicio você se tornará responsável pela Tarefa."
+                                       style="font-size: small; color: red; font-weight:bold"/>                       
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton action="#{cadTarefaBean.iniciarAnaliseTarefa()}" value="Sim" update="@form :frmCadAnalise" icon="ui-icon ui-icon-check" />
+                        <p:commandButton onclick="PF('dlConfirmTarefa').hide()" type="button" value="Não" update="@form :frmCadAnalise" icon="ui-icon ui-icon-closethick"/>
                     </f:facet>
                 </p:panel>
             </h:form>

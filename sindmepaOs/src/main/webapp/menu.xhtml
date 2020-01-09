@@ -7,22 +7,24 @@
     <body>
         <ui:composition>        
             <h:form id="frmMenu" acceptcharset="ISO-8859-1" enctype="multipart/form-data">    
-                <p:menu id="menu">
+                <p:menu id="menu" style="width: 150px;" toggleable="true">
                     <p:submenu label="Administrativo">                               
                         <p:menuitem value="Cadastrar Funcionário" url="#{menuManager.menuCadFucionario()}"/>
                         <p:menuitem value="Cadastrar Setor" url="cadsetor.xhtml"/>
-                        <p:menuitem value="Cadastrar Categoria" url="cadordemservico.xhtml"/>
+                        <p:menuitem value="Cadastrar Categoria" url="cadcategoria.xhtml"/>
                     </p:submenu>
 
                     <p:submenu label="Gerenciamento de Protocolos">                               
                         <p:menuitem value="Cadastro" url="cadordemservico.xhtml"/>
-                        <p:menuitem value="Análise" url="cadanalise.xhtml"/>
+                        <p:menuitem value="Análise" url="#{menuManager.menuAnalise()}"/>
+                        <p:menuitem value="Acompanhamento" url="acompanhamentoprotocolo.xhtml" rendered="#{menuManager.menuAcompanhamento()}"/>
                     </p:submenu>              
 
                     <p:submenu label="Usuário">
-                        <p:menuitem value="Sair" action="#{loginBean.logOff()}"/>
-                    </p:submenu>                                        
-                </p:menu>                   
+                        <p:menuitem value="Alterar Senha" action="#{menuManager.menuAlterarSenha()}"/>
+                        <p:menuitem value="Sair do sistema" action="#{loginBean.logOff()}"/>                        
+                    </p:submenu>                  
+                </p:menu>                  
             </h:form>        
         </ui:composition>
     </body>

@@ -30,13 +30,15 @@
                 </h:panelGrid>
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadSetorBean.pesquisa()}" update="gridPrincipal" ajax="false"/>                    
-                    <p:commandButton value="Limpar" actionListener="#{cadSetorBean.limparPesquisa()}" update="frmCadSetor" ajax="false"/>                    
-                    <p:commandButton value="Novo Setor" onclick="PF('dlCadSetor').show()" update="frmDlCadSetor"/>  
-                    <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
+                    <p:commandButton value="Limpar" actionListener="#{cadSetorBean.limparPesquisa()}" update=":frmCadSetor" ajax="false"/>                    
+                    <p:commandButton value="Novo Setor" onclick="PF('dlCadSetor').show()" update=":frmDlCadSetor"/>  
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
                 </f:facet>
             </p:panel>
 
-            <p:dataTable id="gridPrincipal" value="#{cadSetorBean.gridPesquisa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+            <p:dataTable id="gridPrincipal" value="#{cadSetorBean.gridPesquisa}" var="item" rows="8" 
+                         paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                         emptyMessage="Nenhum Registro Encontrado">
                 <f:facet name="header">
                     Setores Cadastrados
                 </f:facet>
@@ -74,32 +76,32 @@
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable>
-
-            <p:dialog widgetVar="dlCadSetor" header="Cadastrar Setor">
-                <h:form id="frmDlCadSetor" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-                    <p:panel>
-                        <h:panelGrid columns="2" >
-
-                            <h:outputLabel value="Nome: "/>
-                            <p:inputText value="#{cadSetorBean.nomeSetor}" />
-
-                            <p:outputLabel for="sit" value="Situação: " />
-                            <p:selectOneRadio id="sit" value="#{cadSetorBean.sitSetor}" >
-                                <f:selectItem itemLabel="Ativo" itemValue="01" />
-                                <f:selectItem itemLabel="Inativo" itemValue="02" />                                
-                            </p:selectOneRadio>
-
-                        </h:panelGrid>
-                        <f:facet name="footer">
-                            <p:commandButton value="Salvar" actionListener="#{cadSetorBean.salvarSetorBean()}" update="@form :frmCadSetor" />
-                            <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadSetor').hide()" update="@form :frmCadSetor" />
-                        </f:facet>
-                    </p:panel>
-                </h:form>
-            </p:dialog>
         </h:form>
-        
-        <p:dialog widgetVar="dlAltSetor" header="Alterar Setor">
+
+        <p:dialog widgetVar="dlCadSetor" header="Cadastrar Setor" modal="true" appendTo="@(body)">
+            <h:form id="frmDlCadSetor" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                <p:panel>
+                    <h:panelGrid columns="2" >
+
+                        <h:outputLabel value="Nome: "/>
+                        <p:inputText value="#{cadSetorBean.nomeSetor}" />
+
+                        <p:outputLabel for="sit" value="Situação: " />
+                        <p:selectOneRadio id="sit" value="#{cadSetorBean.sitSetor}" >
+                            <f:selectItem itemLabel="Ativo" itemValue="01" />
+                            <f:selectItem itemLabel="Inativo" itemValue="02" />                                
+                        </p:selectOneRadio>
+
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton value="Salvar" actionListener="#{cadSetorBean.salvarSetorBean()}" update="@form :frmCadSetor" />
+                        <p:commandButton type="button" value="Cancelar" onclick="PF('dlCadSetor').hide()" update="@form :frmCadSetor" />
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="dlAltSetor" header="Alterar Setor" modal="true" appendTo="@(body)">
             <h:form id="frmDlAltSetor" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
                 <p:panel>
                     <h:panelGrid columns="2" >

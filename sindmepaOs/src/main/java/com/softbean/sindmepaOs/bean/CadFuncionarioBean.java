@@ -20,7 +20,6 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -44,26 +43,20 @@ public class CadFuncionarioBean implements Serializable {
     Util util;
     @Inject
     CadOsControle osControle;
+    @Inject
+    LoginBean loginBean;
 
     CadFuncionario objFunc;
+    CadFuncionario usuAltSenhaObj;
     CadFuncionarioPK objfuncPK;
 
-    String nome, cpf, email;
+    String nome, cpf, email, senhaAcess, repetirSenhaAcess;
     Date dataNascimento;
     Integer codSetor;
 
     List<Map<String, Object>> setorResponsFunc;
-    
-    
-//    public void senha(){
-//        System.out.println("::::::::: SENHA MD5 ::::: " +util.converteParaMd5("102030"));
-//        if("4badaee57fed5610012a296273158f5f".equals(util.converteParaMd5("102030"))){
-//            System.out.println("SENHAS IGUAIS!");
-//        }
-//    }
-    
-    public void salvarCadFuncionario() {
-        RequestContext context = RequestContext.getCurrentInstance();
+
+    public void salvarCadFuncionario() {        
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             if (getObjFunc().getCadFuncionarioPK() == null) {
@@ -81,13 +74,13 @@ public class CadFuncionarioBean implements Serializable {
                 getObjFunc().setDtUltAtuFunc(new Date());
                 getObjFunc().setFuncUltAtuFunc(999);
                 getObjFunc().setSenhaFunc(util.converteParaMd5("102030"));
-                
+
                 if (funcionarioControle.verificaCpfCadastrado(getCpf()) == 0) {
                     if (util.emailValido(getEmail())) {
                         if (util.CPFcorreto(getCpf())) {
                             if (funcionarioControle.salvarFuncioControle(getObjFunc(), getObjfuncPK())) {
                                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Funcionário Realizado com Sucesso."));
-                                limparCadastro();
+                                limparCadastro();                                
                             } else {
                                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Funcionário."));
                             }
@@ -126,6 +119,35 @@ public class CadFuncionarioBean implements Serializable {
 
     }
 
+    public String alterarSenha() {
+        FacesContext mensagem = FacesContext.getCurrentInstance();
+        String ret = null;
+        setUsuAltSenhaObj(null);
+        setUsuAltSenhaObj(funcionarioControle.retornaUsuario(loginBean.getUsuario().getCadFuncionarioPK().getCpfFunc(), 
+                                                             loginBean.getUsuario().getSenhaFunc()));
+        if (!getSenhaAcess().equals(getRepetirSenhaAcess())) {
+            mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Erro ao Validar Senha (Senhas Diferentes)."));
+
+        } else if (getUsuAltSenhaObj() != null) {
+            getUsuAltSenhaObj().setSenhaFunc(util.converteParaMd5(getSenhaAcess()));
+            getUsuAltSenhaObj().setDtUltAtuFunc(new Date());
+            getUsuAltSenhaObj().setFuncUltAtuFunc(999);
+            if (funcionarioControle.alterarSenha(getUsuAltSenhaObj())) {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepProtocol Informa:", "Senha alterada com sucesso. acesse o sistema com sua nova senha."));
+                limparPrimeiroAcesso();
+                ret = loginBean.logOff();
+            } else {
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepProtocol Informa:", "Ocorreu um erro ao tentarmos alterar sua senha."));
+            }
+        }
+        return ret;
+    }
+
+    public void limparPrimeiroAcesso() {
+        setSenhaAcess(null);
+        setRepetirSenhaAcess(null);
+    }
+
     public String getNome() {
         return nome;
     }
@@ -158,11 +180,35 @@ public class CadFuncionarioBean implements Serializable {
         this.dataNascimento = dataNascimento;
     }
 
+    public String getSenhaAcess() {
+        return senhaAcess;
+    }
+
+    public void setSenhaAcess(String senhaAcess) {
+        this.senhaAcess = senhaAcess;
+    }
+
+    public String getRepetirSenhaAcess() {
+        return repetirSenhaAcess;
+    }
+
+    public void setRepetirSenhaAcess(String repetirSenhaAcess) {
+        this.repetirSenhaAcess = repetirSenhaAcess;
+    }
+
     public CadFuncionario getObjFunc() {
         if (objFunc == null) {
             objFunc = new CadFuncionario();
         }
         return objFunc;
+    }
+
+    public CadFuncionario getUsuAltSenhaObj() {
+        return usuAltSenhaObj;
+    }
+
+    public void setUsuAltSenhaObj(CadFuncionario usuAltSenhaObj) {
+        this.usuAltSenhaObj = usuAltSenhaObj;
     }
 
     public String getEmail() {

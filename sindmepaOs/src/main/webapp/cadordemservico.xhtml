@@ -9,7 +9,7 @@
 
     <ui:define name="centro"> 
         <h:form id="frmCadOs" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-            
+
             <p:growl id="growl" showDetail="true"/>                                  
             <p:panel header="Cadastro de Protocolos" >
                 <h:panelGrid columns="2" >
@@ -43,16 +43,31 @@
                                        itemLabel="#{sitPesq.get('nome')}" itemValue="#{sitPesq.get('codigo')}" />
                     </p:selectOneMenu>
                 </h:panelGrid>
+                <h:panelGrid columns="4">
+                    <h:outputLabel value="Data de abertura entre: "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniAbertOs}" />
+                    <h:outputLabel value=" e "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimAbertOs}" />     
+                    
+                    <h:outputLabel value="Data de fechamento entre: "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.iniFechaOs}" />
+                    <h:outputLabel value=" e "/>
+                    <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadOsBean.fimFechaOs}" />     
+                </h:panelGrid>
+                
+                
                 <f:facet name="footer">                    
-                    <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisar()}" update="gridPrincipal"/>                    
+                    <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisarOs()}" update="gridPrincipal"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
                     <p:commandButton value="Novo Protocolo" onclick="PF('dlCadOs').show()" update="@form :frmDlCadOs"/>  
-                    <p:commandButton value="Voltar" action="index.xhtml" ajax="false" style="float: right" />
-<!--                    <p:commandButton value="Enviar" actionListener="# {cadOsBean.enviarEmail()}" update="@form"/>                    -->
+                    <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
+                    <!--                    <p:commandButton value="Enviar" actionListener="# {cadOsBean.enviarEmail()}" update="@form"/>                    -->
                 </f:facet>
             </p:panel>
 
-            <p:dataTable id="gridPrincipal" value="#{cadOsBean.gridPesquisa}" var="item" rows="8" paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom">
+            <p:dataTable id="gridPrincipal" value="#{cadOsBean.gridPesquisaOs}" var="item" rows="8" 
+                         paginator="true" paginatorAlwaysVisible="false"  paginatorPosition="bottom"
+                         emptyMessage="Nenhum Registro Encontrado">
                 <f:facet name="header">
                     Protocolos 
                 </f:facet>
@@ -133,7 +148,7 @@
                                     update=":frmDlVerOs"/>
 
                         <p:menuitem value="Anexos" 
-                                    url="cadanexo.xhtml"
+                                    action="#{cadAnexoBean.paginaAnexo(item.get('os'))}"
                                     disabled="#{'06'.equals(item.get('cd_sit'))}"/>
 
                         <p:menuitem value="Encaminhar para Atendimento"
@@ -160,7 +175,8 @@
             <p:dataTable id="gridSecundario" value="#{cadOsBean.gridSecundario}" var="nota" rows="8" paginator="true" 
                          paginatorAlwaysVisible="false"  paginatorPosition="bottom"
                          rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
-                         rowIndexVar="rowIx">
+                         rowIndexVar="rowIx"
+                         emptyMessage="Nenhum Registro Encontrado">
                 <f:facet name="header">
                     Notas Cadastradas 
                 </f:facet>
@@ -217,7 +233,7 @@
             </p:dataTable>           
         </h:form>
 
-        <p:dialog widgetVar="dlCancelOs" header="Confirmação">
+        <p:dialog widgetVar="dlCancelOs" header="Confirmação" modal="true" appendTo="@(body)">
             <h:form id="frmDlCancelOs" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="1" > 
@@ -231,7 +247,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlConfirm" header="Confirmação">
+        <p:dialog widgetVar="dlConfirm" header="Confirmação" modal="true" appendTo="@(body)">
             <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="1" > 
@@ -247,7 +263,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo">
+        <p:dialog widgetVar="dlCadOs" header="Cadastrar Protocolo" modal="true" appendTo="@(body)">
             <h:form id="frmDlCadOs" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -297,7 +313,7 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlAltOs" header="Alterar Protocolo">
+        <p:dialog widgetVar="dlAltOs" header="Alterar Protocolo" modal="true" appendTo="@(body)">
             <h:form id="frmDlAltOs" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="2" style="margin: 0 auto;">
@@ -350,26 +366,69 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado">
+        <p:dialog widgetVar="dlVerOs" header="Visualizar Informações do Protocolo Cadastrado" responsive="true" height="500"
+                  modal="true" appendTo="@(body)">
             <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
-                <p:panel>                    
+                <p:panel header="DADOS DO PROTOCOLO">                    
                     <h:panelGrid columns="2">
                         <h:outputLabel value="Protocolo: " style="font-weight:bold; "/>
-                        <h:outputLabel value="#{cadOsBean.obCadOs.nrOs}" style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.os}" />
+
+                        <h:outputLabel value="Categoria: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.categoria}" />  
 
                         <h:outputLabel value="Prioridade: " style="font-weight:bold; "/>
-                        <h:outputLabel id="priorCad" value="#{cadOsBean.priorAlt}" style="font-weight:bold; "/>                                       </h:panelGrid>
-                </p:panel><br/>  
-                <p:panel>
-                    <h:panelGrid columns="2" >    
+                        <h:outputLabel value="#{cadOsBean.objVerOs.prioridade}" />    
 
+                        <h:outputLabel value="Tipo de Envio: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.tipoEnvio}" /> 
+
+                        <h:outputLabel value="Status: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.sit}" />  
+                    </h:panelGrid>
+                </p:panel><br/>  
+                <p:panel header="DADOS DA ABERTURA">
+                    <h:panelGrid columns="2" >    
+                        <h:outputLabel value="Data de Abertura: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.dataHoraAbert}" /> 
+
+                        <h:outputLabel value="Setor de Abertura: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.setorAbertura}" />  
+
+                        <h:outputLabel value="Aberto por: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.funcAbert}" />                         
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" style="border: none !important;">
+                        <h:outputLabel value="Solicitação: " style="font-weight:bold; "/>
+                        <p:inputTextarea rows="4" cols="90" value="#{cadOsBean.objVerOs.historico}" readonly="true"/>  
+
+                        <h:outputLabel value="Observações: " style="font-weight:bold; "/>
+                        <p:inputTextarea rows="4" cols="90" value="#{cadOsBean.objVerOs.observacao}" readonly="true"/>  
+                    </h:panelGrid>
+                </p:panel><br/>
+                <p:panel header="DADOS DA RESOLUÇÃO">
+                    <h:panelGrid columns="2" >   
+                        <h:outputLabel value="Setor Responsável: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.setorResponsavel}" />  
+
+                        <h:outputLabel value="Colaborador Responsável: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.funcRespon}" />  
+
+                        <h:outputLabel value="Resolvido por: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.funcFinali}" />  
+
+                        <h:outputLabel value="Data da Resolução: " style="font-weight:bold; "/>
+                        <h:outputLabel value="#{cadOsBean.objVerOs.dataHoraFecha}" />                         
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" style="border: none !important;">
+                        <h:outputLabel value="Descrição da Resolução: " style="font-weight:bold; "/>
+                        <p:inputTextarea rows="4" cols="90" value="#{cadOsBean.objVerOs.descFinalizacao}" readonly="true"/>  
                     </h:panelGrid>
                 </p:panel>
-
             </h:form>
         </p:dialog>        
 
-        <p:dialog widgetVar="dlCadNota" header="Cadastrar Nota">
+        <p:dialog widgetVar="dlCadNota" header="Cadastrar Nota" modal="true" appendTo="@(body)">
             <h:form id="frmDlCadNota" acceptcharset="ISO-8859-1">
                 <p:panel>
                     <h:panelGrid columns="2">

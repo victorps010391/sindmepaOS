@@ -6,11 +6,13 @@
 package com.softbean.sindmepaOs.controle;
 
 import com.softbean.sindmepaOs.entidade.CadFuncionario;
+import com.softbean.sindmepaOs.util.Util;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -24,8 +26,13 @@ public class LoginControle implements PhaseListener {
      */
     public LoginControle() {
     }
-    
-     private FacesContext facesContext;
+
+    @Inject
+    Util util;
+
+    CadFuncionario objUsuario;
+
+    private FacesContext facesContext;
 
     @Override
     public void afterPhase(PhaseEvent event) {
@@ -63,5 +70,13 @@ public class LoginControle implements PhaseListener {
     public PhaseId getPhaseId() {
         return PhaseId.RESTORE_VIEW;
     }
-    
+
+    public CadFuncionario getObjUsuario() {
+        return objUsuario;
+    }
+
+    public void setObjUsuario(CadFuncionario objUsuario) {
+        this.objUsuario = objUsuario;
+    }
+
 }

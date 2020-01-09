@@ -15,7 +15,9 @@ import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -43,29 +45,69 @@ public class CadAnexoBean implements Serializable {
     CadAnexoControle anexosControle;
     @Inject
     Util util;
+    @Inject
+    LoginBean loginBean;
 
     UploadedFile arquivo;
     CadAnexos objAnexo;
     CadAnexosPK objAnexoPk;
-    String nome;
+    String nome, paginaAnterior;
     Integer cod;
+    Integer codOsAnexo;
 
-    List<CadAnexos> gridPesquisa;
-    
-    
-        public void pesquisar() {
+    String dtRegistro;
+    String usuRegistro;
+
+    List<CadAnexos> gridPesquisaAnexo;
+    List<Map<String, Object>> infomacoes;
+
+    public void info(Integer nros) {
+        setInfomacoes(null);
+        setInfomacoes(anexosControle.InfoAnexo(nros));
+
+        for (Map<String, Object> elemento : getInfomacoes()) {
+            setDtRegistro((String) elemento.get("dt_regi_anexo"));
+            setUsuRegistro((String) elemento.get("func_abert"));
+        }
+    }
+
+    public void pesquisarAnexo() {
         try {
-            setGridPesquisa(anexosControle.gridPrincipal(getNome(), getCod()));
+            setGridPesquisaAnexo(anexosControle.gridPrincipal(getNome(), getCod(), getCodOsAnexo()));
+            info(getCodOsAnexo());
         } catch (Exception e) {
             System.out.println("ERRO no método pesquisar()");
             e.printStackTrace();
         }
     }
 
-    public void limparPesquisa() {
+    public void limparPesquisaAnexo() {
         setCod(null);
         setNome(null);
-        setGridPesquisa(null);
+        setGridPesquisaAnexo(null);
+        setDtRegistro(null);
+        setUsuRegistro(null);
+        setInfomacoes(null);
+    }
+
+    public String paginaAnexoTarefa(String tarOs) {
+        return paginaAnexo(Integer.parseInt(tarOs));
+    }
+
+    public String paginaAnexo(Integer codOs) {
+        setCodOsAnexo(null);//limpar variavel
+        setPaginaAnterior(null);// limpar variavel
+        limparPesquisaAnexo();
+        setCodOsAnexo(codOs);
+        info(codOs);
+        setPaginaAnterior(FacesContext.getCurrentInstance().getViewRoot().getViewId());
+        setGridPesquisaAnexo(anexosControle.gridPrincipal("", null, codOs));
+        RequestContext.getCurrentInstance().update(":frmCadAnexo");
+        return "cadanexo.xhtml";
+    }
+
+    public String voltarAnexo() {
+        return getPaginaAnterior();
     }
 
     public void uploadAnexo(FileUploadEvent evento) throws IOException {
@@ -77,12 +119,18 @@ public class CadAnexoBean implements Serializable {
 
             if (getObjAnexo().getCadAnexosPK() == null) {
                 setObjAnexoPk(new CadAnexosPK());
-                getObjAnexoPk().setIdAnexo(189);
+                getObjAnexoPk().setCodOsAnexo(getCodOsAnexo());
+                getObjAnexoPk().setSeqAnexo(anexosControle.retornaSeqAnexo(getCodOsAnexo()));
 
                 setObjAnexo(new CadAnexos());
                 getObjAnexo().setBlobArqAnexo(arquivByte);
                 getObjAnexo().setNmArqAnexo(getArquivo().getFileName());
                 getObjAnexo().setExtArqAnexo(extensao);
+                getObjAnexo().setPagArqAnexo(getPaginaAnterior());
+                getObjAnexo().setDtRegiAnexo(new Date());
+                getObjAnexo().setFuncRegiAnexo(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
+                getObjAnexo().setDtUltAtuAnexo(new Date());
+                getObjAnexo().setFuncUltAtuAnexo(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
 
                 salvar();
             }
@@ -107,27 +155,62 @@ public class CadAnexoBean implements Serializable {
     public void excluirAnexo(CadAnexos obj) {
         try {
             if (anexosControle.excluirControle(obj)) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaOS Informa:", "Anexo Excluido com Sucesso."));
-                setGridPesquisa(null);
-                setGridPesquisa(anexosControle.gridPrincipal("", null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Anexo Excluido com Sucesso."));
+                setGridPesquisaAnexo(null);
+                setGridPesquisaAnexo(anexosControle.gridPrincipal("", null, obj.getCadAnexosPK().getCodOsAnexo()));
+                info(obj.getCadAnexosPK().getCodOsAnexo());
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaOS Informa:", "Erro ao Excluir Anexo."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Excluir Anexo."));
             }
         } catch (Exception e) {
             System.out.println("ERRO no método excluirAnexo");
             e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaOS Informa:", "Erro ao Excluir Anexo."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Excluir Anexo."));
         }
     }
 
     public void salvar() {
         RequestContext context = RequestContext.getCurrentInstance();
         if (anexosControle.salvarControle(getObjAnexo(), getObjAnexoPk())) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaOS Informa:", "Cadastro do Anexo " + getObjAnexo().getNmArqAnexo() + " Realizado Com Sucesso."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro do Anexo " + getObjAnexo().getNmArqAnexo() + " Realizado Com Sucesso."));
+            setGridPesquisaAnexo(anexosControle.gridPrincipal(getObjAnexo().getNmArqAnexo(), getObjAnexo().getCadAnexosPK().getSeqAnexo(), getObjAnexo().getCadAnexosPK().getCodOsAnexo()));
+            info(getObjAnexo().getCadAnexosPK().getCodOsAnexo());
             context.execute("PF('dlCadAnex').hide()");
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ADM Monobloco Informa:", "Não Foi Possivel Realizar o Cadastro do Anexo."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Não Foi Possivel Realizar o Cadastro do Anexo."));
         }
+    }
+
+    public String getDtRegistro() {
+        return dtRegistro;
+    }
+
+    public void setDtRegistro(String dtRegistro) {
+        this.dtRegistro = dtRegistro;
+    }
+
+    public String getUsuRegistro() {
+        return usuRegistro;
+    }
+
+    public void setUsuRegistro(String usuRegistro) {
+        this.usuRegistro = usuRegistro;
+    }
+
+    public List<Map<String, Object>> getInfomacoes() {
+        return infomacoes;
+    }
+
+    public void setInfomacoes(List<Map<String, Object>> infomacoes) {
+        this.infomacoes = infomacoes;
+    }
+
+    public Integer getCodOsAnexo() {
+        return codOsAnexo;
+    }
+
+    public void setCodOsAnexo(Integer codOsAnexo) {
+        this.codOsAnexo = codOsAnexo;
     }
 
     public UploadedFile getArquivo() {
@@ -160,6 +243,14 @@ public class CadAnexoBean implements Serializable {
         this.objAnexoPk = objAnexoPk;
     }
 
+    public String getPaginaAnterior() {
+        return paginaAnterior;
+    }
+
+    public void setPaginaAnterior(String paginaAnterior) {
+        this.paginaAnterior = paginaAnterior;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -176,12 +267,12 @@ public class CadAnexoBean implements Serializable {
         this.cod = cod;
     }
 
-    public List<CadAnexos> getGridPesquisa() {
-        return gridPesquisa;
+    public List<CadAnexos> getGridPesquisaAnexo() {
+        return gridPesquisaAnexo;
     }
 
-    public void setGridPesquisa(List<CadAnexos> gridPesquisa) {
-        this.gridPesquisa = gridPesquisa;
+    public void setGridPesquisaAnexo(List<CadAnexos> gridPesquisaAnexo) {
+        this.gridPesquisaAnexo = gridPesquisaAnexo;
     }
 
 }

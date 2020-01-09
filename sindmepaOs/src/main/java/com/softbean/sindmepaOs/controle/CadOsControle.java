@@ -14,6 +14,7 @@ import com.softbean.sindmepaOs.fachada.CadSetorFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -38,7 +39,6 @@ public class CadOsControle implements Serializable {
     CadSetorFacade setorFacade;
     @Inject
     CadCategoriaFacade categoriaFacade;
-   
 
     public Boolean salvarOsControle(CadOs obj) {
         try {
@@ -49,6 +49,14 @@ public class CadOsControle implements Serializable {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public List<Map<String, Object>> usuDashboard(Integer cdSetor) {
+        return osFacade.usuDashboard(cdSetor);
+    }
+
+    public List<Map<String, Object>> usuDiretorDashboard(Integer cdSetor) {
+        return osFacade.usuDiretorDashboard(cdSetor);
     }
 
     public CadOs buscarOsControle(Integer cod) {
@@ -98,7 +106,19 @@ public class CadOsControle implements Serializable {
         return osFacade.listarSituaPesq();
     }
 
-    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, Integer codFuncRespon, String sit, Integer usuSetor) {
-        return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor);
+    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, 
+            Integer codFuncRespon, String sit, Integer usuSetor,
+            Date dtIni, Date dtFim, Date dtIniFecha, Date dtFimFecha) {
+        return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor, dtIni, dtFim, dtIniFecha, dtFimFecha);
+    }
+
+    public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor, 
+            Integer codFuncRespon, String sit, Integer usuSetor,
+            Date dtIni, Date dtFim, Date dtIniFecha, Date dtFimFecha) {
+        return osFacade.gridPrincipalOs(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor,  dtIni,  dtFim,  dtIniFecha,  dtFimFecha);
+    }
+
+    public Integer validarFinalizacao(Integer os) {
+        return osFacade.validarFinalizacao(os);
     }
 }

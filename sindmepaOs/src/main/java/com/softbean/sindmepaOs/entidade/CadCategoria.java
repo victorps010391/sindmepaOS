@@ -39,6 +39,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "CadCategoria.findByUsuRegCateg", query = "SELECT c FROM CadCategoria c WHERE c.usuRegCateg = :usuRegCateg")})
 public class CadCategoria implements Serializable {
 
+    @Column(name = "usu_categoria")
+    private Character usuCategoria;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -148,6 +151,14 @@ public class CadCategoria implements Serializable {
     @Override
     public String toString() {
         return "com.softbean.sindmepaOs.entidade.CadCategoria[ idCategoria=" + idCategoria + " ]";
+    }
+
+    public Character getUsuCategoria() {
+        return usuCategoria;
+    }
+
+    public void setUsuCategoria(Character usuCategoria) {
+        this.usuCategoria = usuCategoria;
     }
     
 }

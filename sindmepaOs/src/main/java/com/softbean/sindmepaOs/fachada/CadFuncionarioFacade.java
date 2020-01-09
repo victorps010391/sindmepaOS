@@ -64,17 +64,17 @@ public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
         }
     }
 
-    public CadFuncionario validaAcesso(String cpf, String email) {
+    public CadFuncionario validaAcesso(String cpf, String senha) {
         CadFuncionario usuario = null;
         StringBuilder sql = new StringBuilder();
 
         try {
             sql.append(" SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cpfFunc = :cpfFunc ");
-            sql.append(" AND c.emailFunc = :emailFunc ");
+            sql.append(" AND c.senhaFunc = :senhaFunc ");
 
             Query createQuery = em.createQuery(sql.toString());
             createQuery.setParameter("cpfFunc", cpf);
-            createQuery.setParameter("emailFunc", email);
+            createQuery.setParameter("senhaFunc", senha);
 
             usuario = (CadFuncionario) createQuery.getSingleResult();
 
@@ -96,6 +96,25 @@ public class CadFuncionarioFacade extends AbstractFacade<CadFuncionario> {
             Query createQuery = em.createQuery(sql.toString());
             createQuery.setParameter("cpfFunc", cpf);
             createQuery.setParameter("senhaFunc", senha);
+
+            usuario = (CadFuncionario) createQuery.getSingleResult();
+
+        } catch (Exception e) {
+            System.out.println("Erro no metodo validaAcesso " + e.getMessage());
+            e.printStackTrace();
+        }
+        return usuario;
+    }
+
+    public CadFuncionario retornaUsuarioSolicitacaoSenha(String cpf) {
+        CadFuncionario usuario = null;
+        StringBuilder sql = new StringBuilder();
+
+        try {
+            sql.append(" SELECT c FROM CadFuncionario c WHERE c.cadFuncionarioPK.cpfFunc = :cpfFunc ");
+
+            Query createQuery = em.createQuery(sql.toString());
+            createQuery.setParameter("cpfFunc", cpf);
 
             usuario = (CadFuncionario) createQuery.getSingleResult();
 
