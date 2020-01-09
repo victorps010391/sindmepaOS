@@ -81,7 +81,7 @@ public class IndexManager implements Serializable {
     public void carregaGrid() {
         try {
             setUsu(osControle.usuDashboard(loginBean.getUsuario().getSetorFunc().getCdSetor()));
-            setUsuDiretor(osControle.usuDiretorDashboard());
+            setUsuDiretor(osControle.usuDiretorDashboard(loginBean.getUsuario().getSetorFunc().getCdSetor()));
         } catch (Exception e) {
             System.out.println("Erro no metodo carregaGrid " + e.getMessage());
             e.printStackTrace();

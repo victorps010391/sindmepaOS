@@ -554,7 +554,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         return resultMaps;
     }
 
-    public List<Map<String, Object>> usuDiretorDashboard() {
+    public List<Map<String, Object>> usuDiretorDashboard(Integer cdSetor) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
@@ -563,6 +563,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as setRespon ");
         sql.append(" from cad_os ");
         sql.append(" where sit_os <> '01' ");
+        sql.append(" and setor_respon_os <> ").append(cdSetor);
         sql.append(" group by sit_os,setor_respon_os ");
         sql.append(" order by sit_os,setor_respon_os ");
 
