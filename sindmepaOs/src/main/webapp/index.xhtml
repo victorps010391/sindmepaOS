@@ -5,7 +5,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pe="http://primefaces.org/ui/extensions">
 
     <ui:define name="centro">
 
@@ -38,7 +39,15 @@
                         legend="Protocolos" 
                         toggleable="true" 
                         toggleSpeed="500" 
-                        style=" width: 350px; border-width: thick;">                
+                        style=" width: 350px; border-width: thick;">   
+
+
+<!--                <p:inputText id="txtCopy" value="teste" />
+                <p:commandButton id="btnCopy" value="Copy" icon="fa fa-copy" />
+                <pe:clipboard id="clipCopy" trigger="btnCopy" action="copy" target="txtCopy"/>
+			-->
+
+                
                 <h:panelGrid columns="2" cellpadding="5">                     
                     <p:dataTable id="usuario" value="#{indexManager.usu}" var="item" rows="5" paginator="true" 
                                  paginatorAlwaysVisible="false"  paginatorPosition="bottom"

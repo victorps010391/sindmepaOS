@@ -23,8 +23,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
-
+import org.primefaces.PrimeFaces;
 /**
  *
  * @author admin
@@ -89,7 +88,7 @@ public class CadTarefaBean implements Serializable {
     String VtarefaDescFinal;
 
     public String analiseTarefa(String os, Integer seq) {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         String ret = null;
         try {
             setObjVerTarefa(null);
@@ -111,13 +110,13 @@ public class CadTarefaBean implements Serializable {
                 setVtarefaDescFinal((String) elemento.get("hist_fecha_tarefa"));
             }
             if (getVtarefaCdSit().equals("02")) {
-                context.execute("PF('dlConfirmTarefa').show()");
-                context.update(":frmDlConfirmTarefa :gridTarefa :gridNota");
+                context.executeScript("PF('dlConfirmTarefa').show()");
+                context.ajax().update(":frmDlConfirmTarefa :gridTarefa :gridNota");
             } else {
                 limparCadastroNota();
                 limparCadastroTarefa();
                 pesquisarTarefa();
-                context.update(":frmAnaliseTarefa :gridTarefa :gridNota");
+                context.ajax().update(":frmAnaliseTarefa :gridTarefa :gridNota");
                 ret = "analisetarefa";
             }
         } catch (Exception e) {
@@ -157,7 +156,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public String iniciarAnaliseTarefa() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setObjCadTarefa(null)/*limpar variavel*/;
@@ -168,11 +167,11 @@ public class CadTarefaBean implements Serializable {
             getObjCadTarefa().setSitTarefa("03");
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise da tarefa Iniciada com Sucesso."));
-                context.execute("PF('dlConfirmTarefa').hide()");
+                context.executeScript("PF('dlConfirmTarefa').hide()");
                 pesquisarTarefa();
                 limparCadastroNota();
                 limparCadastroTarefa();
-                context.update(":frmAnaliseTarefa :gridTarefa :gridNota");
+                context.ajax().update(":frmAnaliseTarefa :gridTarefa :gridNota");
                 return "analisetarefa";
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao iniciar Análise da tarefa."));
@@ -196,7 +195,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void encaminharTarefaOs() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObjCadTarefa().setDtUltAtuTarefa(new Date());
@@ -205,7 +204,7 @@ public class CadTarefaBean implements Serializable {
 
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa Encaminhado Para Atendimento com Sucesso."));
-                context.execute("PF('dlConfirm').hide()");
+                context.executeScript("PF('dlConfirm').hide()");
                 analiseBean.pesquisarTarefa();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao encaminhar Tarefa Para Atendimento."));
@@ -217,7 +216,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void encaminharTarefa() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObjCadTarefa().setDtUltAtuTarefa(new Date());
@@ -226,7 +225,7 @@ public class CadTarefaBean implements Serializable {
 
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa Encaminhado Para Atendimento com Sucesso."));
-                context.execute("PF('dlConfirm').hide()");
+                context.executeScript("PF('dlConfirm').hide()");
                 pesquisarTarefa();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Tarefa Para Atendimento."));
@@ -238,7 +237,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void salvarTarefaAnalise() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         setObjCadTarefa(null)/*limpar variavel*/;
         try {
@@ -268,7 +267,7 @@ public class CadTarefaBean implements Serializable {
                 if (osControle.alterarOsControle(getObjCadOs())) {
                     if (tarefaControle.salvarTarefaControle(getObjCadTarefa(), getObjCadTarefaPk())) {
                         mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Tarefa Realizado com Sucesso."));
-                        context.execute("PF('dlCadTarTarefa').hide()");
+                        context.executeScript("PF('dlCadTarTarefa').hide()");
                         pesquisarTarefa();
                         limparCadastroTarefa();
                         limparCadastroNota();
@@ -286,7 +285,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void cancelarTarefa() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObjCadTarefa().setDtUltAtuTarefa(new Date());
@@ -303,7 +302,7 @@ public class CadTarefaBean implements Serializable {
                     osControle.alterarOsControle(getObjCadOs());
                 }
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa Cancelado com Sucesso."));
-                context.execute("PF('dlCancelTarefa').hide()");
+                context.executeScript("PF('dlCancelTarefa').hide()");
                 pesquisarTarefa();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Cancelar Tarefa."));
@@ -315,14 +314,14 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void alterarTarefa() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObjCadTarefa().setDtUltAtuTarefa(new Date());
             getObjCadTarefa().setFuncUltAtuTarefa(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             if (tarefaControle.alterarTarefaControle(getObjCadTarefa())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Alteração da Tarefa Realizado com Sucesso."));
-                context.execute("PF('dlAltTarefa').hide()");
+                context.executeScript("PF('dlAltTarefa').hide()");
                 pesquisarTarefa();
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Alterar Tarefa."));
@@ -334,7 +333,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void salvarNotaAnalise() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             if (getCadNotaObj().getCadNotaPK() == null) {
@@ -351,13 +350,13 @@ public class CadTarefaBean implements Serializable {
 
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
-                    context.update("@form :frmAnaliseTarefa");
-                    context.execute("PF('dlCadNotaAnalise').hide()");
+                    context.ajax().update("@form :frmAnaliseTarefa");
+                    context.executeScript("PF('dlCadNotaAnalise').hide()");
                     pesquisarNota();
                     limparCadastroNota();
                 } else {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));
-                    context.update("@form :frmAnaliseTarefa");
+                    context.ajax().update("@form :frmAnaliseTarefa");
                 }
             }
         } catch (Exception e) {
@@ -365,7 +364,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void finalizarAnalise() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setObjCadTarefa(null)/*limpar variavel*/;
@@ -386,7 +385,7 @@ public class CadTarefaBean implements Serializable {
                     osControle.alterarOsControle(getObjCadOs());
                 }
                 limparFinalização();
-                context.execute("PF('dlResolvOs').hide()");
+                context.executeScript("PF('dlResolvOs').hide()");
                 visualizar(getObjCadTarefa().getCadTarefaPK().getNrOsTarefa(), getObjCadTarefa().getCadTarefaPK().getSeqTarefa());
                 analiseTarefa(getObjCadTarefa().getCadTarefaPK().getNrOsTarefa(), getObjCadTarefa().getCadTarefaPK().getSeqTarefa());
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa finalizada com sucesso."));
@@ -411,7 +410,7 @@ public class CadTarefaBean implements Serializable {
     }
 
     public void pesquisarTarefa() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         try {
             setListarTarefa(null);
             setListarTarefa(tarefaControle.gridTarefa(Integer.parseInt(getVtarefaOs()), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
@@ -433,16 +432,16 @@ public class CadTarefaBean implements Serializable {
 //        }
 //    }
     public void limparFinalização() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         try {
             if (tarefaControle.validarFinalizacaoTarefa(getVtarefaOs(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()) == 0) {
                 setListarFinalizacao(null);
                 setSitFinal(null);
                 setDescFinal(null);
-                context.execute("PF('dlResolvOs').show()");
-                context.update(":frmDlResolvOs");
+                context.executeScript("PF('dlResolvOs').show()");
+                context.ajax().update(":frmDlResolvOs");
             } else {
-                context.execute("PF('dlValida').show()");
+                context.executeScript("PF('dlValida').show()");
             }
         } catch (Exception e) {
             System.out.println("Erro no método limparFinalização (Tarefa) " + e.getMessage());

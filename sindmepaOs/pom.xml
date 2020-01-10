@@ -18,8 +18,17 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
+<<<<<<< HEAD
             <version>5.3</version>
             <type>jar</type>
+=======
+            <version>7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>6.2.5</version>
+>>>>>>> ae44a938ade99b8b4fc6fca80f18fdfb96d9ef5a
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>

@@ -21,7 +21,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -94,7 +94,7 @@ public class CadAnexoBean implements Serializable {
         return paginaAnexo(Integer.parseInt(tarOs));
     }
 
-    public String paginaAnexo(Integer codOs) {
+    public String paginaAnexo(Integer codOs) {        
         setCodOsAnexo(null);//limpar variavel
         setPaginaAnterior(null);// limpar variavel
         limparPesquisaAnexo();
@@ -102,7 +102,7 @@ public class CadAnexoBean implements Serializable {
         info(codOs);
         setPaginaAnterior(FacesContext.getCurrentInstance().getViewRoot().getViewId());
         setGridPesquisaAnexo(anexosControle.gridPrincipal("", null, codOs));
-        RequestContext.getCurrentInstance().update(":frmCadAnexo");
+        PrimeFaces.current().ajax().update(":frmCadAnexo");
         return "cadanexo.xhtml";
     }
 
@@ -170,12 +170,12 @@ public class CadAnexoBean implements Serializable {
     }
 
     public void salvar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         if (anexosControle.salvarControle(getObjAnexo(), getObjAnexoPk())) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro do Anexo " + getObjAnexo().getNmArqAnexo() + " Realizado Com Sucesso."));
             setGridPesquisaAnexo(anexosControle.gridPrincipal(getObjAnexo().getNmArqAnexo(), getObjAnexo().getCadAnexosPK().getSeqAnexo(), getObjAnexo().getCadAnexosPK().getCodOsAnexo()));
             info(getObjAnexo().getCadAnexosPK().getCodOsAnexo());
-            context.execute("PF('dlCadAnex').hide()");
+            context.executeScript("PF('dlCadAnex').hide()");
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Não Foi Possivel Realizar o Cadastro do Anexo."));
         }

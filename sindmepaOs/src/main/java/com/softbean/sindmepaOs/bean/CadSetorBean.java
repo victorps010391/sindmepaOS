@@ -15,8 +15,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
-
+import org.primefaces.PrimeFaces;
 /**
  *
  * @author Victor
@@ -56,7 +55,7 @@ public class CadSetorBean implements Serializable {
     }
 
     public void salvarSetorBean() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setObjSetor(new CadSetor());
@@ -65,7 +64,7 @@ public class CadSetorBean implements Serializable {
 
             if (setorControle.salvarSetorControle(getObjSetor())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Setor Realizado com Sucesso."));
-                context.execute("PF('dlCadSetor').hide()");
+                context.executeScript("PF('dlCadSetor').hide()");
                 limparCadastro();
                 setGridPesquisa(setorControle.gridPrincipal(getObjSetor().getNmSetor(), getObjSetor().getCdSetor(), getObjSetor().getSitSetor()));
             } else {
@@ -89,13 +88,13 @@ public class CadSetorBean implements Serializable {
     }
 
     public void alterarSetorBean() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObjSetor().setSitSetor(getSitSetorAlt());
             if (setorControle.alterarSetorControle(getObjSetor())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Setor Alterado com Sucesso."));
-                context.execute("PF('dlAltSetor').hide()");
+                context.executeScript("PF('dlAltSetor').hide()");
                 setGridPesquisa(setorControle.gridPrincipal(getObjSetor().getNmSetor(), getObjSetor().getCdSetor(), getObjSetor().getSitSetor()));
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Tentar Alterar Setor."));

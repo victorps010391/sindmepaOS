@@ -76,9 +76,9 @@ public class CadSetorFacade extends AbstractFacade<CadSetor> {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
-        sql.append(" select cd_setor as codigo       ");
-        sql.append("        ,upper(nm_setor) as nome ");
-        sql.append(" from cad_setor                  ");
+        sql.append(" select cd_setor as codigo                   ");
+        sql.append("        ,upper(nm_setor) as nome             ");
+        sql.append(" from cad_setor where usu_setor in ('I','A') ");
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();

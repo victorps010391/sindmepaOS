@@ -21,7 +21,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.primefaces.event.FlowEvent;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
+
 
 /**
  *
@@ -89,8 +90,8 @@ public class CadExternoBean implements Serializable {
         //precisa de anexo
     }
 
-    public void salvaPagDebMenCartCred() {
-        RequestContext context = RequestContext.getCurrentInstance();
+    public void salvaPagDebMenCartCred() {        
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             
@@ -163,7 +164,7 @@ public class CadExternoBean implements Serializable {
     }
 
     public void salvaPagDebCCorrente() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             //Informações de Endereço
@@ -214,7 +215,7 @@ public class CadExternoBean implements Serializable {
     }
 
     public void salvaPagDebCCheque() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             //Informações de Endereço

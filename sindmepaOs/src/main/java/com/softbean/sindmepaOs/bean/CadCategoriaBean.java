@@ -16,7 +16,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -91,7 +91,7 @@ public class CadCategoriaBean implements Serializable {
     }
 
     public void salvar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setObj(null);//limpar variavel
@@ -106,7 +106,7 @@ public class CadCategoriaBean implements Serializable {
             if (categoriaControle.salvarCategoria(getObj())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Categoria salva com sucesso."));
                 setGridPesquisa(categoriaControle.gridPrincipal(getNomeCateg(), getCodCateg(), getTipoCateg()));
-                context.execute("PF('dlCadCateg').hide()");
+                context.executeScript("PF('dlCadCateg').hide()");
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao salvar categoria"));
             }
@@ -127,7 +127,7 @@ public class CadCategoriaBean implements Serializable {
     }
 
     public void alterarCategoria() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObj().setDtUltAtuCategoria(new Date());
@@ -135,7 +135,7 @@ public class CadCategoriaBean implements Serializable {
             if (categoriaControle.alterarCategoria(getObj())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Categoria alterada com sucesso."));
                 setGridPesquisa(categoriaControle.gridPrincipal(getObj().getDescCategoria(), getObj().getIdCategoria(), getObj().getCodPriorCategoria()));
-                context.execute("PF('dlAltCateg').hide()");
+                context.executeScript("PF('dlAltCateg').hide()");
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao alterar categoria"));
             }

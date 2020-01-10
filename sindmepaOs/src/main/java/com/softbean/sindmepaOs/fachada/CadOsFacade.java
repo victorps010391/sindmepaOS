@@ -476,10 +476,10 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
         StringBuilder sql = new StringBuilder();
-        sql.append(" select setor_respon_os as codigo ");
+        sql.append(" select setor_respon_os as codigo                                                  ");
         sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_respon_os) as nome ");
-        sql.append(" from cad_os ");
-        sql.append(" group by setor_respon_os ");
+        sql.append(" from cad_os                                                                       ");
+        sql.append(" group by setor_respon_os                                                          ");
         try {
             Query createQuery = em.createNativeQuery(sql.toString());
             resultArrays = createQuery.getResultList();

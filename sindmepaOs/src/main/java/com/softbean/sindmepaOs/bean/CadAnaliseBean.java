@@ -23,7 +23,8 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
+
 
 /**
  *
@@ -92,12 +93,12 @@ public class CadAnaliseBean implements Serializable {
 
     public String voltarCadAnalise() {
         try {
-            RequestContext context = RequestContext.getCurrentInstance();
+            PrimeFaces context = PrimeFaces.current();
             setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
-            context.update("@form :frmCadAnalise");
+            context.ajax().update(":frmCadAnalise");
             return "cadanalise";
 
         } catch (Exception e) {
@@ -137,7 +138,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public String iniciarAnalise() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setObjOs(null);
@@ -148,12 +149,12 @@ public class CadAnaliseBean implements Serializable {
             getObjOs().setSitOs("03");
             if (osControle.alterarOsControle(getObjOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Análise do protocolo: " + getObjOs().getNrOs() + " Iniciada com Sucesso."));
-                context.execute("PF('dlConfirm').hide()");
+                context.executeScript("PF('dlConfirm').hide()");
                 setNotaAnalise(null);
                 setTarefaAnalise(null);
                 setNotaAnalise(notaControle.gridSecundario(getVos()));
                 setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
-                context.update(":frmAnaliseOs :gridNota :gridTarefa");
+                context.ajax().update(":frmAnaliseOs :gridNota :gridTarefa");
                 return "analise";
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao iniciar Análise do protocolo: " + getObjOs().getNrOs() + "."));
@@ -167,7 +168,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public String analiseIniciada(Integer os) {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         try {
             setVerOs(null);
             setVerOs(analiseControle.verOs(os));
@@ -194,7 +195,7 @@ public class CadAnaliseBean implements Serializable {
             setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
             limparCadastroNota();
             limparCadastroTarefa();
-            context.update(":frmAnaliseOs :gridNota :gridTarefa");
+            context.ajax().update(":frmAnaliseOs :gridNota :gridTarefa");
             return "analise";
 
         } catch (Exception e) {
@@ -205,7 +206,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void finalizarAnalise() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setObjOs(null);
@@ -218,7 +219,7 @@ public class CadAnaliseBean implements Serializable {
             getObjOs().setSitOs(getSitFinal());
             if (osControle.alterarOsControle(getObjOs())) {
                 limparFinalização();
-                context.execute("PF('dlResolvOs').hide()");
+                context.executeScript("PF('dlResolvOs').hide()");
                 analise(getObjOs().getNrOs());
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObjOs().getNrOs() + " finalizado com sucesso."));
             } else {
@@ -246,13 +247,13 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void pesquisarMenu() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         try {
             setGrid01(analiseControle.gridAnalise01(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
-            context.update("@form :frmCadAnalise");
+            context.ajax().update("@form :frmCadAnalise");
 
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
@@ -261,11 +262,11 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void pesquisarNota() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         try {
             setNotaAnalise(null);
             setNotaAnalise(notaControle.gridSecundario(getVos()));
-            context.update(":frmAnaliseOs :gridNota :gridTarefa");
+            context.ajax().update(":frmAnaliseOs :gridNota :gridTarefa");
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarNota " + e.getMessage());
             e.printStackTrace();
@@ -273,11 +274,11 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void pesquisarTarefa() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         try {
             setTarefaAnalise(null);
             setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
-            context.update(":frmAnaliseOs :gridNota :gridTarefa");
+            context.ajax().update(":frmAnaliseOs :gridNota :gridTarefa");
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarTarefa " + e.getMessage());
             e.printStackTrace();
@@ -321,7 +322,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void salvarTarefaAnalise() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             if (getObjTarefa().getCadTarefaPK() == null) {
@@ -350,7 +351,7 @@ public class CadAnaliseBean implements Serializable {
                 if (osControle.alterarOsControle(getObjOs())) {
                     if (tarefaControle.salvarTarefaControle(getObjTarefa(), getObjTarefaPk())) {
                         mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Tarefa Realizado com Sucesso."));
-                        context.execute("PF('dlCadTar').hide()");
+                        context.executeScript("PF('dlCadTar').hide()");
                         pesquisarTarefa();
                         limparCadastroTarefa();
                     } else {
@@ -367,7 +368,7 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void salvarNotaAnalise() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             if (getCadNotaObj().getCadNotaPK() == null) {
@@ -384,13 +385,13 @@ public class CadAnaliseBean implements Serializable {
 
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
-                    context.update("@form :frmAnaliseOs");
-                    context.execute("PF('dlCadNotaAnalise').hide()");
+                    context.ajax().update("@form :frmAnaliseOs");
+                    context.executeScript("PF('dlCadNotaAnalise').hide()");
                     pesquisarNota();
                     limparCadastroNota();
                 } else {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Realizar Cadastro de Nota."));
-                    context.update("@form :frmAnaliseOs");
+                    context.ajax().update("@form :frmAnaliseOs");
                 }
             }
         } catch (Exception e) {
@@ -408,16 +409,16 @@ public class CadAnaliseBean implements Serializable {
     }
 
     public void limparFinalização() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         try {
             if (osControle.validarFinalizacao(getVos()) == 0) {
                 setListarFinalizacao(null);
                 setSitFinal(null);
                 setDescFinal(null);
-                context.execute("PF('dlResolvOs').show()");
-                context.update(":frmDlResolvOs");
+                context.executeScript("PF('dlResolvOs').show()");
+                context.ajax().update(":frmDlResolvOs");
             } else {
-                context.execute("PF('dlValida').show()");
+                context.executeScript("PF('dlValida').show()");
             }
         } catch (Exception e) {
             System.out.println("Erro no método limparFinalização (OS) " + e.getMessage());

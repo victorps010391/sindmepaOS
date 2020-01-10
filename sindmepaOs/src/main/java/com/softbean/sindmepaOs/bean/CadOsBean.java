@@ -22,8 +22,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
-
+import org.primefaces.PrimeFaces;
 /**
  *
  * @author admin
@@ -119,7 +118,7 @@ public class CadOsBean implements Serializable {
     }
 
     public void salvar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setObCadOs(null)/*limpar variavel*/;
@@ -143,7 +142,7 @@ public class CadOsBean implements Serializable {
 
             if (osControle.salvarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
-                context.execute("PF('dlCadOs').hide()");
+                context.executeScript("PF('dlCadOs').hide()");
                 limparCadastro();
                 setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
                         getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
@@ -202,7 +201,7 @@ public class CadOsBean implements Serializable {
     }
 
     public void alterar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             setCadSetorObj(osControle.buscarSetor(getSetAlt()));
@@ -211,7 +210,7 @@ public class CadOsBean implements Serializable {
             getObCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             if (osControle.alterarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Alteração do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
-                context.execute("PF('dlAltOs').hide()");
+                context.executeScript("PF('dlAltOs').hide()");
                 setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(), getColabRespon(),
                         getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
             } else {
@@ -224,7 +223,7 @@ public class CadOsBean implements Serializable {
     }
 
     public void cancelar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObCadOs().setDtUltAtuOs(new Date());
@@ -233,7 +232,7 @@ public class CadOsBean implements Serializable {
             getObCadOs().setDtFechaOs(new Date());
             if (osControle.alterarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Cancelado com Sucesso."));
-                context.execute("PF('dlCancelOs').hide()");
+                context.executeScript("PF('dlCancelOs').hide()");
                 setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
                         getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
             } else {
@@ -256,7 +255,7 @@ public class CadOsBean implements Serializable {
     }
 
     public void encaminhar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             getObCadOs().setDtUltAtuOs(new Date());
@@ -267,7 +266,7 @@ public class CadOsBean implements Serializable {
                 visualizar(getObCadOs().getNrOs());
                 if (disparaEmailabertura(getObjVerOs(),loginBean.getUsuario().getEmailFunc())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Encaminhado Para Atendimento com Sucesso."));
-                    context.execute("PF('dlConfirm').hide()");
+                    context.executeScript("PF('dlConfirm').hide()");
                     setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(),
                             getObCadOs().getSetorResponOs().getCdSetor(), getColabRespon(), getObCadOs().getSitOs(),
                             loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
