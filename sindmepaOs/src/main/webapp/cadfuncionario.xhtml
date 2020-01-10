@@ -20,7 +20,7 @@
                     <p:inputText value="#{cadFuncionarioBean.cpf}" />
                     <h:outputLabel value="Data de Nascimento: "/>
                     <p:calendar locale="pt" pattern="dd/MM/yyyy" value="#{cadFuncionarioBean.dataNascimento}" />
-                    <h:outputLabel value="Setor Responsável:"/>
+                    <h:outputLabel value="Setor: "/>
                     <p:selectOneMenu value="#{cadFuncionarioBean.codSetor}" id="setorDrop" filter="true" filterMatchMode="contains">
                         <f:selectItem itemLabel="........................................" /> 
                         <f:selectItems value="#{cadFuncionarioBean.listarSetorPesq()}" var="setorPesq"  

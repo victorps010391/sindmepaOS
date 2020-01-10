@@ -19,7 +19,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -50,7 +50,7 @@ public class LoginBean implements Serializable {
 
     public String logar() {
         FacesContext mensagem = FacesContext.getCurrentInstance();
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         setUsuario(null);//limpar variavel
         setUsuario(funcionarioControle.validaAcesso(getCpfAcess(), util.converteParaMd5(getSenha())));
 
@@ -64,17 +64,17 @@ public class LoginBean implements Serializable {
                 session.setAttribute("usuario", getUsuario());
             }
             indexManager.carregaGrids();
-            context.update(":frmIndex");
+            context.ajax().update(":frmIndex");
             return "index";
         }
     }
-    
-    public void limpaCpf(){
+
+    public void limpaCpf() {
         setCpfSolicitacao(null);
     }
 
     public String solicitarAlteraSenha() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         String ret = "login";
         try {
@@ -90,22 +90,22 @@ public class LoginBean implements Serializable {
 
                 if (funcionarioControle.alterarSenha(getUsuarioSolicitacaoSenha())) {
                     if (enviarEmailNovaSenha(getUsuarioSolicitacaoSenha().getEmailFunc(), getNovaSenha(), getUsuarioSolicitacaoSenha())) {
-                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Solicitação realizada com sucesso, enviamos um e-mail com sua nova senha."));                        
-                        context.execute("PF('dlSolicitarSenha').hide()");
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Solicitação realizada com sucesso, enviamos um e-mail com sua nova senha."));
+                        context.executeScript("PF('dlSolicitarSenha').hide()");
 
                     } else {
-                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));                        
-                        context.execute("PF('dlSolicitarSenha').hide()");
+                        mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));
+                        context.executeScript("PF('dlSolicitarSenha').hide()");
 
                     }
                 } else {
-                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));                    
-                    context.execute("PF('dlSolicitarSenha').hide()");
+                    mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro, Solicitação não concluida."));
+                    context.executeScript("PF('dlSolicitarSenha').hide()");
 
                 }
             } else {
-                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Usuário não encontrado."));               
-                context.execute("PF('dlSolicitarSenha').hide()");
+                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Usuário não encontrado."));
+                context.executeScript("PF('dlSolicitarSenha').hide()");
 
             }
 
@@ -157,13 +157,13 @@ public class LoginBean implements Serializable {
 
     public String logOff() {
         FacesContext mensagem = FacesContext.getCurrentInstance();
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         HttpSession session = (HttpSession) mensagem.getExternalContext().getSession(false);
         mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Você saiu do sistema."));
         setCpfAcess(null);
         setSenha(null);
         session.invalidate();
-        context.update(":frmLogin");
+        context.ajax().update(":frmLogin");
         return "login";
     }
 

@@ -40,13 +40,7 @@
         <h:form id="frmExterno" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
             <p:growl id="growlFrmExterno" showDetail="true"/>    
             <p:panel header="Abertura de Ordem de Serviço" >
-                <h:panelGrid columns="2" >
-                    <h:outputLabel value="Setor responsável: "/>
-                    <p:selectOneMenu id="comboSetor" value="#{cadExternoBean.setor}">                    
-                        <f:selectItem itemLabel="........................................" />    
-                        <f:selectItems value="#{cadExternoBean.comboSetorView()}" var="setor"  
-                                       itemLabel="#{setor.get('setor')}" itemValue="#{setor.get('codigo')}" />
-                    </p:selectOneMenu>
+                <h:panelGrid columns="2" >                    
                     <h:outputLabel value="Categoria: "/>
                     <p:selectOneMenu id="comboCategoria" value="#{cadExternoBean.categoria}">                    
                         <f:selectItem itemLabel="........................" />    
@@ -124,17 +118,17 @@
                                             <h:panelGrid columns="1" cellpadding="5">
                                                 <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" >
                                                     <h:outputText value="Autorizo o desconto da mensalidade em meu contra-cheque, no dia 10 de cada mês, 
-                                                              com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
-                                                              Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
+                                                                  com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
+                                                                  Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
                                                 </h:selectBooleanCheckbox>
                                                 <h:outputText value="Número de matrícula: " />
                                                 <p:inputText value="#{cadExternoBean.numMatricula}"/>
                                                 <h:outputLabel value="Instituição a ser debitada: "/>
                                                 <p:selectOneMenu id="comboInst" value="#{cadExternoBean.instituicao}">                    
-                                                <f:selectItem itemLabel="........................................" />    
-                                                <f:selectItems value="#{cadExternoBean.comboPagInstituicaoView()}" var="inst"  
-                                                               itemLabel="#{inst.get('detalhe')}" itemValue="#{inst.get('codigo')}" />
-                                            </p:selectOneMenu>
+                                                    <f:selectItem itemLabel="........................................" />    
+                                                    <f:selectItems value="#{cadExternoBean.comboPagInstituicaoView()}" var="inst"  
+                                                                   itemLabel="#{inst.get('detalhe')}" itemValue="#{inst.get('codigo')}" />
+                                                </p:selectOneMenu>
                                             </h:panelGrid>
                                         </p:panel>
                                         <p:panel id="debMenCartCred" header="Dados bancários" rendered="#{cadExternoBean.debMenCartCred}" >
@@ -237,21 +231,21 @@
 
                                             <h:outputText value="CPF: " />
                                             <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
-                                            
+
                                             <h:outputText value="Número CRM: " />
                                             <h:outputText value="#{cadExternoBean.crm}" styleClass="outputLabel"/>
-                                            
+
                                             <h:outputText value="Especialidade: " />
                                             <h:outputText value="#{cadExternoBean.espec}" styleClass="outputLabel"/>
-                                            
+
                                             <h:outputText value="Data de Nascimento: " />
                                             <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
-                                            
+
                                             <h:outputText value="Sexo: " />
                                             <h:outputText value="#{cadExternoBean.sexo}" styleClass="outputLabel"/>
-                                        
 
-                                        
+
+
                                             <h:outputText value="Endereço: " />
                                             <h:outputText value="#{cadExternoBean.endereco}" styleClass="outputLabel"/>
 
@@ -260,16 +254,16 @@
 
                                             <h:outputText value="CEP: " />
                                             <h:outputText value="#{cadExternoBean.cep}" styleClass="outputLabel"/>
-                                            
+
                                             <h:outputText value="Número: " />
                                             <h:outputText value="#{cadExternoBean.numeroEnd}" styleClass="outputLabel"/>
-                                            
+
                                             <h:outputText value="Bairro: " />
                                             <h:outputText value="#{cadExternoBean.bairro}" styleClass="outputLabel"/>
-                                            
+
                                             <h:outputText value="Cidade: " />
                                             <h:outputText value="#{cadExternoBean.cidade}" styleClass="outputLabel"/>
-                                       
+
                                             <h:outputText value="Telefone Comercial: " />
                                             <h:outputText value="#{cadExternoBean.telComerc}" styleClass="outputLabel"/>
 
@@ -280,8 +274,14 @@
                                             <h:outputText value="#{cadExternoBean.whatsapp}" styleClass="outputLabel"/>
 
                                             <h:outputText value="E-mail: " />
-                                            <h:outputText value="#{cadExternoBean.email}" styleClass="outputLabel"/>
+                                            <h:outputText value="#{cadExternoBean.email}" styleClass="outputLabel"/>                                                                                        
                                         </h:panelGrid>
+                                        <h:outputLabel value="Setor responsável: "/>
+                                        <p:selectOneMenu id="comboSetor" value="#{cadExternoBean.setor}">                    
+                                            <f:selectItem itemLabel="........................................" />    
+                                            <f:selectItems value="#{cadExternoBean.comboSetorView()}" var="setor"  
+                                                           itemLabel="#{setor.get('setor')}" itemValue="#{setor.get('codigo')}" />
+                                        </p:selectOneMenu>
                                     </h:panelGrid>
 
                                     <p:commandButton value="Enviar" actionListener="#{cadExternoBean.salvarExterno()}" update="growl" process="@this"/>

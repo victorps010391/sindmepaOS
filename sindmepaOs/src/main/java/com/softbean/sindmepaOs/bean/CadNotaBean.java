@@ -15,8 +15,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import org.primefaces.context.RequestContext;
-
+import org.primefaces.PrimeFaces;
 /**
  *
  * @author Victor
@@ -55,7 +54,7 @@ public class CadNotaBean implements Serializable {
     }
 
     public void alterar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
 
         try {
@@ -63,7 +62,7 @@ public class CadNotaBean implements Serializable {
             getCadNotaObj().setFuncUltAtuNota(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
             if (notaControle.alterarNotaControle(getCadNotaObj())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Nota Alterada com Sucesso."));
-                context.execute("PF('dlAltNota').hide()");
+                context.executeScript("PF('dlAltNota').hide()");
                 osBean.pesquisarNota(getCadNotaObj().getCadNotaPK().getNrOsNota());
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Alterar Nota."));
@@ -74,7 +73,7 @@ public class CadNotaBean implements Serializable {
     }
 
     public void excluir() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
 
         try {
@@ -83,7 +82,7 @@ public class CadNotaBean implements Serializable {
             getCadNotaObj().setInvalidaNota("S");
             if (notaControle.excluirNotaControle(getCadNotaObj())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Nota Excluida com Sucesso."));
-                context.execute("PF('dlExcNota').hide()");
+                context.executeScript("PF('dlExcNota').hide()");
                 osBean.pesquisarNota(getCadNotaObj().getCadNotaPK().getNrOsNota());
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Excluir Nota."));
@@ -98,7 +97,7 @@ public class CadNotaBean implements Serializable {
     }
 
     public void salvar() {
-        RequestContext context = RequestContext.getCurrentInstance();
+        PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
             if (getCadNotaObj().getCadNotaPK() == null) {
@@ -115,7 +114,7 @@ public class CadNotaBean implements Serializable {
 
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
-                    context.execute("PF('dlCadNota').hide()");
+                    context.executeScript("PF('dlCadNota').hide()");
                     osBean.pesquisarNota(getOsCad());
                     limparCadastro();
                 } else {
