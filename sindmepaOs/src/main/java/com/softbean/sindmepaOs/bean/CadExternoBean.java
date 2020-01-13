@@ -74,6 +74,7 @@ public class CadExternoBean implements Serializable {
     }
 
     public void salvarExterno() {
+        PrimeFaces context = PrimeFaces.current();
         if (getPagamento() == 13) {//"13 - DÉBITO MENSAL NO CARTÃO DE CRÉDITO"
             System.out.println("Entrou no If salvarExterno() - 13 ");
             salvaPagDebMenCartCred();
@@ -134,9 +135,9 @@ public class CadExternoBean implements Serializable {
                     getCadOs().setCategOs(getCategoria());
                     setObjSetor(null);
                     System.out.println("OBJSETOR: " + getSetor());
-                    setObjSetor(cadOsControle.buscarSetor(getSetor()));
+                    setObjSetor(cadOsControle.buscarSetor(4));//RECEPÇÃO
                     System.out.println("OBJSETOR DEPOIS: " + getSetor());
-                    getCadOs().setSetorAbertOs(getObjSetor());
+                    getCadOs().setSetorAbertOs(cadOsControle.buscarSetor(0));
                     getCadOs().setSetorResponOs(getObjSetor());
                     getCadOs().setDtAbertOs(new Date());
                     getCadOs().setDtFechaOs(null);
@@ -151,6 +152,9 @@ public class CadExternoBean implements Serializable {
                     System.out.println(" ========= ANTES DO IF getCadOs() ========");
                     if(cadExternoControle.salvarOsExt(getCadOs())){
                         mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: " + getCadOs().getNrOs() + " Realizado com Sucesso."));
+                        limpaFormulario();
+                        context.executeScript("redirecionarPagSeguro()");
+                        context.executeScript("redirecionarHomepage()");
                         System.out.println("== SALVOU, FDP!");
                     }
                 }
@@ -275,13 +279,13 @@ public class CadExternoBean implements Serializable {
         setAbriOsExt("false");
         setSindicaliza("false");
 
-        if (getCategoria() == 7) {
+        if (getCategoria() == 0) {
             setSindicaliza("true");
         } else {
             setAbriOsExt("true");
         }
     }
-
+    
     public void validaDadoBancario() {
         setAnuidadeResidente("false");
         setDebMenCartCred("false");
@@ -304,6 +308,26 @@ public class CadExternoBean implements Serializable {
 
     }
 
+    public void limpaFormulario(){
+        setNomeExt("");
+        setRg("");
+        setCpf("");
+        setCrm("");
+        setEspec("");
+        setDtNascimento(null);
+        setSexo('\0');
+        setEndereco("");
+        setComplemento("");
+        setCep("");
+        setNumeroEnd("");
+        setCidade("");
+        setBairro("");
+        setTelComerc("");
+        setCelular("");
+        setWhatsapp("");
+        setEmail("");
+        
+    }
     public List<Map<String, Object>> comboCategoriaView() {
         try {
             setComboCategoria(cadExternoControle.listarCategoria());
