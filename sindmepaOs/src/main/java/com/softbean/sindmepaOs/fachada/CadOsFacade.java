@@ -92,7 +92,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método verOs " + e.getMessage());
+            System.out.println("ERRO no mÃ©todo verOs " + e.getMessage());
             e.printStackTrace();
         }
         return resultMaps;
@@ -143,7 +143,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método gridAnalise01 ");
+            System.out.println("ERRO no mÃ©todo gridAnalise01 ");
             e.printStackTrace();
         }
         return resultMaps;
@@ -194,7 +194,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método gridAnalise02 ");
+            System.out.println("ERRO no mÃ©todo gridAnalise02 ");
             e.printStackTrace();
         }
         return resultMaps;
@@ -245,7 +245,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método gridAnalise04 ");
+            System.out.println("ERRO no mÃ©todo gridAnalise04 ");
             e.printStackTrace();
         }
         return resultMaps;
@@ -276,6 +276,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,(select nm_setor from cad_setor where cd_setor = setor_abert_os) as setor_abert ");
         sql.append(" from cad_os ");
         sql.append(" where 1=1 ");
+        sql.append(" and setor_abert_os <> ").append(usuSetor);
 
         if (usuSetor != 7) {
             sql.append(" and setor_abert_os = ").append(usuSetor);
@@ -337,7 +338,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método gridPrincipal (OS)");
+            System.out.println("ERRO no mÃ©todo gridPrincipal (OS)");
             e.printStackTrace();
         }
         return resultMaps;
@@ -425,7 +426,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método gridPrincipal (OS)");
+            System.out.println("ERRO no mÃ©todo gridPrincipal (OS)");
             e.printStackTrace();
         }
         return resultMaps;
@@ -466,7 +467,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método listarCategPesq");
+            System.out.println("ERRO no mÃ©todo listarCategPesq");
             e.printStackTrace();
         }
         return resultMaps;
@@ -492,7 +493,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método listarSetorPesq");
+            System.out.println("ERRO no mÃ©todo listarSetorPesq");
             e.printStackTrace();
         }
         return resultMaps;
@@ -518,7 +519,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método listarSetorPesq");
+            System.out.println("ERRO no mÃ©todo listarSetorPesq");
             e.printStackTrace();
         }
         return resultMaps;
@@ -548,7 +549,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método usuDashboard " + e.getMessage());
+            System.out.println("ERRO no mÃ©todo usuDashboard " + e.getMessage());
             e.printStackTrace();
         }
         return resultMaps;
@@ -580,7 +581,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 resultMaps.add(map);
             }
         } catch (Exception e) {
-            System.out.println("ERRO no método usuDashboard " + e.getMessage());
+            System.out.println("ERRO no mÃ©todo usuDashboard " + e.getMessage());
             e.printStackTrace();
         }
         return resultMaps;

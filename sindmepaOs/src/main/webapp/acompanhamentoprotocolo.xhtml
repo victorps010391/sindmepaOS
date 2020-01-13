@@ -146,11 +146,7 @@
                         <p:menuitem value="Detalhes"
                                     actionListener="#{cadOsBean.visualizar(item.get('os'))}"
                                     onclick="PF('dlVerOs').show()" 
-                                    update=":frmDlVerOs"/>
-
-                        <p:menuitem value="Anexos" 
-                                    url="cadanexo.xhtml"
-                                    disabled="#{'06'.equals(item.get('cd_sit'))}"/>                      
+                                    update=":frmDlVerOs"/>                                     
                     </p:tieredMenu>
                 </p:column>
             </p:dataTable><br/>

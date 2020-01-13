@@ -253,7 +253,7 @@ public class CadAnaliseBean implements Serializable {
             setGrid02(analiseControle.gridAnalise02(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGrid03(analiseControle.gridAnalise03(getNrOs(), getPriorPesq(), loginBean.getUsuario().getSetorFunc().getCdSetor()));
             setGridTarefa(tarefaControle.gridTarefaAtendimento(getNrOs() != null ? getNrOs().toString() : null, loginBean.getUsuario().getSetorFunc().getCdSetor()));
-            context.ajax().update("@form :frmCadAnalise");
+            context.ajax().update(":frmCadAnalise");
 
         } catch (Exception e) {
             System.out.println("erro no método pesquisar(Analise) " + e.getMessage());
@@ -385,7 +385,7 @@ public class CadAnaliseBean implements Serializable {
 
                 if (notaControle.salvarNotaControle(getCadNotaObj(), getCadNotaObjPK())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro de Nota Realizado com Sucesso."));
-                    context.ajax().update("@form :frmAnaliseOs");
+                    context.ajax().update(":frmAnaliseOs");
                     context.executeScript("PF('dlCadNotaAnalise').hide()");
                     pesquisarNota();
                     limparCadastroNota();
