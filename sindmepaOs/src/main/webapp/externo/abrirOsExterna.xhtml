@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<<<<<<< HEAD
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
@@ -15,13 +14,13 @@
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
                 <title>SINDMEPA - Gerenciamento de Protocolos</title>
             </f:facet>            
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.structure.min.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.theme.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jjquery-ui.theme.min.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.css" />
-            <link type="text/css" rel="stylesheet" href="theme/jquery-ui.min.css" /> 
-            <link type="text/css" rel="stylesheet" href="theme/estilos.css" /> 
+            <link type="text/css" rel="stylesheet" href="jquery/jquery-ui.structure.css" />
+            <link type="text/css" rel="stylesheet" href="jquery/jquery-ui.structure.min.css" />
+            <link type="text/css" rel="stylesheet" href="jquery/jquery-ui.theme.css" />
+            <link type="text/css" rel="stylesheet" href="jquery/jjquery-ui.theme.min.css" />
+            <link type="text/css" rel="stylesheet" href="jquery/jquery-ui.css" />
+            <link type="text/css" rel="stylesheet" href="jquery/jquery-ui.min.css" /> 
+
         </h:head>
         <h:body>
             <div id="messages" style="display: block;">
@@ -38,474 +37,344 @@
                     <h:outputLabel value="Processando..." />
                     <p:graphicImage url="/images/loading.gif" />
                 </p:dialog>
-            </div>                             
+            </div>  
+
+
+            <h:form id="frmExterno" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
+                <p:growl id="growlFrmExterno" showDetail="true"/>    
+                <p:panel header="Abertura de Ordem de Serviço" style="width:500px; margin-left:auto; margin-right:auto;">
+                    <h:panelGrid columns="2" >
+
+                        <h:outputLabel value="Categoria: "/>
+                        <p:selectOneMenu id="comboCategoria" value="#{cadExternoBean.categoria}">                    
+                            <f:selectItem itemLabel="........................" />    
+                            <f:selectItems value="#{cadExternoBean.comboCategoriaView()}" var="categoria"  
+                                           itemLabel="#{categoria.get('categoria')}" itemValue="#{categoria.get('codigo')}" />
+                            <p:ajax listener="#{cadExternoBean.validador()}" update="@form protocolo sindicaliza"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <br/>
+                    <p:fieldset id="protocolo" legend="Protocolo" toggleable="true" toggleSpeed="500" rendered="#{cadExternoBean.abriOsExt}">
+                        <h:panelGrid columns="2" cellpadding="5">
+
+                            <div class="ui-g ui-fluid">
+                                <p:inputText placeholder="Nome completo"  />      
+
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">$</span>
+                                        <p:inputText placeholder="Price" />
+                                        <span class="ui-inputgroup-addon">.00</span>      
+                                    </div>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-inputgroup">
+                                        <span class="ui-inputgroup-addon">www</span>
+                                        <p:inputText placeholder="Website" />   
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGrid>
+                    </p:fieldset>
+                    <br />
+
+                    <p:fieldset id="sindicaliza" legend="SINDICALIZE-SE" toggleable="true" toggleSpeed="500" rendered="#{cadExternoBean.sindicaliza}">
+                        <h:panelGrid columns="2" cellpadding="5">
+
+                            <p:growl id="growl" sticky="true" showDetail="true"/>
+                            <p:wizard backLabel="Anterior" nextLabel="Próximo" flowListener="#{cadExternoBean.onFlowProcess}">
+                                <p:tab id="pagamento" title="Pagamento">
+
+                                    <!-- <h:outputLabel value="Setor responsável: " />
+                                    <p:selectOneMenu id="comboSetor" value="#{cadExternoBean.setor}">                    
+                                        <f:selectItem itemLabel="........................................" />    
+                                        <f:selectItems value="#{cadExternoBean.comboSetorView()}" var="setor"  
+                                                       itemLabel="#{setor.get('setor')}" itemValue="#{setor.get('codigo')}" />
+                                    </p:selectOneMenu> -->
+
+                                    <p:panel header="Ficha de autorização em conta corrente, contra-cheque, boleto de anuidade e débito recorrente no cartão de crédito.">
+                                        <p:messages />
+                                        <h:panelGrid columns="2" columnClasses="label, value">
+                                            <h:panelGrid columns="2" style="margin-bottom:50px" cellpadding="5">
+                                                <h:outputLabel value="Tipo de Pagamento: "/>
+                                                <p:selectOneMenu id="comboPag" value="#{cadExternoBean.pagamento}">                    
+                                                    <f:selectItem itemLabel="........................................" />    
+                                                    <f:selectItems value="#{cadExternoBean.comboTipoPagView()}" var="pag"  
+                                                                   itemLabel="#{pag.get('detalhe')}" itemValue="#{pag.get('codigo')}" />
+                                                    <p:ajax listener="#{cadExternoBean.validaDadoBancario()}" update="@form anuidRes"/>
+                                                </p:selectOneMenu>
+                                            </h:panelGrid>
+                                            <br/>
+                                            <p:panel id="anuidRes" header="Dados bancários" rendered="#{cadExternoBean.anuidadeResidente}" >
+                                                <h:outputText value="Autorizo a emissão do boleto da anuidade de 2019, com o desconto de 50%, 
+                                                              no valor correspondente a R$ 594,00, em favor do Sindicato dos Médicos. 
+                                                              Estou ciente que este valor será reajustado anualmente no mês de janeiro. " />
+                                                <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" />
+                                                <br /><br />
+                                                <p:growl id="messages" showDetail="true" />
+                                                <h:outputText value="Enviar declaração de residência: " />
+                                                <br />
+                                                <h1>"ANEXO: ANUIDADE RESIDENTE"</h1>
+                                                <!-- <p:fileUpload mode="simple" required="true"/> -->
+                                            </p:panel>
+
+                                            <p:panel id="debCCorrente" header="Dados bancários" rendered="#{cadExternoBean.debCCorrente}" >
+                                                <h:panelGrid columns="1" cellpadding="5">
+
+                                                    <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}">
+                                                        <h:outputText value="Autorizo o desconto da mensalidade através de débito em minha conta corrente, no dia 10 de cada mês, 
+                                                                      com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
+                                                                      Estou ciente que este valor será reajustado anualmente no mês de janeiro. " />
+                                                    </h:selectBooleanCheckbox>
+
+
+                                                    <h:outputText value="Agência: " />
+                                                    <p:inputText value="#{cadExternoBean.agencia}"/>
+
+                                                    <h:outputText value="Banco: " />
+                                                    <p:inputText value="#{cadExternoBean.banco}"/>
+
+                                                    <h:outputText value="Conta Corrente: " />
+                                                    <p:inputText value="#{cadExternoBean.cc}"/>
+                                                </h:panelGrid>
+                                            </p:panel>
+
+
+                                            <p:panel id="debCCheque" header="Dados bancários" rendered="#{cadExternoBean.debCCheque}" >
+                                                <h:panelGrid columns="1" cellpadding="5">
+                                                    <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" >
+                                                        <h:outputText value="Autorizo o desconto da mensalidade em meu contra-cheque, no dia 10 de cada mês, 
+                                                                      com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
+                                                                      Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
+                                                    </h:selectBooleanCheckbox>
+                                                    <h:outputText value="Número de matrícula: " />
+                                                    <p:inputText value="#{cadExternoBean.numMatricula}"/>
+                                                    <h:outputLabel value="Instituição a ser debitada: "/>
+                                                    <p:selectOneMenu id="comboInst" value="#{cadExternoBean.instituicao}">                    
+                                                        <f:selectItem itemLabel="........................................" />    
+                                                        <f:selectItems value="#{cadExternoBean.comboPagInstituicaoView()}" var="inst"  
+                                                                       itemLabel="#{inst.get('detalhe')}" itemValue="#{inst.get('codigo')}" />
+                                                    </p:selectOneMenu>
+                                                </h:panelGrid>
+                                            </p:panel>
+                                            <p:panel id="debMenCartCred" header="Dados bancários" rendered="#{cadExternoBean.debMenCartCred}" >
+                                                <h:outputText value="Autorizo o desconto da mensalidade em meu cartão de crédito, no valor correspondente a R$ 99,00 
+                                                              em favor do Sindicato dos Médicos do Pará. 
+                                                              Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
+                                                <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" />
+                                            </p:panel>
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+                                <p:tab id="pessoal" title="Informações">
+                                    <p:panel header="Dados Pessoais">
+                                        <p:messages />
+                                        <h:panelGrid columns="2">
+                                            <h:outputText value="Nome: " />
+                                            <p:inputText value="#{cadExternoBean.nomeExt}"/>
+
+                                            <h:outputText value="RG: " />
+                                            <p:inputText value="#{cadExternoBean.rg}"/>
+
+                                            <h:outputText value="CPF: " />
+                                            <p:inputText value="#{cadExternoBean.cpf}"/>
+
+                                            <h:outputText value="Número CRM: " />
+                                            <p:inputText value="#{cadExternoBean.crm}"/>
+
+                                            <h:outputText value="Especialidade: " />
+                                            <p:inputText value="#{cadExternoBean.espec}"/>
+
+                                            <h:outputText value="Data de Nascimento: " />
+                                            <p:calendar value="#{cadExternoBean.dtNascimento}" locale="pt" pattern="dd/MM/yyyy"/>
+
+                                            <h:outputText value="Sexo" />
+                                            <p:selectOneRadio value="#{cadExternoBean.sexo}">
+                                                <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                                <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                            </p:selectOneRadio>
+                                        </h:panelGrid>
+                                    </p:panel>
+
+                                    <p:panel header="Informações do endereço">
+                                        <p:messages />
+                                        <h:panelGrid columns="2">
+                                            <h:outputText value="Endereço: " />
+                                            <p:inputText value="#{cadExternoBean.endereco}"/>
+
+                                            <h:outputText value="Complemento: " />
+                                            <p:inputText />
+
+                                            <h:outputText value="CEP :" />
+                                            <p:inputText value="#{cadExternoBean.cep}"/>
+
+                                            <h:outputText value="Número: " />
+                                            <p:inputText value="#{cadExternoBean.numeroEnd}"/>
+
+                                            <h:outputText value="Bairro: " />
+                                            <p:inputText value="#{cadExternoBean.bairro}"/>
+
+                                            <h:outputText value="Cidade: " />
+                                            <p:inputText value="#{cadExternoBean.cidade}"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+
+
+
+                                    <p:panel header="Informações de Contato">
+                                        <p:messages />
+                                        <h:panelGrid columns="2">
+                                            <h:outputText value="Telefone comercial: " />
+                                            <p:inputText value="#{cadExternoBean.telComerc}"/>
+
+                                            <h:outputText value="Celular: " />
+                                            <p:inputText value="#{cadExternoBean.celular}"/>
+
+                                            <h:outputText value="Whatsapp: " />
+                                            <p:inputText value="#{cadExternoBean.whatsapp}"/>
+
+                                            <h:outputText value="E-mail: " />
+                                            <p:inputText value="#{cadExternoBean.email}" type="email"/>
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                </p:tab>
+
+
+
+                                <p:tab id="confirmacao" title="Confirmação">
+                                    <p:panel header="Confirmaçao">
+                                        <h:panelGrid id="confirmation" columns="3">
+                                            <h:panelGrid columns="2" >
+                                                <h:outputText value="Nome: " />
+                                                <h:outputText value="#{cadExternoBean.nomeExt}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="RG: " />
+                                                <h:outputText value="#{cadExternoBean.rg}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="CPF: " />
+                                                <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Número CRM: " />
+                                                <h:outputText value="#{cadExternoBean.crm}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Especialidade: " />
+                                                <h:outputText value="#{cadExternoBean.espec}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Data de Nascimento: " />
+                                                <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Sexo: " />
+                                                <h:outputText value="#{cadExternoBean.sexo}" styleClass="outputLabel"/>
+
+
+
+                                                <h:outputText value="Endereço: " />
+                                                <h:outputText value="#{cadExternoBean.endereco}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Complemento: " />
+                                                <h:outputText styleClass="outputLabel"/>
+
+                                                <h:outputText value="CEP: " />
+                                                <h:outputText value="#{cadExternoBean.cep}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Número: " />
+                                                <h:outputText value="#{cadExternoBean.numeroEnd}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Bairro: " />
+                                                <h:outputText value="#{cadExternoBean.bairro}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Cidade: " />
+                                                <h:outputText value="#{cadExternoBean.cidade}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Telefone Comercial: " />
+                                                <h:outputText value="#{cadExternoBean.telComerc}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Celular: " />
+                                                <h:outputText value="#{cadExternoBean.celular}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="Whatsapp: " />
+                                                <h:outputText value="#{cadExternoBean.whatsapp}" styleClass="outputLabel"/>
+
+                                                <h:outputText value="E-mail: " />
+                                                <h:outputText value="#{cadExternoBean.email}" styleClass="outputLabel"/>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+
+                                        <p:commandButton value="Enviar" 
+                                                         onclick="PF('dlConfirm').show()" 
+                                                         update=":frmDlConfirm"/>
+                                        
+                                        <br /> <p:staticMessage severity="warn" summary="ATENÇÃO!" detail="Anote seu chamado e após enviar seu cadastrado você será redirecionado para
+                                                             a página do PAGSEGURO." />
+                                        
+                                    </p:panel>
+                                </p:tab>
+                            </p:wizard>
+
+
+                        </h:panelGrid>
+                    </p:fieldset>
+                </p:panel>
+            </h:form>
+            
+            <p:dialog widgetVar="dlConfirm" header="CONFIRMAÇÃO" modal="true" appendTo="@(body)">
+            <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
+                <p:panel>
+                    <h:panelGrid columns="1" > 
+                        <h:outputLabel value="O número do protocolo foi enviado para seu e-mail" style="font-weight:bold ; font-size: medium;"/><br/>
+                        
+                        <h:outputLabel  value="IMPORTANTE: Aguarde o redirecionamento para o PAGSEGURO"
+                                       style="font-size: small; color: red; font-weight:bold"/>                       
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <p:commandButton action="#{cadExternoBean.salvarExterno()}" value="Ok" update="@form :frmExterno" icon="ui-icon ui-icon-check" onclick="PF('dlConfirm').hide()" />
+                        <!-- <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmExterno" icon="ui-icon ui-icon-closethick"/> -->
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:dialog>
+
         </h:body>
 
     </f:view>
 
-    <h:form id="frmExterno" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-        <p:growl id="growlFrmExterno" showDetail="true"/>    
-        <p:panel header="Abertura de Ordem de Serviço" >
-            <h:panelGrid columns="2" >
-
-                <h:outputLabel value="Categoria: "/>
-                <p:selectOneMenu id="comboCategoria" value="#{cadExternoBean.categoria}">                    
-                    <f:selectItem itemLabel="........................" />    
-                    <f:selectItems value="#{cadExternoBean.comboCategoriaView()}" var="categoria"  
-                                   itemLabel="#{categoria.get('categoria')}" itemValue="#{categoria.get('codigo')}" />
-                    <p:ajax listener="#{cadExternoBean.validador()}" update="@form protocolo sindicaliza"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
-            <br/>
-            <p:fieldset id="protocolo" legend="Protocolo" toggleable="true" toggleSpeed="500" rendered="#{cadExternoBean.abriOsExt}">
-                <h:panelGrid columns="2" cellpadding="5">
-
-                    <div class="ui-g ui-fluid">
-                        <p:inputText placeholder="Nome completo"  />      
-
-                        <div class="ui-g-12 ui-md-4">
-                            <div class="ui-inputgroup">
-                                <span class="ui-inputgroup-addon">$</span>
-                                <p:inputText placeholder="Price" />
-                                <span class="ui-inputgroup-addon">.00</span>      
-                            </div>
-                        </div>
-
-                        <div class="ui-g-12 ui-md-4">
-                            <div class="ui-inputgroup">
-                                <span class="ui-inputgroup-addon">www</span>
-                                <p:inputText placeholder="Website" />   
-                            </div>
-                        </div>
-                    </div>
-=======
-<ui:composition template="/template.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core">   
-
-    <style type="text/css">
-        .label {
-            width:20%;
-            padding:4px;
+    <script>
+        function redirecionarPagSeguro() {
+            window.open('http://pag.ae/7UvH_2im2', '_blank');
         }
-
-        .value {
-            width:80%;
-            padding:4px;
+        function redirecionarHomepage() {
+            window.open('https://sindmepa.org.br');
         }
-
-        .grid {
-            width:100%;
-        }
-
-        .error {
-            color: red;
-        }
-
-        .outputLabel {
-            font-weight: bold;
-        }
-
-        .grid {
-            width:33%;
-            padding:4px;
-        }
-    </style>
-
-    <ui:define name="centro"> 
-        <h:form id="frmExterno" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-            <p:growl id="growlFrmExterno" showDetail="true"/>    
-            <p:panel header="Abertura de Ordem de Serviço" >
-                <h:panelGrid columns="2" >                    
-                    <h:outputLabel value="Categoria: "/>
-                    <p:selectOneMenu id="comboCategoria" value="#{cadExternoBean.categoria}">                    
-                        <f:selectItem itemLabel="........................" />    
-                        <f:selectItems value="#{cadExternoBean.comboCategoriaView()}" var="categoria"  
-                                       itemLabel="#{categoria.get('categoria')}" itemValue="#{categoria.get('codigo')}" />
-                        <p:ajax listener="#{cadExternoBean.validador()}" update="@form protocolo sindicaliza"/>
-                    </p:selectOneMenu>
->>>>>>> ae44a938ade99b8b4fc6fca80f18fdfb96d9ef5a
-                </h:panelGrid>
-            </p:fieldset>
-            <br />
-
-            <p:fieldset id="sindicaliza" legend="SINDICALIZE-SE" toggleable="true" toggleSpeed="500" rendered="#{cadExternoBean.sindicaliza}">
-                <h:panelGrid columns="2" cellpadding="5">
-
-                    <p:growl id="growl" sticky="true" showDetail="true"/>
-                    <p:wizard flowListener="#{cadExternoBean.onFlowProcess}">
-                        <p:tab id="pagamento" title="Pagamento">
-
-                            <h:outputLabel value="Setor responsável: " />
-                            <p:selectOneMenu id="comboSetor" value="#{cadExternoBean.setor}">                    
-                                <f:selectItem itemLabel="........................................" />    
-                                <f:selectItems value="#{cadExternoBean.comboSetorView()}" var="setor"  
-                                               itemLabel="#{setor.get('setor')}" itemValue="#{setor.get('codigo')}" />
-                            </p:selectOneMenu>
-
-                            <p:panel header="Ficha de autorização em conta corrente, contra-cheque, boleto de anuidade e débito recorrente no cartão de crédito.">
-                                <p:messages />
-                                <h:panelGrid columns="2" columnClasses="label, value">
-                                    <h:panelGrid columns="2" style="margin-bottom:50px" cellpadding="5">
-                                        <h:outputLabel value="Tipo de Pagamento: "/>
-                                        <p:selectOneMenu id="comboPag" value="#{cadExternoBean.pagamento}">                    
-                                            <f:selectItem itemLabel="........................................" />    
-                                            <f:selectItems value="#{cadExternoBean.comboTipoPagView()}" var="pag"  
-                                                           itemLabel="#{pag.get('detalhe')}" itemValue="#{pag.get('codigo')}" />
-                                            <p:ajax listener="#{cadExternoBean.validaDadoBancario()}" update="@form anuidRes"/>
-                                        </p:selectOneMenu>
-                                    </h:panelGrid>
-                                    <br/>
-                                    <p:panel id="anuidRes" header="Dados bancários" rendered="#{cadExternoBean.anuidadeResidente}" >
-                                        <h:outputText value="Autorizo a emissão do boleto da anuidade de 2019, com o desconto de 50%, 
-                                                      no valor correspondente a R$ 594,00, em favor do Sindicato dos Médicos. 
-                                                      Estou ciente que este valor será reajustado anualmente no mês de janeiro. " />
-                                        <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" />
-                                        <br /><br />
-                                        <p:growl id="messages" showDetail="true" />
-                                        <h:outputText value="Enviar declaração de residência: " />
-                                        <br />
-                                        <h1>"ANEXO: ANUIDADE RESIDENTE"</h1>
-                                        <!-- <p:fileUpload mode="simple" required="true"/> -->
-                                    </p:panel>
-
-                                    <p:panel id="debCCorrente" header="Dados bancários" rendered="#{cadExternoBean.debCCorrente}" >
-                                        <h:panelGrid columns="1" cellpadding="5">
-
-                                            <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}">
-                                                <h:outputText value="Autorizo o desconto da mensalidade através de débito em minha conta corrente, no dia 10 de cada mês, 
-                                                              com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
-                                                              Estou ciente que este valor será reajustado anualmente no mês de janeiro. " />
-                                            </h:selectBooleanCheckbox>
-
-
-                                            <h:outputText value="Agência: " />
-                                            <p:inputText value="#{cadExternoBean.agencia}"/>
-
-                                            <h:outputText value="Banco: " />
-                                            <p:inputText value="#{cadExternoBean.banco}"/>
-
-                                            <h:outputText value="Conta Corrente: " />
-                                            <p:inputText value="#{cadExternoBean.cc}"/>
-                                        </h:panelGrid>
-<<<<<<< HEAD
-                                    </p:panel>
-
-
-                                    <p:panel id="debCCheque" header="Dados bancários" rendered="#{cadExternoBean.debCCheque}" >
-                                        <h:panelGrid columns="1" cellpadding="5">
-                                            <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" >
-                                                <h:outputText value="Autorizo o desconto da mensalidade em meu contra-cheque, no dia 10 de cada mês, 
-                                                              com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
-                                                              Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
-                                            </h:selectBooleanCheckbox>
-                                            <h:outputText value="Número de matrícula: " />
-                                            <p:inputText value="#{cadExternoBean.numMatricula}"/>
-                                            <h:outputLabel value="Instituição a ser debitada: "/>
-                                            <p:selectOneMenu id="comboInst" value="#{cadExternoBean.instituicao}">                    
-                                                <f:selectItem itemLabel="........................................" />    
-                                                <f:selectItems value="#{cadExternoBean.comboPagInstituicaoView()}" var="inst"  
-                                                               itemLabel="#{inst.get('detalhe')}" itemValue="#{inst.get('codigo')}" />
-                                            </p:selectOneMenu>
-                                        </h:panelGrid>
-                                    </p:panel>
-                                    <p:panel id="debMenCartCred" header="Dados bancários" rendered="#{cadExternoBean.debMenCartCred}" >
-                                        <h:outputText value="Autorizo o desconto da mensalidade em meu cartão de crédito, no valor correspondente a R$ 99,00 
-                                                      em favor do Sindicato dos Médicos do Pará. 
-                                                      Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
-                                        <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" />
-                                    </p:panel>
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-
-                        <p:tab id="pessoal" title="Informações">
-                            <p:panel header="Dados Pessoais">
-                                <p:messages />
-                                <h:panelGrid columns="2" columnClasses="label, value">
-                                    <h:outputText value="Nome: " />
-                                    <p:inputText value="#{cadExternoBean.nomeExt}"/>
-
-                                    <h:outputText value="RG: " />
-                                    <p:inputText value="#{cadExternoBean.rg}"/>
-
-                                    <h:outputText value="CPF: " />
-                                    <p:inputText value="#{cadExternoBean.cpf}"/>
-
-                                    <h:outputText value="Número CRM: " />
-                                    <p:inputText value="#{cadExternoBean.crm}"/>
-
-                                    <h:outputText value="Especialidade: " />
-                                    <p:inputText value="#{cadExternoBean.espec}"/>
-
-                                    <h:outputText value="Data de Nascimento: " />
-                                    <p:calendar value="#{cadExternoBean.dtNascimento}"/>
-
-                                    <h:outputText value="Sexo" />
-                                    <p:selectOneButton value="#{cadExternoBean.sexo}">
-                                        <f:selectItem itemLabel="Masculino" itemValue="M" />
-                                        <f:selectItem itemLabel="Feminino" itemValue="F" />
-                                    </p:selectOneButton>
-                                </h:panelGrid>
-                            </p:panel>
-
-
-
-                            <p:panel header="Informações do endereço">
-                                <p:messages />
-                                <h:panelGrid columns="2" columnClasses="label, value">
-                                    <h:outputText value="Endereço: " />
-                                    <p:inputText value="#{cadExternoBean.endereco}"/>
-
-                                    <h:outputText value="Complemento: " />
-                                    <p:inputText />
-=======
-                                        <br/>
-                                        <p:panel id="anuidRes" header="Dados bancários" rendered="#{cadExternoBean.anuidadeResidente}" >
-                                            <h:outputText value="Autorizo a emissão do boleto da anuidade de 2019, com o desconto de 50%, 
-                                                          no valor correspondente a R$ 594,00, em favor do Sindicato dos Médicos. 
-                                                          Estou ciente que este valor será reajustado anualmente no mês de janeiro. " />
-                                            <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" />
-                                            <br /><br />
-                                            <p:growl id="messages" showDetail="true" />
-                                            <h:outputText value="Enviar declaração de residência: " />
-                                            <br />
-                                            <h1>"ANEXO: ANUIDADE RESIDENTE"</h1>
-                                            <!-- <p:fileUpload mode="simple" required="true"/> -->
-                                        </p:panel>
-
-                                        <p:panel id="debCCorrente" header="Dados bancários" rendered="#{cadExternoBean.debCCorrente}" >
-                                            <h:panelGrid columns="1" cellpadding="5">
-
-                                                <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}">
-                                                    <h:outputText value="Autorizo o desconto da mensalidade através de débito em minha conta corrente, no dia 10 de cada mês, 
-                                                                  com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
-                                                                  Estou ciente que este valor será reajustado anualmente no mês de janeiro. " />
-                                                </h:selectBooleanCheckbox>
-
-
-                                                <h:outputText value="Agência: " />
-                                                <p:inputText value="#{cadExternoBean.agencia}"/>
-
-                                                <h:outputText value="Banco: " />
-                                                <p:inputText value="#{cadExternoBean.banco}"/>
-
-                                                <h:outputText value="Conta Corrente: " />
-                                                <p:inputText value="#{cadExternoBean.cc}"/>
-                                            </h:panelGrid>
-                                        </p:panel>
-
-
-                                        <p:panel id="debCCheque" header="Dados bancários" rendered="#{cadExternoBean.debCCheque}" >
-                                            <h:panelGrid columns="1" cellpadding="5">
-                                                <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" >
-                                                    <h:outputText value="Autorizo o desconto da mensalidade em meu contra-cheque, no dia 10 de cada mês, 
-                                                                  com valor correspondente a R$ 99,00 em favor do Sindicato dos Médicos do Pará. 
-                                                                  Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
-                                                </h:selectBooleanCheckbox>
-                                                <h:outputText value="Número de matrícula: " />
-                                                <p:inputText value="#{cadExternoBean.numMatricula}"/>
-                                                <h:outputLabel value="Instituição a ser debitada: "/>
-                                                <p:selectOneMenu id="comboInst" value="#{cadExternoBean.instituicao}">                    
-                                                    <f:selectItem itemLabel="........................................" />    
-                                                    <f:selectItems value="#{cadExternoBean.comboPagInstituicaoView()}" var="inst"  
-                                                                   itemLabel="#{inst.get('detalhe')}" itemValue="#{inst.get('codigo')}" />
-                                                </p:selectOneMenu>
-                                            </h:panelGrid>
-                                        </p:panel>
-                                        <p:panel id="debMenCartCred" header="Dados bancários" rendered="#{cadExternoBean.debMenCartCred}" >
-                                            <h:outputText value="Autorizo o desconto da mensalidade em meu cartão de crédito, no valor correspondente a R$ 99,00 
-                                                          em favor do Sindicato dos Médicos do Pará. 
-                                                          Estou ciente que este valor será reajustado anualmente no mês de janeiro." />
-                                            <h:selectBooleanCheckbox required="true" value="#{cadExternoBean.liAceito}" />
-                                        </p:panel>
-                                    </h:panelGrid>
-                                </p:panel>
-                            </p:tab>
->>>>>>> ae44a938ade99b8b4fc6fca80f18fdfb96d9ef5a
-
-                                    <h:outputText value="CEP :" />
-                                    <p:inputText value="#{cadExternoBean.cep}"/>
-
-                                    <h:outputText value="Número: " />
-                                    <p:inputText value="#{cadExternoBean.numeroEnd}"/>
-
-                                    <h:outputText value="Bairro: " />
-                                    <p:inputText value="#{cadExternoBean.bairro}"/>
-
-                                    <h:outputText value="Cidade: " />
-                                    <p:inputText value="#{cadExternoBean.cidade}"/>
-                                </h:panelGrid>
-                            </p:panel>
-
-
-
-                            <p:panel header="Informações de Contato">
-                                <p:messages />
-                                <h:panelGrid columns="2" columnClasses="label, value">
-                                    <h:outputText value="Telefone comercial: " />
-                                    <p:inputText value="#{cadExternoBean.telComerc}"/>
-
-                                    <h:outputText value="Celular: " />
-                                    <p:inputText value="#{cadExternoBean.celular}"/>
-
-                                    <h:outputText value="Whatsapp: " />
-                                    <p:inputText value="#{cadExternoBean.whatsapp}"/>
-
-                                    <h:outputText value="E-mail: " />
-                                    <p:inputText value="#{cadExternoBean.email}" type="email"/>
-
-                                </h:panelGrid>
-                            </p:panel>
-                        </p:tab>
-
-
-
-                        <p:tab id="confirmacao" title="Confirmação">
-                            <p:panel header="Confirmaçao">
-                                <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
-                                    <h:panelGrid columns="2" columnClasses="label, value">
-                                        <h:outputText value="Nome: " />
-                                        <h:outputText value="#{cadExternoBean.nomeExt}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="RG: " />
-                                        <h:outputText value="#{cadExternoBean.rg}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="CPF: " />
-                                        <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Número CRM: " />
-                                        <h:outputText value="#{cadExternoBean.crm}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Especialidade: " />
-                                        <h:outputText value="#{cadExternoBean.espec}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Data de Nascimento: " />
-                                        <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Sexo: " />
-                                        <h:outputText value="#{cadExternoBean.sexo}" styleClass="outputLabel"/>
-
-
-
-                                        <h:outputText value="Endereço: " />
-                                        <h:outputText value="#{cadExternoBean.endereco}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Complemento: " />
-                                        <h:outputText styleClass="outputLabel"/>
-
-                                        <h:outputText value="CEP: " />
-                                        <h:outputText value="#{cadExternoBean.cep}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Número: " />
-                                        <h:outputText value="#{cadExternoBean.numeroEnd}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Bairro: " />
-                                        <h:outputText value="#{cadExternoBean.bairro}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Cidade: " />
-                                        <h:outputText value="#{cadExternoBean.cidade}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Telefone Comercial: " />
-                                        <h:outputText value="#{cadExternoBean.telComerc}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Celular: " />
-                                        <h:outputText value="#{cadExternoBean.celular}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="Whatsapp: " />
-                                        <h:outputText value="#{cadExternoBean.whatsapp}" styleClass="outputLabel"/>
-
-                                        <h:outputText value="E-mail: " />
-<<<<<<< HEAD
-                                        <h:outputText value="#{cadExternoBean.email}" styleClass="outputLabel"/>
-=======
-                                        <p:inputText value="#{cadExternoBean.email}" type="email"/>
-
-                                    </h:panelGrid>
-                                </p:panel>
-                            </p:tab>
-
-
-
-                            <p:tab id="confirmacao" title="Confirmação">
-                                <p:panel header="Confirmaçao">
-                                    <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
-                                        <h:panelGrid columns="2" columnClasses="label, value">
-                                            <h:outputText value="Nome: " />
-                                            <h:outputText value="#{cadExternoBean.nomeExt}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="RG: " />
-                                            <h:outputText value="#{cadExternoBean.rg}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="CPF: " />
-                                            <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Número CRM: " />
-                                            <h:outputText value="#{cadExternoBean.crm}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Especialidade: " />
-                                            <h:outputText value="#{cadExternoBean.espec}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Data de Nascimento: " />
-                                            <h:outputText value="#{cadExternoBean.cpf}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Sexo: " />
-                                            <h:outputText value="#{cadExternoBean.sexo}" styleClass="outputLabel"/>
-
-
-
-                                            <h:outputText value="Endereço: " />
-                                            <h:outputText value="#{cadExternoBean.endereco}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Complemento: " />
-                                            <h:outputText styleClass="outputLabel"/>
-
-                                            <h:outputText value="CEP: " />
-                                            <h:outputText value="#{cadExternoBean.cep}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Número: " />
-                                            <h:outputText value="#{cadExternoBean.numeroEnd}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Bairro: " />
-                                            <h:outputText value="#{cadExternoBean.bairro}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Cidade: " />
-                                            <h:outputText value="#{cadExternoBean.cidade}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Telefone Comercial: " />
-                                            <h:outputText value="#{cadExternoBean.telComerc}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Celular: " />
-                                            <h:outputText value="#{cadExternoBean.celular}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="Whatsapp: " />
-                                            <h:outputText value="#{cadExternoBean.whatsapp}" styleClass="outputLabel"/>
-
-                                            <h:outputText value="E-mail: " />
-                                            <h:outputText value="#{cadExternoBean.email}" styleClass="outputLabel"/>                                                                                        
-                                        </h:panelGrid>
-                                        <h:outputLabel value="Setor responsável: "/>
-                                        <p:selectOneMenu id="comboSetor" value="#{cadExternoBean.setor}">                    
-                                            <f:selectItem itemLabel="........................................" />    
-                                            <f:selectItems value="#{cadExternoBean.comboSetorView()}" var="setor"  
-                                                           itemLabel="#{setor.get('setor')}" itemValue="#{setor.get('codigo')}" />
-                                        </p:selectOneMenu>
->>>>>>> ae44a938ade99b8b4fc6fca80f18fdfb96d9ef5a
-                                    </h:panelGrid>
-                                </h:panelGrid>
-
-                                <p:commandButton value="Enviar" actionListener="#{cadExternoBean.salvarExterno()}" update="growl" process="@this"/>
-                            </p:panel>
-                        </p:tab>
-                    </p:wizard>
-
-
-                </h:panelGrid>
-            </p:fieldset>
-        </p:panel>
-    </h:form>
-
+    </script>
+    <script type="text/javascript">
+        PrimeFaces.locales['pt'] = {
+            closeText: 'Fechar',
+            prevText: 'Anterior',
+            nextText: 'Próximo',
+            currentText: 'Começo',
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+            weekHeader: 'Semana',
+            firstDay: 0,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            timeOnlyTitle: 'Só Horas',
+            timeText: 'Tempo',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            ampm: false,
+            month: 'Mês',
+            week: 'Semana',
+            day: 'Dia',
+            allDayText: 'Todo o Dia'
+        };
+    </script>
 </html>
