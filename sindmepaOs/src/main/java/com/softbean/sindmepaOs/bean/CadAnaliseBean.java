@@ -326,10 +326,10 @@ public class CadAnaliseBean implements Serializable {
             getObjOs().setDescFinalizacaoOs(getDescFinal());
             getObjOs().setSitOs(getSitFinal());
             if (osControle.alterarOsControle(getObjOs())) {
-                limparFinalização();                
                 context.executeScript("PF('dlResolvOs').hide()");
                 analise(getObjOs().getNrOs());
-                disparaEmailAtendimentoFinalizado(getCadExternoObj().getEmail());
+                disparaEmailAtendimentoFinalizado(getCadExternoObj().getEmail(), getDescFinal());
+                limparFinalização();
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObjOs().getNrOs() + " finalizado com sucesso."));
             } else {
                 limparFinalização();
@@ -342,7 +342,7 @@ public class CadAnaliseBean implements Serializable {
         }
     }
 
-    public Boolean disparaEmailAtendimentoFinalizado(String destinatario) {
+    public Boolean disparaEmailAtendimentoFinalizado(String destinatario, String resolucao) {
         try {
             String assunto = "ATENDIMENTO DE PROTOCOLO FINALIZADO";
 
@@ -375,7 +375,7 @@ public class CadAnaliseBean implements Serializable {
             corpoEmailAbertura.append("<br /><br />");
             corpoEmailAbertura.append("<strong>DADOS DA RESOLUÇÃO: </strong><br />");
             corpoEmailAbertura.append("<strong>Resolução: </strong>");
-            corpoEmailAbertura.append(getDescFinal());                                   
+            corpoEmailAbertura.append(resolucao);
             corpoEmailAbertura.append("<br />");
             corpoEmailAbertura.append("<br /><br /><br />");
             corpoEmailAbertura.append("<i>Email Enviado automaticamente pelo sistema ");
