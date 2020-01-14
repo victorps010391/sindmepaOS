@@ -4,7 +4,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
 
     <f:view contentType="text/html"> 
         <h:head>
@@ -95,13 +96,19 @@
                                                      action="#{cadAnexoBean.paginaAnexo(cadAnaliseBean.vos)}"
                                                      disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/>
 
-                                    <p:commandButton value="Visualizar Dados do Solicitante" rendered="#{cadAnaliseBean.dadosSindicais()}" />
+                                    <p:commandButton value="Visualizar Dados do Solicitante" 
+                                                     actionListener="#{cadAnaliseBean.carregaDadosSindicais()}"
+                                                     rendered="#{cadAnaliseBean.dadosSindicais()}" 
+                                                     onclick="PF('dlVerSind').show()" 
+                                                     update=":frmDlVerSind"/>
 
                                     <p:commandButton value="Resolver"
                                                      actionListener="#{cadAnaliseBean.limparFinalização()}"                                                 
                                                      disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/> 
 
-                                    <p:commandButton value="Voltar" action="#{cadAnaliseBean.voltarCadAnalise()}" style="float: right" />                    
+                                    <p:commandButton value="Voltar" 
+                                                     action="#{cadAnaliseBean.voltarCadAnalise()}" 
+                                                     style="float: right" />                    
                                 </f:facet>
                             </p:panel>
 
@@ -474,7 +481,87 @@
                                 </h:panelGrid>
                             </p:panel>
                         </h:form>
-                    </p:dialog>        
+                    </p:dialog>   
+
+                    <p:dialog widgetVar="dlVerSind" header="Informações para Sindicalização" responsive="true" height="500"
+                              modal="true" appendTo="@(body)">
+                        <h:form id="frmDlVerSind" acceptcharset="ISO-8859-1">
+                            <p:panel header="DADOS DO SOLICITANTE">                    
+                                <h:panelGrid columns="4" >
+                                    <h:outputText value="Nome: " styleClass="tituloV"/>
+                                    <h:outputText id="nome"  value="#{cadAnaliseBean.snome_ext}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiaNome" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipNome" trigger="copiaNome" action="copy" target="nome"/>   
+
+                                    <h:outputText value="RG: " styleClass="tituloV"/>
+                                    <h:outputText id="rg" value="#{cadAnaliseBean.srg_ext}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiaRg" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipRg" trigger="copiaRg" action="copy" target="rg"/>
+
+                                    <h:outputText value="CPF: " styleClass="tituloV"/>
+                                    <h:outputText id="cpf" value="#{cadAnaliseBean.scpf_ext}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiacpf" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipcpf" trigger="copiacpf" action="copy" target="cpf"/>
+
+                                    <h:outputText value="Número CRM: " styleClass="tituloV"/>
+                                    <h:outputText id="crm" value="#{cadAnaliseBean.scrm_ext}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiacrm" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipcrm" trigger="copiacrm" action="copy" target="crm"/>
+
+                                    <h:outputText value="Especialidade: " styleClass="tituloV"/>
+                                    <h:outputText id="esp" value="#{cadAnaliseBean.sesp_ext}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiaesp" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipesp" trigger="copiaesp" action="copy" target="esp"/>
+
+                                    <h:outputText value="Data de Nascimento: " styleClass="tituloV"/>
+                                    <h:outputText id="nasc" value="#{cadAnaliseBean.sdt_nasc_ext}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copianasc" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipnasc" trigger="copianasc" action="copy" target="nasc"/>
+
+                                    <h:outputText value="Sexo: " styleClass="tituloV"/>
+                                    <h:outputText id="sex" value="#{cadAnaliseBean.ssexo_ext}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiasex" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipsex" trigger="copiasex" action="copy" target="sex"/>
+
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="2" >                                  
+
+
+
+                                    <!--                                    <h:outputText value="Endereço: " />
+                                                                        <h:outputText value="# {cadExternoBean.endereco}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="Complemento: " />
+                                                                        <h:outputText styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="CEP: " />
+                                                                        <h:outputText value="# {cadExternoBean.cep}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="Número: " />
+                                                                        <h:outputText value="# {cadExternoBean.numeroEnd}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="Bairro: " />
+                                                                        <h:outputText value="# {cadExternoBean.bairro}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="Cidade: " />
+                                                                        <h:outputText value="# {cadExternoBean.cidade}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="Telefone Comercial: " />
+                                                                        <h:outputText value="# {cadExternoBean.telComerc}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="Celular: " />
+                                                                        <h:outputText value="# {cadExternoBean.celular}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="Whatsapp: " />
+                                                                        <h:outputText value="# {cadExternoBean.whatsapp}" styleClass="outputLabel"/>
+                                    
+                                                                        <h:outputText value="E-mail: " />
+                                                                        <h:outputText value="# {cadExternoBean.email}" styleClass="outputLabel"/>-->
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:form>
+                    </p:dialog>
 
                 </p:layoutUnit>
             </p:layout>

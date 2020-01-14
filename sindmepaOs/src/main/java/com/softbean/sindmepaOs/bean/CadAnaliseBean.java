@@ -25,7 +25,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.primefaces.PrimeFaces;
 
-
 /**
  *
  * @author admin
@@ -56,6 +55,7 @@ public class CadAnaliseBean implements Serializable {
     CadNotaPK cadNotaObjPK;
     CadTarefa objTarefa;
     CadTarefaPK objTarefaPk;
+
     Integer nrOs;
     String priorPesq;
     List<Map<String, Object>> grid01;
@@ -64,12 +64,13 @@ public class CadAnaliseBean implements Serializable {
     List<Map<String, Object>> gridTarefa;
     List<Map<String, Object>> priorListaPesq;
     List<Map<String, Object>> verOs;
+    List<Map<String, Object>> verDadosSindicais;
     List<Map<String, Object>> listarFinalizacao;
     List<Map<String, Object>> notaAnalise;
     List<Map<String, Object>> tarefaAnalise;
     List<Map<String, Object>> setorTarefa;
 
-    Integer Vos;
+    Integer Vos, VfuncAbert;
     String Vprioridade;
     String Vcategoria;
     String Vsetor_responsavel;
@@ -90,6 +91,23 @@ public class CadAnaliseBean implements Serializable {
     Integer cdSetorTarefa;
     String descTarefa;
     String descObsTarefa;
+
+    String Snome_ext;
+    String Srg_ext;
+    String Scpf_ext;
+    String Scrm_ext;
+    String Sesp_ext;
+    String Sdt_nasc_ext;
+    String Ssexo_ext;
+    String Sendereco;
+    String Scep_end;
+    String Snm_end;
+    String Sbairro_end;
+    String Scid_end;
+    String Stel_com_end;
+    String Scel_end;
+    String Swtp_end;
+    String Semail;
 
     public String voltarCadAnalise() {
         try {
@@ -128,6 +146,7 @@ public class CadAnaliseBean implements Serializable {
                 setVcod_categoria((Integer) elemento.get("cod_categoria"));
                 setVfunc_abert((String) elemento.get("func_abert"));
                 setVdesc_final((String) elemento.get("desc_finalizacao"));
+                setVfuncAbert((Integer) elemento.get("func_abert_os"));
             }
             limparCadastroNota();
             limparCadastroTarefa();
@@ -188,6 +207,7 @@ public class CadAnaliseBean implements Serializable {
                 setVcod_categoria((Integer) elemento.get("cod_categoria"));
                 setVfunc_abert((String) elemento.get("func_abert"));
                 setVdesc_final((String) elemento.get("desc_finalizacao"));
+                setVfuncAbert((Integer) elemento.get("func_abert_os"));
             }
             setNotaAnalise(null);
             setTarefaAnalise(null);
@@ -202,6 +222,36 @@ public class CadAnaliseBean implements Serializable {
             System.out.println("Erro no método analiseIniciada " + e.getMessage());
             e.printStackTrace();
             return "";
+        }
+    }
+
+    public void carregaDadosSindicais() {
+        try {
+            setVerDadosSindicais(null);
+            setVerDadosSindicais(osControle.verDadosSindicais(getVfuncAbert()));
+            for (Map<String, Object> elemento : getVerDadosSindicais()) {
+                
+                setSnome_ext((String) elemento.get("nome_ext"));
+                setSrg_ext((String) elemento.get("rg_ext"));
+                setScpf_ext((String) elemento.get("cpf_ext"));
+                setScrm_ext((String) elemento.get("crm_ext"));
+                setSesp_ext((String) elemento.get("esp_ext"));
+                setSdt_nasc_ext((String) elemento.get("dt_nasc_ext"));
+                setSsexo_ext((String) elemento.get("sexo_ext"));
+                setSendereco((String) elemento.get("endereco"));
+                setScep_end((String) elemento.get("cep_end"));
+                setSnm_end((String) elemento.get("nm_end"));
+                setSbairro_end((String) elemento.get("bairro_end"));
+                setScid_end((String) elemento.get("cid_end"));
+                setStel_com_end((String) elemento.get("tel_com_end"));
+                setScel_end((String) elemento.get("cel_end"));
+                setSwtp_end((String) elemento.get("wtp_end"));
+                setSemail((String) elemento.get("email"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro no método carregaDadosSindicais " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -524,6 +574,14 @@ public class CadAnaliseBean implements Serializable {
         this.priorPesq = priorPesq;
     }
 
+    public List<Map<String, Object>> getVerDadosSindicais() {
+        return verDadosSindicais;
+    }
+
+    public void setVerDadosSindicais(List<Map<String, Object>> verDadosSindicais) {
+        this.verDadosSindicais = verDadosSindicais;
+    }
+
     public List<Map<String, Object>> getSetorTarefa() {
         return setorTarefa;
     }
@@ -610,6 +668,14 @@ public class CadAnaliseBean implements Serializable {
 
     public void setVerOs(List<Map<String, Object>> verOs) {
         this.verOs = verOs;
+    }
+
+    public Integer getVfuncAbert() {
+        return VfuncAbert;
+    }
+
+    public void setVfuncAbert(Integer VfuncAbert) {
+        this.VfuncAbert = VfuncAbert;
     }
 
     public Integer getVos() {
@@ -766,6 +832,134 @@ public class CadAnaliseBean implements Serializable {
 
     public void setObjTarefaPk(CadTarefaPK objTarefaPk) {
         this.objTarefaPk = objTarefaPk;
+    }
+
+    public String getSnome_ext() {
+        return Snome_ext;
+    }
+
+    public void setSnome_ext(String Snome_ext) {
+        this.Snome_ext = Snome_ext;
+    }
+
+    public String getSrg_ext() {
+        return Srg_ext;
+    }
+
+    public void setSrg_ext(String Srg_ext) {
+        this.Srg_ext = Srg_ext;
+    }
+
+    public String getScpf_ext() {
+        return Scpf_ext;
+    }
+
+    public void setScpf_ext(String Scpf_ext) {
+        this.Scpf_ext = Scpf_ext;
+    }
+
+    public String getScrm_ext() {
+        return Scrm_ext;
+    }
+
+    public void setScrm_ext(String Scrm_ext) {
+        this.Scrm_ext = Scrm_ext;
+    }
+
+    public String getSesp_ext() {
+        return Sesp_ext;
+    }
+
+    public void setSesp_ext(String Sesp_ext) {
+        this.Sesp_ext = Sesp_ext;
+    }
+
+    public String getSdt_nasc_ext() {
+        return Sdt_nasc_ext;
+    }
+
+    public void setSdt_nasc_ext(String Sdt_nasc_ext) {
+        this.Sdt_nasc_ext = Sdt_nasc_ext;
+    }
+
+    public String getSsexo_ext() {
+        return Ssexo_ext;
+    }
+
+    public void setSsexo_ext(String Ssexo_ext) {
+        this.Ssexo_ext = Ssexo_ext;
+    }
+
+    public String getSendereco() {
+        return Sendereco;
+    }
+
+    public void setSendereco(String Sendereco) {
+        this.Sendereco = Sendereco;
+    }
+
+    public String getScep_end() {
+        return Scep_end;
+    }
+
+    public void setScep_end(String Scep_end) {
+        this.Scep_end = Scep_end;
+    }
+
+    public String getSnm_end() {
+        return Snm_end;
+    }
+
+    public void setSnm_end(String Snm_end) {
+        this.Snm_end = Snm_end;
+    }
+
+    public String getSbairro_end() {
+        return Sbairro_end;
+    }
+
+    public void setSbairro_end(String Sbairro_end) {
+        this.Sbairro_end = Sbairro_end;
+    }
+
+    public String getScid_end() {
+        return Scid_end;
+    }
+
+    public void setScid_end(String Scid_end) {
+        this.Scid_end = Scid_end;
+    }
+
+    public String getStel_com_end() {
+        return Stel_com_end;
+    }
+
+    public void setStel_com_end(String Stel_com_end) {
+        this.Stel_com_end = Stel_com_end;
+    }
+
+    public String getScel_end() {
+        return Scel_end;
+    }
+
+    public void setScel_end(String Scel_end) {
+        this.Scel_end = Scel_end;
+    }
+
+    public String getSwtp_end() {
+        return Swtp_end;
+    }
+
+    public void setSwtp_end(String Swtp_end) {
+        this.Swtp_end = Swtp_end;
+    }
+
+    public String getSemail() {
+        return Semail;
+    }
+
+    public void setSemail(String Semail) {
+        this.Semail = Semail;
     }
 
 }

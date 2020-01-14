@@ -106,19 +106,23 @@ public class CadOsControle implements Serializable {
         return osFacade.listarSituaPesq();
     }
 
-    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor, 
+    public List<Map<String, Object>> gridPrincipal(Integer nrOs, Integer codCateg, Integer codSetor,
             Integer codFuncRespon, String sit, Integer usuSetor,
             Date dtIni, Date dtFim, Date dtIniFecha, Date dtFimFecha) {
         return osFacade.gridPrincipal(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor, dtIni, dtFim, dtIniFecha, dtFimFecha);
     }
 
-    public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor, 
+    public List<Map<String, Object>> gridPrincipalOs(Integer nrOs, Integer codCateg, Integer codSetor,
             Integer codFuncRespon, String sit, Integer usuSetor,
             Date dtIni, Date dtFim, Date dtIniFecha, Date dtFimFecha) {
-        return osFacade.gridPrincipalOs(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor,  dtIni,  dtFim,  dtIniFecha,  dtFimFecha);
+        return osFacade.gridPrincipalOs(nrOs, codCateg, codSetor, codFuncRespon, sit, usuSetor, dtIni, dtFim, dtIniFecha, dtFimFecha);
     }
 
     public Integer validarFinalizacao(Integer os) {
         return osFacade.validarFinalizacao(os);
+    }
+
+    public List<Map<String, Object>> verDadosSindicais(Integer id) {
+        return osFacade.verDadosSindicais(id);
     }
 }

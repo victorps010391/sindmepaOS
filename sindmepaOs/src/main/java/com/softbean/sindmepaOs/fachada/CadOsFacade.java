@@ -35,6 +35,61 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         super(CadOs.class);
     }
 
+    public List<Map<String, Object>> verDadosSindicais(Integer id) {
+        List<Object[]> resultArrays;
+        List<Map<String, Object>> resultMaps = null;
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select upper(nome_ext) as nome_ext                                                ");
+        sql.append("        ,rg_ext                                                                    ");
+        sql.append("        ,cpf_ext                                                                   ");
+        sql.append("        ,crm_ext                                                                   ");
+        sql.append("        ,upper(esp_ext) as esp_ext                                                 ");
+        sql.append("        ,TO_CHAR(data_nasc_ext, 'DD/MM/YYYY') as dt_nasc_ext                       ");
+        sql.append("        ,case when sexo_ext = 'M' then 'MASCULINO' else 'FEMININO' end as sexo_ext ");
+        sql.append("        ,upper(endereco) as endereco                                               ");
+        sql.append("        ,cep_end                                                                   ");
+        sql.append("        ,nm_end                                                                    ");
+        sql.append("        ,upper(bairro_end) as bairro_end                                           ");
+        sql.append("        ,upper(cid_end) as cid_end                                                 ");
+        sql.append("        ,tel_com_end                                                               ");
+        sql.append("        ,cel_end                                                                   ");
+        sql.append("        ,wtp_end                                                                   ");
+        sql.append("        ,email                                                                     ");
+        sql.append(" from cad_externo inner join endereco on (id_end_ext = id_end)                     ");
+        sql.append(" where id_ext = ").append(id);
+
+        try {
+            Query createQuery = em.createNativeQuery(sql.toString());
+            resultArrays = createQuery.getResultList();
+            resultMaps = new ArrayList<>();
+            Map<String, Object> map;
+            for (Object[] array : resultArrays) {
+                map = new HashMap<>();
+                map.put("nome_ext", array[0]);
+                map.put("rg_ext", array[1]);
+                map.put("cpf_ext", array[2]);
+                map.put("crm_ext", array[3]);
+                map.put("esp_ext", array[4]);
+                map.put("dt_nasc_ext", array[5]);
+                map.put("sexo_ext", array[6]);
+                map.put("endereco", array[7]);
+                map.put("cep_end", array[8]);
+                map.put("nm_end", array[9]);
+                map.put("bairro_end", array[10]);
+                map.put("cid_end", array[11]);
+                map.put("tel_com_end", array[12]);
+                map.put("cel_end", array[13]);
+                map.put("wtp_end", array[14]);
+                map.put("email", array[15]);                
+                resultMaps.add(map);
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no mÃ©todo verDadosSindicais " + e.getMessage());
+            e.printStackTrace();
+        }
+        return resultMaps;
+    }
+
     public List<Map<String, Object>> verOs(Integer nrOs) {
         List<Object[]> resultArrays;
         List<Map<String, Object>> resultMaps = null;
@@ -61,6 +116,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_respon_os) as func_respon                                   ");
         sql.append("        ,(select nm_func from cad_funcionario where cd_func = func_finali_os) as func_finali                                   ");
         sql.append("        ,(case when tipo_envio_os = 'I' then 'INTERNO' ELSE 'EXTERNO' END) as tipo_envio                                       ");
+        sql.append("        ,func_abert_os                                                                                                         ");
         sql.append(" from cad_os                                                                                                                   ");
         sql.append(" where nr_os = ").append(nrOs);
 
@@ -89,6 +145,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
                 map.put("func_respon", array[15]);
                 map.put("func_finali", array[16]);
                 map.put("tipo_envio", array[17]);
+                map.put("func_abert_os", array[18]);
                 resultMaps.add(map);
             }
         } catch (Exception e) {
@@ -385,8 +442,7 @@ public class CadOsFacade extends AbstractFacade<CadOs> {
         if (sit != null) {
             sql.append(" and sit_os = '").append(sit).append("'");
         }
-        
-        
+
         if (dtIni != null && dtFim != null) {
             sql.append(" and dt_abert_os between ").append("'").append(dtIniSql).append("' and '").append(dtFimSql).append("'");
         }
