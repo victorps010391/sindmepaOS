@@ -483,7 +483,7 @@
                         </h:form>
                     </p:dialog>   
 
-                    <p:dialog widgetVar="dlVerSind" header="Informações para Sindicalização" responsive="true" height="500"
+                    <p:dialog widgetVar="dlVerSind" header="Informações para Sindicalização" responsive="true" height="600"
                               modal="true" appendTo="@(body)">
                         <h:form id="frmDlVerSind" acceptcharset="ISO-8859-1">
                             <p:panel header="DADOS DO SOLICITANTE">                    
@@ -523,46 +523,60 @@
                                     <p:commandButton id="copiasex" icon="ui-icon ui-icon-document" />
                                     <pe:clipboard id="clipsex" trigger="copiasex" action="copy" target="sex"/>
 
-                                </h:panelGrid>
+                                    <h:outputText value="Endereço: " styleClass="tituloV"/>
+                                    <h:outputText id="end" value="#{cadAnaliseBean.sendereco}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiaend" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipend" trigger="copiaend" action="copy" target="end"/>
 
-                                <h:panelGrid columns="2" >                                  
+                                    <h:outputText value="Complemento: " styleClass="tituloV"/>
+                                    <h:outputText id="comp" value="#{cadAnaliseBean.sendereco}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiacomp" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipcomp" trigger="copiacomp" action="copy" target="comp"/>
 
+                                    <h:outputText value="CEP: " styleClass="tituloV"/>
+                                    <h:outputText id="cep" value="#{cadAnaliseBean.scep_end}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiacep" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipcep" trigger="copiacep" action="copy" target="cep"/>
 
+                                    <h:outputText value="Número: " styleClass="tituloV"/>
+                                    <h:outputText id="num" value="#{cadAnaliseBean.snm_end}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copianum" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipnum" trigger="copianum" action="copy" target="num"/>
 
-                                    <!--                                    <h:outputText value="Endereço: " />
-                                                                        <h:outputText value="# {cadExternoBean.endereco}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="Complemento: " />
-                                                                        <h:outputText styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="CEP: " />
-                                                                        <h:outputText value="# {cadExternoBean.cep}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="Número: " />
-                                                                        <h:outputText value="# {cadExternoBean.numeroEnd}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="Bairro: " />
-                                                                        <h:outputText value="# {cadExternoBean.bairro}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="Cidade: " />
-                                                                        <h:outputText value="# {cadExternoBean.cidade}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="Telefone Comercial: " />
-                                                                        <h:outputText value="# {cadExternoBean.telComerc}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="Celular: " />
-                                                                        <h:outputText value="# {cadExternoBean.celular}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="Whatsapp: " />
-                                                                        <h:outputText value="# {cadExternoBean.whatsapp}" styleClass="outputLabel"/>
-                                    
-                                                                        <h:outputText value="E-mail: " />
-                                                                        <h:outputText value="# {cadExternoBean.email}" styleClass="outputLabel"/>-->
+                                    <h:outputText value="Bairro: " styleClass="tituloV"/>
+                                    <h:outputText id="bai" value="#{cadAnaliseBean.sbairro_end}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiabai" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipbai" trigger="copiabai" action="copy" target="bai"/>
+
+                                    <h:outputText value="Cidade: " styleClass="tituloV"/>
+                                    <h:outputText id="cid" value="#{cadAnaliseBean.scid_end}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiacid" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipcid" trigger="copiacid" action="copy" target="cid"/>
+
+                                    <h:outputText value="Telefone Comercial: " styleClass="tituloV"/>
+                                    <h:outputText id="telcom" value="#{cadAnaliseBean.stel_com_end}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiatelcom" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="cliptelcom" trigger="copiatelcom" action="copy" target="telcom"/>
+
+                                    <h:outputText value="Celular: " styleClass="tituloV"/>
+                                    <h:outputText id="cel" value="#{cadAnaliseBean.scel_end}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiacel" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipcel" trigger="copiacel" action="copy" target="cel"/>
+
+                                    <h:outputText value="Whatsapp: " styleClass="tituloV"/>
+                                    <h:outputText id="wtp" value="#{cadAnaliseBean.swtp_end}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiawtp" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipwtp" trigger="copiawtp" action="copy" target="wtp"/>
+
+                                    <h:outputText value="E-mail: " styleClass="tituloV"/>
+                                    <h:outputText id="email" value="#{cadAnaliseBean.semail}" styleClass="conteudoV"/>
+                                    <p:commandButton id="copiaemail" icon="ui-icon ui-icon-document" />
+                                    <pe:clipboard id="clipemail" trigger="copiaemail" action="copy" target="email"/>
+
                                 </h:panelGrid>
                             </p:panel>
                         </h:form>
                     </p:dialog>
-
                 </p:layoutUnit>
             </p:layout>
         </h:body>

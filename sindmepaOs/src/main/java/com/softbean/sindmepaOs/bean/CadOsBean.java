@@ -311,7 +311,7 @@ public class CadOsBean implements Serializable {
 
     public Boolean disparaEmailabertura(CadOsVer obj, String destinatario) {
         try {
-            String assunto = "Abertura de Protocolo";
+            String assunto = "ABERTURA DE PROTOCOO";
             
             SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
 

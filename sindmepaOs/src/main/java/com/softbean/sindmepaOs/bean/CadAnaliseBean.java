@@ -6,17 +6,21 @@
 package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadAnaliseControle;
+import com.softbean.sindmepaOs.controle.CadExternoControle;
 import com.softbean.sindmepaOs.controle.CadNotaControle;
 import com.softbean.sindmepaOs.controle.CadOsControle;
 import com.softbean.sindmepaOs.controle.CadTarefaControle;
+import com.softbean.sindmepaOs.entidade.CadExterno;
 import com.softbean.sindmepaOs.entidade.CadNota;
 import com.softbean.sindmepaOs.entidade.CadNotaPK;
 import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.CadTarefa;
 import com.softbean.sindmepaOs.entidade.CadTarefaPK;
+import com.softbean.sindmepaOs.util.MailUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,12 +53,17 @@ public class CadAnaliseBean implements Serializable {
     CadTarefaControle tarefaControle;
     @Inject
     LoginBean loginBean;
+    @Inject
+    CadExternoControle externoControle;
+    @Inject
+    MailUtil mailUtil;
 
     CadOs objOs;
     CadNota cadNotaObj;
     CadNotaPK cadNotaObjPK;
     CadTarefa objTarefa;
     CadTarefaPK objTarefaPk;
+    CadExterno cadExternoObj;
 
     Integer nrOs;
     String priorPesq;
@@ -148,6 +157,7 @@ public class CadAnaliseBean implements Serializable {
                 setVdesc_final((String) elemento.get("desc_finalizacao"));
                 setVfuncAbert((Integer) elemento.get("func_abert_os"));
             }
+            setCadExternoObj(externoControle.retornaExt(getVfuncAbert()));
             limparCadastroNota();
             limparCadastroTarefa();
         } catch (Exception e) {
@@ -173,6 +183,7 @@ public class CadAnaliseBean implements Serializable {
                 setTarefaAnalise(null);
                 setNotaAnalise(notaControle.gridSecundario(getVos()));
                 setTarefaAnalise(tarefaControle.gridTarefa(getVos(), loginBean.getUsuario().getCadFuncionarioPK().getCdFunc()));
+                disparaEmailInicioAtendimento(getCadExternoObj().getEmail());
                 context.ajax().update(":frmAnaliseOs :gridNota :gridTarefa");
                 return "analise";
             } else {
@@ -183,6 +194,53 @@ public class CadAnaliseBean implements Serializable {
             System.out.println("Erro no método iniciarAnalise " + e.getMessage());
             e.printStackTrace();
             return "";
+        }
+    }
+
+    public Boolean disparaEmailInicioAtendimento(String destinatario) {
+        try {
+            String assunto = "ATENDIMENTO DE PROTOCOLO INICIADO";
+
+            SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
+
+            StringBuilder corpoEmailAbertura = new StringBuilder();
+            corpoEmailAbertura.append("<p style='font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;'>SindmepaProtocol informa,<br />");
+            corpoEmailAbertura.append("Foi iniciado, na data de hoje, o atendimento do seu protocolo com as seguintes especificações: <br /><br />");
+            corpoEmailAbertura.append("<strong>Número do protocolo: </strong>");
+            corpoEmailAbertura.append(getVos());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Categoria: </strong>");
+            corpoEmailAbertura.append(getVcategoria());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Setor Responsável: </strong>");
+            corpoEmailAbertura.append(getVsetor_responsavel());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Reponsável Pelo Atendimento: </strong>");
+            corpoEmailAbertura.append(loginBean.getUsuario().getNmFunc());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Prioridade: </strong>");
+            corpoEmailAbertura.append(getVprioridade());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Solicitação: </strong>");
+            corpoEmailAbertura.append(getVhistorico());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Data de Abertura: </strong>");
+            corpoEmailAbertura.append(getVdata_hora_abert());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<br /><br />");
+            corpoEmailAbertura.append("<i>Email Enviado automaticamente pelo sistema ");
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Data: ");
+            corpoEmailAbertura.append(formate.format(new Date()));
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Softbean ©");
+            corpoEmailAbertura.append("</i></p>");
+
+            mailUtil.enviar(assunto, destinatario, corpoEmailAbertura.toString());
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -230,7 +288,7 @@ public class CadAnaliseBean implements Serializable {
             setVerDadosSindicais(null);
             setVerDadosSindicais(osControle.verDadosSindicais(getVfuncAbert()));
             for (Map<String, Object> elemento : getVerDadosSindicais()) {
-                
+
                 setSnome_ext((String) elemento.get("nome_ext"));
                 setSrg_ext((String) elemento.get("rg_ext"));
                 setScpf_ext((String) elemento.get("cpf_ext"));
@@ -268,9 +326,10 @@ public class CadAnaliseBean implements Serializable {
             getObjOs().setDescFinalizacaoOs(getDescFinal());
             getObjOs().setSitOs(getSitFinal());
             if (osControle.alterarOsControle(getObjOs())) {
-                limparFinalização();
+                limparFinalização();                
                 context.executeScript("PF('dlResolvOs').hide()");
                 analise(getObjOs().getNrOs());
+                disparaEmailAtendimentoFinalizado(getCadExternoObj().getEmail());
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObjOs().getNrOs() + " finalizado com sucesso."));
             } else {
                 limparFinalização();
@@ -281,7 +340,58 @@ public class CadAnaliseBean implements Serializable {
             System.out.println("Erro no método finalizarAnalise " + e.getMessage());
             e.printStackTrace();
         }
+    }
 
+    public Boolean disparaEmailAtendimentoFinalizado(String destinatario) {
+        try {
+            String assunto = "ATENDIMENTO DE PROTOCOLO FINALIZADO";
+
+            SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
+
+            StringBuilder corpoEmailAbertura = new StringBuilder();
+            corpoEmailAbertura.append("<p style='font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;'>SindmepaProtocol informa,<br />");
+            corpoEmailAbertura.append("Seu protocolo foi finalizado hoje com as seguintes especificações: <br /><br />");
+            corpoEmailAbertura.append("<strong>Número do protocolo: </strong>");
+            corpoEmailAbertura.append(getVos());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Categoria: </strong>");
+            corpoEmailAbertura.append(getVcategoria());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Setor Responsável: </strong>");
+            corpoEmailAbertura.append(getVsetor_responsavel());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Reponsável Pelo Atendimento: </strong>");
+            corpoEmailAbertura.append(loginBean.getUsuario().getNmFunc());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Prioridade: </strong>");
+            corpoEmailAbertura.append(getVprioridade());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Solicitação: </strong>");
+            corpoEmailAbertura.append(getVhistorico());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Data de Abertura: </strong>");
+            corpoEmailAbertura.append(getVdata_hora_abert());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<br /><br />");
+            corpoEmailAbertura.append("<strong>DADOS DA RESOLUÇÃO: </strong><br />");
+            corpoEmailAbertura.append("<strong>Resolução: </strong>");
+            corpoEmailAbertura.append(getDescFinal());                                   
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<br /><br /><br />");
+            corpoEmailAbertura.append("<i>Email Enviado automaticamente pelo sistema ");
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Data: ");
+            corpoEmailAbertura.append(formate.format(new Date()));
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Softbean ©");
+            corpoEmailAbertura.append("</i></p>");
+
+            mailUtil.enviar(assunto, destinatario, corpoEmailAbertura.toString());
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void pesquisar() {
@@ -832,6 +942,17 @@ public class CadAnaliseBean implements Serializable {
 
     public void setObjTarefaPk(CadTarefaPK objTarefaPk) {
         this.objTarefaPk = objTarefaPk;
+    }
+
+    public CadExterno getCadExternoObj() {
+        if (cadExternoObj == null) {
+            cadExternoObj = new CadExterno();
+        }
+        return cadExternoObj;
+    }
+
+    public void setCadExternoObj(CadExterno cadExternoObj) {
+        this.cadExternoObj = cadExternoObj;
     }
 
     public String getSnome_ext() {
