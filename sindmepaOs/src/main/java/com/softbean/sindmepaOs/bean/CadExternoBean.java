@@ -11,9 +11,11 @@ import com.softbean.sindmepaOs.entidade.CadExterno;
 import com.softbean.sindmepaOs.entidade.CadOs;
 import com.softbean.sindmepaOs.entidade.CadSetor;
 import com.softbean.sindmepaOs.entidade.Endereco;
+import com.softbean.sindmepaOs.util.MailUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.PrimeFaces;
-
 
 /**
  *
@@ -37,9 +38,10 @@ public class CadExternoBean implements Serializable {
      */
     @Inject
     CadExternoControle cadExternoControle;
-
     @Inject
     CadOsControle cadOsControle;
+    @Inject
+    MailUtil mailUtil;
 
     List<Map<String, Object>> comboSetor;
     List<Map<String, Object>> comboCategoria;
@@ -91,11 +93,11 @@ public class CadExternoBean implements Serializable {
         //precisa de anexo
     }
 
-    public void salvaPagDebMenCartCred() {        
+    public void salvaPagDebMenCartCred() {
         PrimeFaces context = PrimeFaces.current();
         FacesContext mensagem = FacesContext.getCurrentInstance();
         try {
-            
+
             //Informações de Endereço
             setEnderecoObj(null);
             setEnderecoObj(new Endereco());
@@ -150,8 +152,9 @@ public class CadExternoBean implements Serializable {
                     getCadOs().setSitOs("02");
                     getCadOs().setTipEnvioOs("E");
                     System.out.println(" ========= ANTES DO IF getCadOs() ========");
-                    if(cadExternoControle.salvarOsExt(getCadOs())){
+                    if (cadExternoControle.salvarOsExt(getCadOs())) {
                         mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Externo Informa:", "Cadastro do Protocolo Externo: " + getCadOs().getNrOs() + " Realizado com Sucesso."));
+                        disparaEmailAberturaSindicalizacao(getCadOs(), getEmail());
                         limpaFormulario();
                         context.executeScript("redirecionarPagSeguro()");
                         context.executeScript("redirecionarHomepage()");
@@ -275,6 +278,50 @@ public class CadExternoBean implements Serializable {
 
     }
 
+    public Boolean disparaEmailAberturaSindicalizacao(CadOs obj, String destinatario) {
+        try {
+            String assunto = "ABERTURA DE PROTOCOLO";
+
+            SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
+
+            StringBuilder corpoEmailAbertura = new StringBuilder();
+            corpoEmailAbertura.append("<p style='font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;'>SindmepaProtocol informa,<br />");
+            corpoEmailAbertura.append("Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />");
+            corpoEmailAbertura.append("<strong>Número do protocolo: </strong>");
+            corpoEmailAbertura.append(obj.getNrOs());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Categoria: </strong>");
+            corpoEmailAbertura.append("SINDICALIZAÇÃO");
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Setor Responsável: </strong>");
+            corpoEmailAbertura.append(obj.getSetorResponOs().getNmSetor());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Prioridade: </strong>");
+            corpoEmailAbertura.append("IMEDIATO");
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Solicitação: </strong>");
+            corpoEmailAbertura.append(obj.getHistOs());
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<strong>Data de Abertura: </strong>");
+            corpoEmailAbertura.append(formate.format(obj.getDtAbertOs()));
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("<br /><br />");
+            corpoEmailAbertura.append("<i>Email Enviado automaticamente pelo sistema ");
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Data: ");
+            corpoEmailAbertura.append(formate.format(new Date()));
+            corpoEmailAbertura.append("<br />");
+            corpoEmailAbertura.append("Softbean ©");
+            corpoEmailAbertura.append("</i></p>");
+
+            mailUtil.enviar(assunto, destinatario, corpoEmailAbertura.toString());
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void validador() {
         setAbriOsExt("false");
         setSindicaliza("false");
@@ -285,7 +332,7 @@ public class CadExternoBean implements Serializable {
             setAbriOsExt("true");
         }
     }
-    
+
     public void validaDadoBancario() {
         setAnuidadeResidente("false");
         setDebMenCartCred("false");
@@ -308,7 +355,7 @@ public class CadExternoBean implements Serializable {
 
     }
 
-    public void limpaFormulario(){
+    public void limpaFormulario() {
         setNomeExt("");
         setRg("");
         setCpf("");
@@ -326,8 +373,9 @@ public class CadExternoBean implements Serializable {
         setCelular("");
         setWhatsapp("");
         setEmail("");
-        
+
     }
+
     public List<Map<String, Object>> comboCategoriaView() {
         try {
             setComboCategoria(cadExternoControle.listarCategoria());

@@ -26,23 +26,25 @@
             <div id="messages" style="display: block;">
                 <p:ajaxStatus style="display:none;margin-bottom:2em;height:24px;">
                     <f:facet name="start">
-                        <h:outputLabel value="Processando..."/>
-                        <p:graphicImage url="/images/loading.gif" />
+                        <h:outputLabel value="Processando"/>
+                        <p:graphicImage library="imagesResources" name="loading.gif"/>
                     </f:facet>
                 </p:ajaxStatus>
 
                 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
                 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-                    <h:outputLabel value="Processando..." />
-                    <p:graphicImage url="/images/loading.gif" />
+                    <p:panelGrid columns="1" style="width:100%; height:100%; text-align : center;">
+                        <h:outputLabel value="Processando" style="font-size: medium; font-weight:bold"/>
+                        <p:graphicImage library="imagesResources" name="loading.gif"/>
+                    </p:panelGrid>
                 </p:dialog>
-            </div>  
+            </div>
 
 
             <h:form id="frmExterno" acceptcharset="ISO-8859-1" enctype="multipart/form-data">
-                <p:growl id="growlFrmExterno" showDetail="true"/>    
-                <p:panel header="Abertura de Ordem de Serviço" style="width:500px; margin-left:auto; margin-right:auto;">
+                <p:growl id="growlFrmExterno" showDetail="true"/>                 
+                <p:panel header="Abertura de Protocolo" style="width:700px; margin-left:auto; margin-right:auto;">
                     <h:panelGrid columns="2" >
 
                         <h:outputLabel value="Categoria: "/>
@@ -302,14 +304,13 @@
                                                 <h:outputText value="#{cadExternoBean.email}" styleClass="outputLabel"/>
                                             </h:panelGrid>
                                         </h:panelGrid>
+                                        <br/><br/><br/>
+                                        <p:staticMessage severity="warn" summary="ATENÇÃO!" detail="Anote seu protocolo e após enviar seu cadastrado você será redirecionado para
+                                                         a página do PAGSEGURO." />
 
-                                        <p:commandButton value="Enviar" 
-                                                         onclick="PF('dlConfirm').show()" 
-                                                         update=":frmDlConfirm"/>
-                                        
-                                        <br /> <p:staticMessage severity="warn" summary="ATENÇÃO!" detail="Anote seu chamado e após enviar seu cadastrado você será redirecionado para
-                                                             a página do PAGSEGURO." />
-                                        
+                                        <br/>
+
+                                        <p:commandButton value="Enviar" onclick="PF('dlConfirm').show()" update=":frmDlConfirm"/>
                                     </p:panel>
                                 </p:tab>
                             </p:wizard>
@@ -317,25 +318,25 @@
 
                         </h:panelGrid>
                     </p:fieldset>
-                </p:panel>
+                </p:panel>                 
             </h:form>
-            
+
             <p:dialog widgetVar="dlConfirm" header="CONFIRMAÇÃO" modal="true" appendTo="@(body)">
-            <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
-                <p:panel>
-                    <h:panelGrid columns="1" > 
-                        <h:outputLabel value="O número do protocolo foi enviado para seu e-mail" style="font-weight:bold ; font-size: medium;"/><br/>
-                        
-                        <h:outputLabel  value="IMPORTANTE: Aguarde o redirecionamento para o PAGSEGURO"
-                                       style="font-size: small; color: red; font-weight:bold"/>                       
-                    </h:panelGrid>
-                    <f:facet name="footer">
-                        <p:commandButton action="#{cadExternoBean.salvarExterno()}" value="Ok" update="@form :frmExterno" icon="ui-icon ui-icon-check" onclick="PF('dlConfirm').hide()" />
-                        <!-- <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmExterno" icon="ui-icon ui-icon-closethick"/> -->
-                    </f:facet>
-                </p:panel>
-            </h:form>
-        </p:dialog>
+                <h:form id="frmDlConfirm" acceptcharset="ISO-8859-1">
+                    <p:panel>
+                        <h:panelGrid columns="1" > 
+                            <h:outputLabel value="Os dados do protocolo serão enviados para o e-mail informado no cadastro" style="font-weight:bold ; font-size: medium;"/><br/>
+
+                            <h:outputLabel  value="IMPORTANTE: Aguarde o redirecionamento para o PAGSEGURO"
+                                            style="font-size: small; color: red; font-weight:bold"/>                       
+                        </h:panelGrid>
+                        <f:facet name="footer">
+                            <p:commandButton action="#{cadExternoBean.salvarExterno()}" value="Ok" update="@form :frmExterno" icon="ui-icon ui-icon-check" onclick="PF('dlConfirm').hide()" />
+                            <!-- <p:commandButton onclick="PF('dlConfirm').hide()" type="button" value="Não" update="@form :frmExterno" icon="ui-icon ui-icon-closethick"/> -->
+                        </f:facet>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
 
         </h:body>
 
