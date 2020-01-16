@@ -33,6 +33,7 @@
                     <p:commandButton value="Limpar" actionListener="#{cadSetorBean.limparPesquisa()}" update=":frmCadSetor" ajax="false"/>                    
                     <p:commandButton value="Novo Setor" onclick="PF('dlCadSetor').show()" update=":frmDlCadSetor"/>  
                     <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
+                    <p:commandButton value="boleto" action="#{cadSetorBean.boleto()}" style="float: right" />
                 </f:facet>
             </p:panel>
 

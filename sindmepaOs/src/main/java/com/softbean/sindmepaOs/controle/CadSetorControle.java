@@ -79,8 +79,7 @@ public class CadSetorControle implements Serializable {
 
         /*
                  * INFORMANDO DADOS SOBRE O SACADO.
-         */        
-
+         */
         Sacado sacado = new Sacado("JavaDeveloper Pronto Para Férias", "222.222.222-22");
 
         // Informando o endereço do sacado.
@@ -94,13 +93,14 @@ public class CadSetorControle implements Serializable {
         sacado.addEndereco(enderecoSac);
 
         /*
-                 * INFORMANDO OS DADOS SOBRE O TÍTULO.
+                 * INFORMANDO OS DADOS SOBRE O TÍTULO.               
          */
         // Informando dados sobre a conta bancária do título.
         ContaBancaria contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
-        contaBancaria.setNumeroDaConta(new NumeroDaConta(12345, "0"));
-        contaBancaria.setCarteira(new Carteira(1, TipoDeCobranca.COM_REGISTRO));
-        contaBancaria.setAgencia(new Agencia(9999, "1"));
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(12345, "6"));
+        //contaBancaria.setCarteira(new Carteira(1));
+        contaBancaria.setCarteira(new Carteira(1, TipoDeCobranca.SEM_REGISTRO));
+        contaBancaria.setAgencia(new Agencia(12345, "6"));
 
         Titulo titulo = new Titulo(contaBancaria, sacado, cedente);
         titulo.setNumeroDoDocumento("12345");
@@ -116,8 +116,6 @@ public class CadSetorControle implements Serializable {
         titulo.setMora(BigDecimal.ZERO);
         titulo.setAcrecimo(BigDecimal.ZERO);
         titulo.setValorCobrado(BigDecimal.ZERO);
-        
-        
 
         /*
                  * INFORMANDO OS DADOS SOBRE O BOLETO.
