@@ -7,6 +7,7 @@ package com.softbean.sindmepaOs.bean;
 
 import com.softbean.sindmepaOs.controle.CadSetorControle;
 import com.softbean.sindmepaOs.entidade.CadSetor;
+import com.softbean.sindmepaOs.util.RelatorioUtilBean;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -15,7 +16,9 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import org.jrimum.bopepo.view.BoletoViewer;
 import org.primefaces.PrimeFaces;
+
 /**
  *
  * @author Victor
@@ -32,6 +35,8 @@ public class CadSetorBean implements Serializable {
 
     @Inject
     CadSetorControle setorControle;
+    @Inject
+    RelatorioUtilBean relatorioUtilBean;
 
     CadSetor objSetor;
 
@@ -45,7 +50,50 @@ public class CadSetorBean implements Serializable {
     List<Map<String, Object>> gridPesquisa;
     List<Map<String, Object>> sitSetorLista;
 
-    public void pesquisa() {       
+    public void boleto() {
+        PrimeFaces context = PrimeFaces.current();
+        byte[] pdfAsBytes = null;
+        try {
+            relatorioUtilBean.setExtensaoArquivoExportado("pdf");
+            relatorioUtilBean.setNomeArquivo("Relatório");
+
+            BoletoViewer boletoViewer = setorControle.estudoGerarBoleto();
+            pdfAsBytes = boletoViewer.getPdfAsByteArray();
+
+            if (pdfAsBytes != null) {
+                relatorioUtilBean.setRelatorioByte(pdfAsBytes);
+                context.executeScript("abrirPgRelatorio()");
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ADM Monobloco informa:", "Não Há Infomações Para Gerar O Relatório"));
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método boleto()");
+            e.printStackTrace();
+        }
+    }
+
+    public void gerarRelatorio() {
+        PrimeFaces context = PrimeFaces.current();
+        byte[] jasperPrint = null;
+        try {
+            relatorioUtilBean.setExtensaoArquivoExportado("pdf");
+            relatorioUtilBean.setNomeArquivo("Relatório");
+
+            jasperPrint = setorControle.gerarRelatorio();
+            if (jasperPrint != null) {
+                relatorioUtilBean.setRelatorioByte(jasperPrint);
+                context.executeScript("abrirPgRelatorio()");
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol informa:", "Não Há Infomações Para Gerar O Relatório"));
+
+            }
+        } catch (Exception e) {
+            System.out.println("ERRO no método gerarRelatorio()");
+            e.printStackTrace();
+        }
+    }
+
+    public void pesquisa() {
         try {
             setGridPesquisa(setorControle.gridPrincipal(getNomeSetorPesq(), getCodSetorPesq(), getSitSetorPesq()));
         } catch (Exception e) {
