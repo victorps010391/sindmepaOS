@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.swing.ImageIcon;
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
 import org.jrimum.bopepo.exemplo.Exemplos;
@@ -25,7 +26,9 @@ import org.jrimum.bopepo.view.BoletoViewer;
 import org.jrimum.domkee.comum.pessoa.endereco.CEP;
 import org.jrimum.domkee.comum.pessoa.endereco.Endereco;
 import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa;
+import org.jrimum.domkee.financeiro.banco.ParametrosBancariosMap;
 import org.jrimum.domkee.financeiro.banco.febraban.Agencia;
+import org.jrimum.domkee.financeiro.banco.febraban.Banco;
 import org.jrimum.domkee.financeiro.banco.febraban.Carteira;
 import org.jrimum.domkee.financeiro.banco.febraban.Cedente;
 import org.jrimum.domkee.financeiro.banco.febraban.ContaBancaria;
@@ -92,20 +95,24 @@ public class CadSetorControle implements Serializable {
         enderecoSac.setNumero("1");
         sacado.addEndereco(enderecoSac);
 
+        Banco banco = new Banco();
+        banco.setImgLogo(new ImageIcon("/resources/imagesResources/sindmepaLogo.PNG").getImage());
+
         /*
                  * INFORMANDO OS DADOS SOBRE O TÍTULO.               
          */
         // Informando dados sobre a conta bancária do título.
         ContaBancaria contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
-        contaBancaria.setNumeroDaConta(new NumeroDaConta(12345, "6"));
+        contaBancaria.setAgencia(new Agencia(165));
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(623));
         //contaBancaria.setCarteira(new Carteira(1));
         contaBancaria.setCarteira(new Carteira(1, TipoDeCobranca.SEM_REGISTRO));
-        contaBancaria.setAgencia(new Agencia(12345, "6"));
 
         Titulo titulo = new Titulo(contaBancaria, sacado, cedente);
         titulo.setNumeroDoDocumento("12345");
-        titulo.setNossoNumero("12345678");
-        titulo.setDigitoDoNossoNumero("5");
+        titulo.setNossoNumero("07200003");
+        titulo.setDigitoDoNossoNumero("1");
+        titulo.setParametrosBancarios(new ParametrosBancariosMap("PostoDaAgencia", 02));
         titulo.setValor(BigDecimal.valueOf(0.23));
         titulo.setDataDoDocumento(new Date());
         titulo.setDataDoVencimento(new Date());
@@ -121,7 +128,8 @@ public class CadSetorControle implements Serializable {
                  * INFORMANDO OS DADOS SOBRE O BOLETO.
          */
         Boleto boleto = new Boleto(titulo);
-
+        boleto.addTextosExtras("txtRsCodBanco", "748-X"); 
+        boleto.addTextosExtras("txtFcCodBanco", "748-X");
         boleto.setLocalPagamento("Pagável preferencialmente na Rede X ou em "
                 + "qualquer Banco até o Vencimento.");
         boleto.setInstrucaoAoSacado("Senhor sacado, sabemos sim que o valor "
