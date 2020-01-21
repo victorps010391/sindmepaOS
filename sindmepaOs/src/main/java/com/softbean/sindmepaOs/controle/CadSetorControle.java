@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.swing.ImageIcon;
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
+import org.jrimum.bopepo.campolivre.CampoLivre;
 import org.jrimum.bopepo.exemplo.Exemplos;
 import org.jrimum.bopepo.view.BoletoViewer;
 import org.jrimum.domkee.comum.pessoa.endereco.CEP;
@@ -94,10 +95,7 @@ public class CadSetorControle implements Serializable {
         enderecoSac.setLogradouro("Rua poeta dos programas");
         enderecoSac.setNumero("1");
         sacado.addEndereco(enderecoSac);
-
-        Banco banco = new Banco();
-        banco.setImgLogo(new ImageIcon("/resources/imagesResources/sindmepaLogo.PNG").getImage());
-
+        
         /*
                  * INFORMANDO OS DADOS SOBRE O TÍTULO.               
          */
@@ -106,7 +104,7 @@ public class CadSetorControle implements Serializable {
         contaBancaria.setAgencia(new Agencia(165));
         contaBancaria.setNumeroDaConta(new NumeroDaConta(623));
         //contaBancaria.setCarteira(new Carteira(1));
-        contaBancaria.setCarteira(new Carteira(1, TipoDeCobranca.SEM_REGISTRO));
+        contaBancaria.setCarteira(new Carteira(1, TipoDeCobranca.COM_REGISTRO));
 
         Titulo titulo = new Titulo(contaBancaria, sacado, cedente);
         titulo.setNumeroDoDocumento("12345");
@@ -128,8 +126,6 @@ public class CadSetorControle implements Serializable {
                  * INFORMANDO OS DADOS SOBRE O BOLETO.
          */
         Boleto boleto = new Boleto(titulo);
-        boleto.addTextosExtras("txtRsCodBanco", "748-X"); 
-        boleto.addTextosExtras("txtFcCodBanco", "748-X");
         boleto.setLocalPagamento("Pagável preferencialmente na Rede X ou em "
                 + "qualquer Banco até o Vencimento.");
         boleto.setInstrucaoAoSacado("Senhor sacado, sabemos sim que o valor "
@@ -143,6 +139,12 @@ public class CadSetorControle implements Serializable {
         boleto.setInstrucao7("PARA PAGAMENTO 7 até xx/xx/xxxx COBRAR O VALOR QUE VOCÊ QUISER!");
         boleto.setInstrucao8("APÓS o Vencimento, Pagável Somente na Rede X.");
 
+        boleto.addTextosExtras("txtRsCodBanco", "748-X");
+        boleto.addTextosExtras("txtFcCodBanco", "748-X");
+        boleto.addTextosExtras("txtFcNossoNumero", titulo.getNossoNumero() + "-" + titulo.getDigitoDoNossoNumero());
+        boleto.addTextosExtras("txtRsNossoNumero", titulo.getNossoNumero() + "-" + titulo.getDigitoDoNossoNumero());
+       
+
         /*
                  * GERANDO O BOLETO BANCÁRIO.
          */
@@ -154,6 +156,12 @@ public class CadSetorControle implements Serializable {
 
     }
 
+//    public BoletoViewer estudoGerarBoletoSicredi() {
+//                                
+//        //BoletoViewer boletoViewer = new BoletoViewer(boleto);
+//
+//        return boletoViewer;
+//    }
     public Boolean salvarSetorControle(CadSetor obj) {
         try {
             cadSetorFacade.create(obj);
