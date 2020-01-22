@@ -15,19 +15,18 @@ require_once 'config.php';
 
 class DB {
 
-    //put your code here
     private static $instance;
 
     public static function getInstance() {
         if (!isset(self::$instance)) {
 
             try {
-                self::$instance = new PDO('pgsql:host=' . HOST . '; dbname=' . BASE, USER, PASS);
+                self::$instance = new PDO('pgsql:host=' . host . '; port=' . port . '; dbname=' . base . '; user=' . user . '; password=' . pass);
 
-                self::$instance->setAtributte(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                self::$instance->setAtributte(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            } catch (Exception $exc) {
-                echo $exc->getMessage();
+                self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+            } catch (Exception $e) {
+                echo $e->getMessage();
             }
         }
 

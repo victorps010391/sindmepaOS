@@ -6,7 +6,8 @@
  * and open the template in the editor.
  */
 
-define('HOST', 'localhost');
-define('USER', 'postgres');
-define('PASS', '123456');
-define('BASE', 'sindmepa_os_db');
+define('host', 'localhost');
+define('port', '5433');
+define('user', 'postgres');
+define('pass', '123456');
+define('base', 'sindmepa_os_db');
