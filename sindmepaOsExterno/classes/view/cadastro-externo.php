@@ -54,8 +54,7 @@
                         $endereco->setCelEnd($celular);
                         $endereco->setWtpEnd($whatsapp);
                        
-                        
-                        
+                        $endereco->insertEndereco();
                                         
                         $cadExterno->setNome($_POST['nome']);
                         $cadExterno->setRg($_POST['rg']);
@@ -66,9 +65,8 @@
                         $cadExterno->setEsp($_POST['especialidade']);
                         $cadExterno->setEmail($_POST['email']);
                         $cadExterno->setCdTipPag('13');       
-                        $cadExterno->setIdEnd($endereco->getIdEnd());
+                        $cadExterno->setIdEnd($endereco->getEnderecoId());
                         
-                        $endereco->insertEndereco();
                         $cadExterno->insertCadExterno();        
                         
 		}

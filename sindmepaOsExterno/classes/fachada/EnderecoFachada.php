@@ -11,6 +11,7 @@ require_once '../entidade/Endereco.php';
 class EnderecoFachada extends Endereco {
     
   protected $tabela = 'endereco';
+  public $enderecoId;
     
   public function insertEndereco() {        
         $sql = "INSERT INTO endereco(
@@ -27,7 +28,14 @@ class EnderecoFachada extends Endereco {
         $stm->bindParam(':estEnd', $this->estEnd);
         $stm->bindParam(':telComEnd', $this->telComEnd);
         $stm->bindParam(':celEnd', $this->celEnd);
-        $stm->bindParam(':wtpEnd', $this->wtpEnd);
-        return $stm->execute();
+        $stm->bindParam(':wtpEnd', $this->wtpEnd);    
+        $stm->execute();        
+        $this->enderecoId = DB::lastInsertId();
+        
     }
+    
+    function getEnderecoId() {
+        return $this->enderecoId;
+    }
+    
 }
