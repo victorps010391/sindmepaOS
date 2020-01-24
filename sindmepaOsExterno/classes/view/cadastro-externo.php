@@ -12,22 +12,29 @@
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="../../js/bootstrap.min.js"></script>
+  <script src="../../js/custom-campos.js"></script>
   <style>
-	.panel-default>.panel-heading {
+	.card-default>.card-header {
     color: #333;
     background-color: #2ecc71;
 	}
+
+    /* ESCONDE TODAS AS DIVS */
+    .divs{
+            display:none;
+    }
+
   </style>
 </head>
 <body>
  
 <div class="container">
   <h3>Associe-se</h2>
-  <div class="panel panel-default">
-    <div class="panel-heading"><h4>Cadastro de Associado</h4></div>
+  <div class="card card-default">
+    <div class="card-header"><h4>Cadastro de Associado</h4></div>
     <?php
         $endereco = new EnderecoFachada();
         $cadExterno = new CadExternoFachada();
@@ -72,8 +79,67 @@
 		}
     ?>
     <form method="POST">
+        <h6>Após finalizar seu cadastro, entraremos em contato em até 24h através de e-mail.</h6>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <table class="table table-striped">
+                        <tr>
+                            <td>
+                                <input type="radio" name="categoria" value="Televisao" onclick="habilitaCampos('televisao');" >Débito em conta corrente &nbsp;
+                                <input type="radio" name="categoria" value="Radio" onclick="habilitaCampos('radio');" >Débito em contra-cheque &nbsp;                 
+                                    <input type="radio" name="categoria" value="Web" onclick="habilitaCampos('web');" >Anuidade Residente &nbsp;
+                                    <input type="radio" name="categoria" value="Impresso" onclick="habilitaCampos('impresso');" >Débito mensal no cartão de crédito &nbsp;
+                            </td>                
+                        </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <br>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                    <div id="impresso" class="divs">
+                    	
+                    </div>
+                    <div id="televisao" class="divs">
+                    	<div class="card-body">
+                            <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="ex1">Agência</label>
+                                <input class="form-control" id="ex1" type="text" name="endereco">
+			    </div>
+			    <div class="col-sm-4">
+				<label for="ex2">Banco</label>
+				<input class="form-control" id="ex2" type="text" name="">
+			    </div>
+                            <div class="col-sm-4">
+				<label for="ex2">Conta Corrente</label>
+				<input class="form-control" id="ex2" type="text" name="">
+			    </div>
+                            </div>    
+                        </div>
+                    </div>
+                    <div id="radio" class="divs">
+                    <div class="form-group row">
+			<div class="col-sm-3">
+			  <label for="sel1">Instituição a ser debitada</label>
+			  <select class="form-control" id="sel1" name="sexo">
+				<option value="M">Masculino</option>
+				<option value="F">Feminino</option>
+			  </select>
+			 </div>
+                        <div class="col-sm-4">
+                            <label for="ex2">Número de Matrícula</label>
+                            <input class="form-control" id="ex2" type="text" name="">
+                        </div>
+                    </div>
+                    <div id="web" class="divs">
+                    	<input type="text" class="form-control-input" id="link" name="weblink" placeholder="Insira o link da notícia">
+                    </div>
+                    </div>
+                </div>
     
-		<div class="panel-body">
+		<div class="card-body">
 			<div class="form-group row">
 			  <div class="col-sm-6">
 				<label for="ex3">Nome completo</label>
@@ -170,10 +236,10 @@
 
 			  </div>
 			</div>
-                    <button type="submit" class="btn btn-default" name="cadastrar">Cadastrar</button>
-		</div><!-- fim panel-body-->
+                    <button type="submit" class="btn btn-secondary" name="cadastrar">Cadastrar</button>
+		</div><!-- fim card-body-->
   </form><!-- fim form -->
-  </div> <!-- fim panel panel-default -->
+  </div> <!-- fim card card-default -->
 </div>
 
 </body>
