@@ -36,9 +36,9 @@ class CadExternoFachada extends CadExterno {
     public function insertCadExterno() {        
         $sql = "INSERT INTO cad_externo(
                         nome_ext, rg_ext, cpf_ext, sexo_ext, data_nasc_ext, crm_ext, 
-                        esp_ext, email, cd_tip_pag_ext, id_end_ext)
+                        esp_ext, email, cd_tip_pag_ext, id_end_ext, ag_ext, bc_ext, cc_ext, nr_mat_ext, cd_inst_ext)
                 VALUES (:nome, :rg, :cpf, :sexo, :dtNascimento, :crm, :especialidade, 
-                        :email, :tipoPagamento, :idEnd);
+                        :email, :tipoPagamento, :idEnd, :ag, :bc, :cc, :nrMat, :cdInst);
             ";
         $stm = DB::prepare($sql);
         $stm->bindParam(':nome', $this->nome);
@@ -51,6 +51,11 @@ class CadExternoFachada extends CadExterno {
         $stm->bindParam(':email', $this->email);
         $stm->bindParam(':tipoPagamento', $this->cdTipPag);
         $stm->bindParam(':idEnd', $this->idEnd);
+        $stm->bindParam(':ag', $this->ag);
+        $stm->bindParam(':bc', $this->bc);
+        $stm->bindParam(':cc', $this->cc);
+        $stm->bindParam(':nrMat', $this->nrMat);
+        $stm->bindParam(':cdInst', $this->cdInstituicao);
         return $stm->execute();
     }    
 

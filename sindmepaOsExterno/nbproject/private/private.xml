@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp/www/sindmepaOsExterno-netbeans/classes/entidade/Endereco.php</file>
-            <file>file:/C:/wamp/www/sindmepaOsExterno-netbeans/classes/fachada/EnderecoFachada.php</file>
-            <file>file:/C:/wamp/www/sindmepaOsExterno-netbeans/classes/view/cadastro-externo.php</file>
+            <file>file:/C:/wamp/www/sindmepaOsExterno/classes/fachada/EnderecoFachada.php</file>
+            <file>file:/C:/wamp/www/sindmepaOsExterno/js/custom-campos.js</file>
+            <file>file:/C:/wamp/www/sindmepaOsExterno/classes/view/cadastro-externo.php</file>
+            <file>file:/C:/wamp/www/sindmepaOsExterno/classes/fachada/CadExternoFachada.php</file>
         </group>
     </open-files>
 </project-private>
