@@ -61,5 +61,36 @@ class CadOsFachada extends CadOs {
         $stm->execute();
         return $stm->fetchAll();
     }
+	
+	public function insertCadOs() {        
+        $sql = "INSERT INTO cad_os(
+                        nr_os, categ_os, setor_respon_os, func_respon_os, setor_abert_os, 
+                        func_abert_os, hist_os, obs_os, sit_os, tipo_envio_os, dt_abert_os, 
+                        dt_fecha_os, dt_ult_atu_os, func_ult_atu_os, desc_finalizacao_os, 
+                        func_finali_os)
+                VALUES (retorna_novo_nr_os(), :catOs, :setorResp, :funcResp, :setorAbertura, 
+                        :funcAbertura, :histOs, :obsOs, :sitOs, :tipoEnvio, current_timestamp, 
+                        :dtFecha, current_timestamp, :funcUltAtu, :descFinalizacao, 
+                        :funcFinaliza);
+                        ";
+        $stm = DB::prepare($sql);
+        //$stm->bindParam(':nrOs', $this->nrOs);
+        $stm->bindParam(':catOs', $this->categOs);
+        $stm->bindParam(':setorResp', $this->setorResponOs);
+        $stm->bindParam(':funcResp', $this->funcResponOs);
+        $stm->bindParam(':setorAbertura', $this->setorAbertOs);
+        $stm->bindParam(':funcAbertura', $this->funcAbertOs);
+        $stm->bindParam(':histOs', $this->histOs);
+        $stm->bindParam(':obsOs', $this->obsOs);
+        $stm->bindParam(':sitOs', $this->sitOs);
+        $stm->bindParam(':tipoEnvio', $this->tipoEnvioOs);
+        //$stm->bindParam(':dtAbertura', $this->dtAbert);
+        $stm->bindParam(':dtFecha', $this->dtFechaOs);
+        //$stm->bindParam(':dtUltAtu', $this->dtUltAtu);
+        $stm->bindParam(':funcUltAtu', $this->funcUltAtuOs);
+        $stm->bindParam(':descFinalizacao', $this->descFinalizacaoOs);
+        $stm->bindParam(':funcFinaliza', $this->funcFinaliOs);
+        return $stm->execute();
+    }
 
 }

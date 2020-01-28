@@ -17,6 +17,7 @@ require_once '../entidade/Endereco.php';
 class CadExternoFachada extends CadExterno {
 
     protected $tabela = 'cad_externo';
+	public $cadExternoId;
     
     public function findUnit($id) {
         $sql = "select * from  $this->tabela where id = :id";
@@ -36,9 +37,9 @@ class CadExternoFachada extends CadExterno {
     public function insertCadExterno() {        
         $sql = "INSERT INTO cad_externo(
                         nome_ext, rg_ext, cpf_ext, sexo_ext, data_nasc_ext, crm_ext, 
-                        esp_ext, email, cd_tip_pag_ext, id_end_ext, ag_ext, bc_ext, cc_ext, nr_mat_ext, cd_inst_ext)
+                        esp_ext, email, cd_tip_pag_ext, id_end_ext, ag_ext, bc_ext, cc_ext, nr_mat_ext, cd_inst_ext, tipo_pes_ext)
                 VALUES (:nome, :rg, :cpf, :sexo, :dtNascimento, :crm, :especialidade, 
-                        :email, :tipoPagamento, :idEnd, :ag, :bc, :cc, :nrMat, :cdInst);
+                        :email, :tipoPagamento, :idEnd, :ag, :bc, :cc, :nrMat, :cdInst, :tipoPessoa);
             ";
         $stm = DB::prepare($sql);
         $stm->bindParam(':nome', $this->nome);
@@ -56,8 +57,10 @@ class CadExternoFachada extends CadExterno {
         $stm->bindParam(':cc', $this->cc);
         $stm->bindParam(':nrMat', $this->nrMat);
         $stm->bindParam(':cdInst', $this->cdInstituicao);
-        return $stm->execute();
-    }    
+        $stm->bindParam(':tipoPessoa', $this->tipoPssoa);
+        $stm->execute();
+        $this->cadExternoId = DB::lastInsertId();
+    }   
 
     public function update($id) {
         $sql = "UPDATE $this->tabela SET nome=:nome WHERE id = :id";
@@ -72,6 +75,10 @@ class CadExternoFachada extends CadExterno {
         $stm = DB::prepare($sql);
         $stm->bindParam(':id', $id);
         return $stm->execute();
+    }
+	
+	function getCadExternoId() {
+        return $this->cadExternoId;
     }
 
 }

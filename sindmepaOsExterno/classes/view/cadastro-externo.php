@@ -35,6 +35,7 @@
         $endereco = new EnderecoFachada();
         $cadExterno = new CadExternoFachada();
         $cadDetalhe = new CadDetalheFachada();
+        $cadOs = new CadOsFachada();
 		
 		if(isset($_POST['cadastrar'])){
                     
@@ -77,7 +78,18 @@
                         $cadExterno->setCdInstituicao($_POST['instituicao']);
                         $cadExterno->setNrMat($_POST['nrMat']);
                             
-                        $cadExterno->insertCadExterno();                        
+                        $cadExterno->insertCadExterno();
+                        
+                        $cadOs->setCategOs('10');
+                        $cadOs->setSetorResponOs('4');
+                        $cadOs->setFuncResponOs('999');
+                        $cadOs->setSetorAbertOs('0');
+                        $cadOs->setFuncAbertOs($cadExterno->getCadExternoId());        
+                        $cadOs->setHistOs('Externo');
+                        $cadOs->setSitOs('02');
+                        $cadOs->setTipoEnvioOs('E');
+                            
+                        $cadOs->insertCadOs();                        
 		}
     ?>
     <form method="POST">
