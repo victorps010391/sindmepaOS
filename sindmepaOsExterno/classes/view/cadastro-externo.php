@@ -28,7 +28,7 @@
 <body>
  
 <div class="container">
-  <h3>Associe-se</h2>
+  <h3>Associe-se</h3>
   <div class="card card-default">
     <div class="card-header"><h4>Cadastro de Associado</h4></div>
     <?php

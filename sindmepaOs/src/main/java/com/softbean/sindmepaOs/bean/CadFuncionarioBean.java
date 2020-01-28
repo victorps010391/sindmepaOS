@@ -79,10 +79,10 @@ public class CadFuncionarioBean implements Serializable {
                     if (util.emailValido(getEmail())) {
                         if (util.CPFcorreto(getCpf())) {
                             if (funcionarioControle.salvarFuncioControle(getObjFunc(), getObjfuncPK())) {
-                                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Funcionário Realizado com Sucesso."));
+                                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepOS Informa:", "Cadastro do Colaborador Realizado com Sucesso."));
                                 limparCadastro();                                
                             } else {
-                                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Funcionário."));
+                                mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "Erro ao Cadastrar Colaborador."));
                             }
                         } else {
                             mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepOS Informa:", "O CPF informado é inválido."));
