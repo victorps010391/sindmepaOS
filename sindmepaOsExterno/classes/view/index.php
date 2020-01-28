@@ -10,7 +10,7 @@ spl_autoload_register(function($classe) {
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>SindmepaProtocol</title>
+        <title>SindmepaProtocol - Gerenciamento de Protocolos</title>
 
         <!--CSS BOOTSTRAP-->
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
@@ -22,12 +22,12 @@ spl_autoload_register(function($classe) {
             <?php
             $cadOs = new CadOsFachada();
 
-            $protocolo = (isset($_GET['protocolo'])) ? $_GET['protocolo'] : '';
+            $protocolo = (isset($_POST['protocolo'])) ? $_POST['protocolo'] : '';
 
             if (empty($protocolo)):
 
                 echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>SindmepaProtocol informa: </strong> informe o número do protocolo.
+                        <strong>SindmepaProtocol informa: </strong> para pesquisa informe o número do protocolo.
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -35,14 +35,15 @@ spl_autoload_register(function($classe) {
 
             else:
                 $consulta = $cadOs->pesquisar($protocolo);
+                $detalhe = $cadOs->detalhes($protocolo);
             endif;
             ?>
 
             <div class="card-header">
-                Featured
+                <strong>CONSULTA DE PROTOCOLOS ABERTOS</strong>
             </div>
             <br/>
-            <form action="" method="get">
+            <form action="" method="post">
                 <div class="col-sm-4">
                     <label for="protocolo">Protocolo:</label>
                     <input name="protocolo" id="protocolo" type="text" class="form-control"  placeholder="Nr. do Protocolo"> 
@@ -60,7 +61,8 @@ spl_autoload_register(function($classe) {
                             <th scope="col">Nr. do Protocolo</th>                      
                             <th scope="col">Categoria</th>                        
                             <th scope="col">Data e Hora de Abertura</th>                        
-                            <th scope="col">Situação</th>                        
+                            <th scope="col">Situação</th>
+                            <th scope="col">Ações</th> 
                         </tr>
                     </thead>
                     <tbody>
@@ -69,15 +71,131 @@ spl_autoload_register(function($classe) {
                                 <td><?= $consulta->os ?></td>                                        
                                 <td><?= $consulta->categoria ?></td>                           
                                 <td><?= $consulta->data_hora_abert ?></td>                           
-                                <td><?= $consulta->sit ?></td>        
+                                <td><?= $consulta->sit ?></td>                                  
+                                <td><button type="submit" 
+                                            class="btn btn-primary"  
+                                            data-toggle="modal" 
+                                            data-target="#infoOs" 
+                                            onclick="">Detalhes</button> 
+                                    <input name="nrOs" id="nrOs" type="hidden" class="form-control"  value="<?= $consulta->os ?>"> </td>                      
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+
             <?php else: ?>
                 <h1 class="text-center text-primary">Sem registros.</h1>
             <?php endif; ?>
-        </div>
+        </div>        
+        <div class="modal fade" id="infoOs" tabindex="-1" role="dialog" aria-labelledby="TituloModalLongoExemplo" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="width: 700px;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="TituloModalLongoExemplo">Informações do Protocolo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <?php foreach ($detalhe as $detalhe): ?>
+                        <div class="modal-body">
+                            <form>
+                                <div class="alert alert-primary" role="alert">
+                                    <strong>DADOS DO PROTOCOLO</strong>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="staticProto" class="col-sm-2 col-form-label"><strong>Protocolo: </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->os ?>" type="text" readonly class="form-control-plaintext" id="staticProto" name="staticProto">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="staticCateg" class="col-sm-2 col-form-label"><strong>Categoria: </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->categoria ?>" type="text" readonly class="form-control-plaintext" id="staticCateg" name="staticCateg">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="staticStatus" class="col-sm-2 col-form-label"><strong>Status:  </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->sit ?>" type="text" readonly class="form-control-plaintext" id="staticStatus" name="staticStatus">
+                                    </div>
+                                </div>                                                                                         
+                                
+                                <div class="alert alert-primary" role="alert">
+                                    <strong>DADOS DA ABERTURA</strong>
+                                </div>                                
+                                <div class="form-group row">
+                                    <label for="staticDtAbert" class="col-sm-3 col-form-label"><strong>Data de Abertura:  </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->data_hora_abert ?>" type="text" readonly class="form-control-plaintext" id="staticDtAbert" name="staticDtAbert">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="staticFuncAbert" class="col-sm-3 col-form-label"><strong>Aberto por:  </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->func_abert ?>" type="text" readonly class="form-control-plaintext" id="staticFuncAbert" name="staticFuncAbert">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="staticHist" class="col-sm-3 col-form-label"><strong>Solicitação:  </strong> </label>
+                                    <div class="col-sm-10">                                        
+                                        <textarea class="form-control" id="staticHist" name="staticHist" readonly="true" rows="3"><?= $detalhe->historico ?></textarea>
+                                    </div>
+                                </div> 
+                                
+                                <div class="alert alert-primary" role="alert">
+                                    <strong>DADOS DA RESOLUÇÃO</strong>
+                                </div> 
+
+                                <div class="form-group row">
+                                    <label for="staticStRespon" class="col-sm-3 col-form-label"><strong>Setor Responsável:  </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->setor_responsavel ?>" type="text" readonly class="form-control-plaintext" id="staticStRespon" name="staticStRespon">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="staticFuncRespon" class="col-sm-3 col-form-label"><strong>Colaborador Responsável:  </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->func_respon ?>" type="text" readonly class="form-control-plaintext" id="staticFuncRespon" name="staticFuncRespon">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="staticFuncResolu" class="col-sm-3 col-form-label"><strong>Resolvido por:  </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->func_finali ?>" type="text" readonly class="form-control-plaintext" id="staticFuncResolu" name="staticFuncResolu">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="staticDtResolu" class="col-sm-3 col-form-label"><strong>Data da Resolução:  </strong> </label>
+                                    <div class="col-sm-10">
+                                        <input value="<?= $detalhe->data_hora_fecha ?>" type="text" readonly class="form-control-plaintext" id="staticDtResolu" name="staticDtResolu">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="staticResol" class="col-sm-3 col-form-label"><strong>Resolução:  </strong> </label>
+                                    <div class="col-sm-10">                                        
+                                        <textarea class="form-control" id="staticResol" name="staticResol" readonly="true" rows="3"><?= $detalhe->desc_finalizacao ?></textarea>
+                                    </div>
+                                </div> 
+
+
+                            </form>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>       
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="../../js/bootstrap.min.js"></script>
 
