@@ -61,8 +61,8 @@ class CadOsFachada extends CadOs {
         $stm->execute();
         return $stm->fetchAll();
     }
-	
-	public function insertCadOs() {        
+
+    public function insertCadOs() {
         $sql = "INSERT INTO cad_os(
                         nr_os, categ_os, setor_respon_os, func_respon_os, setor_abert_os, 
                         func_abert_os, hist_os, obs_os, sit_os, tipo_envio_os, dt_abert_os, 
