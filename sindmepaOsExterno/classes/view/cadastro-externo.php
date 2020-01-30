@@ -36,6 +36,7 @@
         $cadExterno = new CadExternoFachada();
         $cadDetalhe = new CadDetalheFachada();
         $cadOs = new CadOsFachada();
+        $cadCategoria = new CadCartegoriaFachada();
 		
 		if(isset($_POST['cadastrar'])){
                     
@@ -80,7 +81,7 @@
                             
                         $cadExterno->insertCadExterno();
                         
-                        $cadOs->setCategOs('10');
+                        $cadOs->setCategOs($_POST['categoria']);
                         $cadOs->setSetorResponOs('4');
                         $cadOs->setFuncResponOs('999');
                         $cadOs->setSetorAbertOs('0');
@@ -93,8 +94,25 @@
 		}
     ?>
     <form method="POST">
-        <h6>Após finalizar seu cadastro, entraremos em contato em até 24h através de e-mail.</h6>
-                <div class="form-group row">
+        
+        <div class="card-body">
+            <div class="form-group row">
+            <div class="col-sm-4">
+                <label for="ex2">Selecione a categoria desejada: </label>
+                <select class="form-control" name="categoria" id="categoria" onchange="cadastrarcategoria()">
+                    <?php foreach ($cadCategoria->listaCategoria() as $key => $value) { ?>
+                    <option value="<?php echo $value->id_categoria; ?>">
+                        <?php echo $value->desc_categoria; ?>
+                    </option>
+                    <?php } ?> 
+                </select>
+            </div>
+            </div>    
+        </div>
+        
+        <!-- form do ASSOCIE-SE -->
+        <div id="cadastrarcategoria" style="display: none;">
+           <div class="form-group row">
                     <div class="col-sm-12">
                         <table class="table table-striped">
                         <tr>
@@ -108,9 +126,7 @@
                         </table>
                     </div>
                 </div>
-                
-                <br>
-                <div class="form-group row">
+             <div class="form-group row">
                     <div class="col-sm-12">
                     <div id="impresso" class="divs">
                     	<input type="file" onchange="(verificaExtensao(this), ValidateSize(this))" id="upload" name="arquivo" accept="application/pdf"> - até 2 MB e PDF
@@ -127,7 +143,9 @@
 				<label for="ex2">Banco</label>
 				<select class="form-control" id="sel1" name="bc">
                                     <?php foreach ($cadDetalhe->listaTipoBanco() as $key => $value) { ?>
-                                    <option value="<?php echo $value->cod_valor_detalhe; ?>"><?php echo $value->desc_detalhe; ?></option>
+                                    <option value="<?php echo $value->cod_valor_detalhe; ?>">
+                                        <?php echo $value->desc_detalhe; ?>
+                                    </option>
                                     <?php } ?> 
                                 </select>
 			    </div>
@@ -157,7 +175,7 @@
                     <div id="web" class="divs">
                     	
                     </div>
-                    </div>
+                    </div> <!-- fim contra-cheque -->
                 </div>
     
 		<div class="card-body">
@@ -261,6 +279,11 @@
 		</div><!-- fim card-body-->
         </form><!-- fim form -->
        </div> <!-- fim card-default -->
+        </div><!-- FIM FORM ASSOCIE-SE -->
+        <!-- OUTRO FORM -->
+        <div id="outra" style="display: none;">
+            Outra
+        </div> 
     </div>
 </div>
 
