@@ -3,10 +3,22 @@ function cadastrarcategoria() {
 
     if (categoria === '0') {
         document.getElementById("cadastrarcategoria").style.display = "block";
-		document.getElementById("outra").style.display = "none";
+        document.getElementById("outra").style.display = "none";
     } else {
         document.getElementById("cadastrarcategoria").style.display = "none";
-		document.getElementById("outra").style.display = "block";
+        document.getElementById("outra").style.display = "block";
+    }
+}
+
+function cadastrarProtocolo() {
+    var categoria = document.getElementById("categoria").value;
+
+    if (categoria === '0') {
+        document.getElementById("cadastrarcategoria").style.display = "block";
+        document.getElementById("outra").style.display = "none";
+    } else {
+        document.getElementById("cadastrarcategoria").style.display = "none";
+        document.getElementById("outra").style.display = "block";
     }
 }
 

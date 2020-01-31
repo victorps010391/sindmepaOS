@@ -50,8 +50,8 @@ spl_autoload_register(function($classe) {
                     <label for="protocolo">Protocolo:</label>
                     <input name="protocolo" id="protocolo" type="text" class="form-control"  placeholder="Nr. do Protocolo"> 
                     <br/> 
-                    <button type="submit" class="btn btn-success">Pesquisar</button> 
-                    <button type="button" class="btn btn-success">Novo Protocolo</button>
+                    <button type="submit" class="btn btn-success">Pesquisar</button>                     
+                    <a class="btn btn-success" href="cadastro-protocolo.php" role="button">Novo Protocolo</a>
                 </div>
             </form>          
             <br/>  
@@ -80,12 +80,12 @@ spl_autoload_register(function($classe) {
                                             data-target="#infoOs" 
                                             onclick="">Detalhes</button> 
                                     <input name="nrOs" id="nrOs" type="hidden" class="form-control"  value="<?= $consulta->os ?>"> 
-                                    <button type="submit" 
+<!--                                    <button type="submit" 
                                             class="btn btn-primary"  
                                             data-toggle="modal" 
                                             data-target="#cadNotaModal" 
                                             onclick="">Criar Nota</button> 
-                                    <input name="nrOsNota" id="nrOsNota" type="hidden" class="form-control"  value="<?= $consulta->os ?>"> </td>  
+                                    <input name="nrOsNota" id="nrOsNota" type="hidden" class="form-control"  value="< ?= $consulta->os ?>"> </td>  -->
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -95,8 +95,8 @@ spl_autoload_register(function($classe) {
                 <h5 class="text-center text-primary">Sem registros.</h5>
             <?php endif; ?>
 
-            <?php if (!empty($consultaNota)): ?>
-                <table class="table table-striped">
+            <? php if (!empty($consultaNota)): ?>
+<!--                <table class="table table-striped">
                     <thead>
                         <tr>                            
                             <th scope="col">Nr. Nota</th>                      
@@ -105,18 +105,18 @@ spl_autoload_register(function($classe) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($consultaNota as $consultaNota): ?>
+                        <? php foreach ($consultaNota as $consultaNota): ?>
                             <tr>
                                 <td><?= $consultaNota->os_nota ?></td>                                        
                                 <td><?= $consultaNota->data_hora_regi ?></td>                           
                                 <td><?= $consultaNota->historico ?></td>                                                                                                                                     
                             </tr>
-                        <?php endforeach; ?>
+                        <? php endforeach; ?>
                     </tbody>
-                </table>
-            <?php else: ?>
-                <h5 class="text-center text-primary">Sem notas cadastradas.</h5>
-            <?php endif; ?>
+                </table>-->
+            <? php else: ?>
+                <!--<h5 class="text-center text-primary">Sem notas cadastradas.</h5>-->
+            <? php endif; ?>
         </div>        
         <div class="modal fade" id="infoOs" tabindex="-1" role="dialog" aria-labelledby="TituloModalLongoExemplo" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -226,7 +226,7 @@ spl_autoload_register(function($classe) {
             </div>
         </div>       
 
-        <div class="modal fade" id="cadNotaModal" tabindex="-1" role="dialog" aria-labelledby="TituloModalLongoExemplo" aria-hidden="true">
+<!--        <div class="modal fade" id="cadNotaModal" tabindex="-1" role="dialog" aria-labelledby="TituloModalLongoExemplo" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -240,7 +240,7 @@ spl_autoload_register(function($classe) {
                             <div class="form-group row">
                                 <label for="protoId" class="col-sm-2 col-form-label"><strong>Protocolo: </strong> </label>
                                 <div class="col-sm-10">
-                                    <input id="protoId" name="protoId" value="<?= $protocolo ?>" type="text" readonly class="form-control-plaintext">
+                                    <input id="protoId" name="protoId" value="< ?= $protocolo ?>" type="text" readonly class="form-control-plaintext">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -257,7 +257,7 @@ spl_autoload_register(function($classe) {
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>  -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="../../js/bootstrap.min.js"></script>
     </body>
