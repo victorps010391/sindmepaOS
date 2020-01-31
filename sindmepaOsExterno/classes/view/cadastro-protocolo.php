@@ -51,5 +51,19 @@ spl_autoload_register(function($classe) {
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/custom-campos.js"></script>
+    <script>
+    function cadastrarProtocolo() {
+    var categoria = document.getElementById("categoria").value;
+
+    if (categoria === '0') {
+        document.getElementById("cadastrarcategoria").style.display = "block";
+        document.getElementById("outra").style.display = "none";
+    } else {
+        document.getElementById("cadastrarcategoria").style.display = "none";
+        document.getElementById("outra").style.display = "block";
+    }
+}
+
+    </script>
 </body>
 </html>

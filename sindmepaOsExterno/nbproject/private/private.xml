@@ -3,16 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/classes/view/index.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/classes/view/protocolo.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/classes/view/cadastro-protocolo.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/classes/view/cadastro-externo.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/mudar%20campos.html</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/classes/view/newPHPClass.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/classes/fachada/EnderecoFachada.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/classes/config.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/index.php</file>
-            <file>file:/C:/xampp/htdocs/sindmepaOsExterno/js/custom-campos.js</file>
+            <file>file:/C:/wamp/www/sindmepaOsExterno/classes/view/cadastro-externo.php</file>
+            <file>file:/C:/wamp/www/sindmepaOsExterno/classes/fachada/CadExternoFachada.php</file>
+            <file>file:/C:/wamp/www/sindmepaOsExterno/js/custom-campos.js</file>
         </group>
     </open-files>
 </project-private>
