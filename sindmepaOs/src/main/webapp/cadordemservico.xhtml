@@ -59,7 +59,7 @@
                 <f:facet name="footer">                    
                     <p:commandButton value="Pesquisar" actionListener="#{cadOsBean.pesquisarOs()}" update="gridPrincipal"/>                    
                     <p:commandButton value="Limpar" actionListener="#{cadOsBean.limparPesquisa()}" update="frmCadOs"/>                              
-                    <p:commandButton value="Novo Protocolo" onclick="PF('dlCadOs').show()" update="@form :frmDlCadOs"/>  
+                    <p:commandButton value="Novo Protocolo" onclick="PF('dlCadOs').show()" update=":frmDlCadOs"/>  
                     <p:commandButton value="Voltar" action="#{indexManager.voltar()}" style="float: right" />
                     <!--                    <p:commandButton value="Enviar" actionListener="# {cadOsBean.enviarEmail()}" update="@form"/>                    -->
                 </f:facet>

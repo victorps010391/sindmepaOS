@@ -161,8 +161,8 @@
 
                                             <p:menuitem value="Detalhes" 
                                                         actionListener="#{cadTarefaBean.visualizar(tarefa.get('nr_os_tarefa'), tarefa.get('seq_tarefa'))}"
-                                                        onclick="PF('dlVerOs').show()" 
-                                                        update=":frmDlVerOs"/>
+                                                        onclick="PF('dlVerTarefa').show()" 
+                                                        update=":frmDlVerTarefa"/>
 
                                             <p:menuitem value="Anexos" 
                                                         action="#{cadAnexoBean.paginaAnexoTarefa(tarefa.get('nr_os_tarefa'))}" 
@@ -245,8 +245,8 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlResolvOs" header="Finalizar Atendimento" modal="true" appendTo="@(body)">
-                        <h:form id="frmDlResolvOs" acceptcharset="ISO-8859-1">                        
+                    <p:dialog widgetVar="dlResolvTarefa" header="Finalizar Atendimento" modal="true" appendTo="@(body)">
+                        <h:form id="frmDlResolvTarefa" acceptcharset="ISO-8859-1">                        
                             <p:panel>
                                 <h:panelGrid columns="1" >                                                                      
                                     <h:outputLabel value="Situação do Resolvido:"/>
@@ -266,7 +266,7 @@
                                 </h:panelGrid>
                                 <f:facet name="footer">
                                     <p:commandButton value="Salvar" actionListener="#{cadTarefaBean.finalizarAnalise()}" update="@form :frmAnaliseTarefa" />
-                                    <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltOs').hide()" update="@form :frmDlResolvOs" />
+                                    <p:commandButton type="button" value="Cancelar" onclick="PF('dlResolvTarefa').hide()" update="@form :frmDlResolvTarefa" />
                                 </f:facet>
                             </p:panel>
                         </h:form>
@@ -416,9 +416,9 @@
                         </h:form>
                     </p:dialog>
 
-                    <p:dialog widgetVar="dlVerOs" header="Visualizar Informações da Tarefa Cadastrada" responsive="true" height="500"
+                    <p:dialog widgetVar="dlVerTarefa" header="Visualizar Informações da Tarefa Cadastrada" responsive="true" height="500"
                               modal="true" appendTo="@(body)">
-                        <h:form id="frmDlVerOs" acceptcharset="ISO-8859-1">
+                        <h:form id="frmDlVerTarefa" acceptcharset="ISO-8859-1">
                             <p:panel header="DADOS DA TAREFA">                    
                                 <h:panelGrid columns="2">
                                     <h:outputLabel value="Protocolo: " style="font-weight:bold; "/>
