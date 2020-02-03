@@ -104,7 +104,8 @@
 
                                     <p:commandButton value="Resolver"
                                                      actionListener="#{cadAnaliseBean.limparFinalização()}"                                                 
-                                                     disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"/> 
+                                                     disabled="#{'05'.equals(cadAnaliseBean.vcd_sit) || '07'.equals(cadAnaliseBean.vcd_sit)}"
+                                                     /> 
 
                                     <p:commandButton value="Voltar" 
                                                      action="#{cadAnaliseBean.voltarCadAnalise()}" 
@@ -278,7 +279,7 @@
                                 </h:panelGrid>
                                 <f:facet name="footer">
                                     <p:commandButton value="Confirmar" actionListener="#{cadAnaliseBean.finalizarAnalise()}" update="@form :frmAnaliseOs" />
-                                    <p:commandButton type="button" value="Cancelar" onclick="PF('dlAltOs').hide()" update="@form :frmDlResolvOs" />
+                                    <p:commandButton type="button" value="Cancelar" onclick="PF('dlResolvOs').hide()" update="@form :frmDlResolvOs" />
                                 </f:facet>
                             </p:panel>
                         </h:form>

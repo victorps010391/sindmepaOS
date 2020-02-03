@@ -6,7 +6,7 @@ spl_autoload_register(function($classe) {
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Bootstrap Example</title>
+        <title>SINDMEPA - Gerenciamento de Protocolos</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../../css/bootstrap.min.css">
@@ -28,9 +28,8 @@ spl_autoload_register(function($classe) {
     <body>
 
         <div class="container">
-            <h3>Associe-se</h3>
-            <div class="card card-default">
-                <div class="card-header"><h4>Cadastro de Associado</h4></div>
+            <h3>Cadastro de protocolo</h3>
+            <div class="card card-default">                
                 <?php
                 $endereco = new EnderecoFachada();
                 $cadExterno = new CadExternoFachada();
@@ -113,6 +112,7 @@ spl_autoload_register(function($classe) {
 
                     <!-- form do ASSOCIE-SE -->
                     <div id="cadastrarcategoria" style="display: none;">
+<<<<<<< HEAD
                         <div class="form-group row">
                             <div class="col-sm-12">
                                 <table class="table table-striped">
@@ -285,6 +285,15 @@ spl_autoload_register(function($classe) {
                     <div id="outra" style="display: none;">
                         Outra
                     </div> 
+=======
+                        <?php include './forms/formAssocieSe.php'; ?>
+                    </div>
+                    <!-- OUTRO FORM -->
+                    <div id="outra" style="display: none;">
+                        <?php include './forms/formOutros.php'; ?>
+                    </div>
+                </form><!-- fim form -->
+>>>>>>> c2178bbde4136dace9e1bce5fbb7a30f181deaa2
             </div>
         </div>
 

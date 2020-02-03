@@ -23,6 +23,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.primefaces.PrimeFaces;
+
 /**
  *
  * @author admin
@@ -99,8 +100,8 @@ public class CadOsBean implements Serializable {
 
     public void pesquisarOs() {
         try {
-            setGridPesquisaOs(osControle.gridPrincipalOs(getNrOs(), getCategOs(), getSetRespon(), getColabRespon(), getSitOs(), 
-                    loginBean.getUsuario().getSetorFunc().getCdSetor(), getIniAbertOs(), getFimAbertOs(), getIniFechaOs(),getFimFechaOs()));
+            setGridPesquisaOs(osControle.gridPrincipalOs(getNrOs(), getCategOs(), getSetRespon(), getColabRespon(), getSitOs(),
+                    loginBean.getUsuario().getSetorFunc().getCdSetor(), getIniAbertOs(), getFimAbertOs(), getIniFechaOs(), getFimFechaOs()));
             setGridSecundario(null);
         } catch (Exception e) {
             System.out.println("Erro no método pesquisarOs (OS)");
@@ -142,10 +143,11 @@ public class CadOsBean implements Serializable {
 
             if (osControle.salvarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Cadastro do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
-                context.executeScript("PF('dlCadOs').hide()");
+                context.executeScript("PF('dlCadOs').hide();");
+                setGridPesquisaOs(osControle.gridPrincipalOs(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
+                        getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(),
+                        null, null, null, null));
                 limparCadastro();
-                setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
-                        getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Cadastrar Protocolo: " + getObCadOs().getNrOs() + "."));
                 limparCadastro();
@@ -211,8 +213,9 @@ public class CadOsBean implements Serializable {
             if (osControle.alterarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Alteração do Protocolo: " + getObCadOs().getNrOs() + " Realizado com Sucesso."));
                 context.executeScript("PF('dlAltOs').hide()");
-                setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(), getColabRespon(),
-                        getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
+                setGridPesquisaOs(osControle.gridPrincipalOs(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
+                        getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(),
+                        null, null, null, null));
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Alterar Protocolo: " + getObCadOs().getNrOs() + "."));
             }
@@ -233,8 +236,9 @@ public class CadOsBean implements Serializable {
             if (osControle.alterarOsControle(getObCadOs())) {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Cancelado com Sucesso."));
                 context.executeScript("PF('dlCancelOs').hide()");
-                setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
-                        getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
+                setGridPesquisaOs(osControle.gridPrincipalOs(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
+                        getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(),
+                        null, null, null, null));
             } else {
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao Cancelar Protocolo: " + getObCadOs().getNrOs() + "."));
             }
@@ -264,12 +268,12 @@ public class CadOsBean implements Serializable {
 
             if (osControle.alterarOsControle(getObCadOs())) {
                 visualizar(getObCadOs().getNrOs());
-                if (disparaEmailabertura(getObjVerOs(),loginBean.getUsuario().getEmailFunc())) {
+                if (disparaEmailabertura(getObjVerOs(), loginBean.getUsuario().getEmailFunc())) {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObCadOs().getNrOs() + " Encaminhado Para Atendimento com Sucesso."));
                     context.executeScript("PF('dlConfirm').hide()");
-                    setGridPesquisaOs(osControle.gridPrincipal(getObCadOs().getNrOs(), getObCadOs().getCategOs(),
-                            getObCadOs().getSetorResponOs().getCdSetor(), getColabRespon(), getObCadOs().getSitOs(),
-                            loginBean.getUsuario().getSetorFunc().getCdSetor(), null, null, null, null));
+                    setGridPesquisaOs(osControle.gridPrincipalOs(getObCadOs().getNrOs(), getObCadOs().getCategOs(), getSetAlt(),
+                            getColabRespon(), getObCadOs().getSitOs(), loginBean.getUsuario().getSetorFunc().getCdSetor(),
+                           null, null, null, null));
                 } else {
                     mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Erro ao encaminhar Protocolo: " + getObCadOs().getNrOs() + " Para Atendimento."));
                 }
@@ -312,7 +316,7 @@ public class CadOsBean implements Serializable {
     public Boolean disparaEmailabertura(CadOsVer obj, String destinatario) {
         try {
             String assunto = "ABERTURA DE PROTOCOLO";
-            
+
             SimpleDateFormat formate = new SimpleDateFormat("dd/MM/yyyy");
 
             StringBuilder corpoEmailAbertura = new StringBuilder();
@@ -323,10 +327,10 @@ public class CadOsBean implements Serializable {
             corpoEmailAbertura.append("<br />");
             corpoEmailAbertura.append("<strong>Categoria: </strong>");
             corpoEmailAbertura.append(obj.getCategoria());
-            corpoEmailAbertura.append("<br />");                       
+            corpoEmailAbertura.append("<br />");
             corpoEmailAbertura.append("<strong>Setor Responsável: </strong>");
             corpoEmailAbertura.append(obj.getSetorResponsavel());
-            corpoEmailAbertura.append("<br />");            
+            corpoEmailAbertura.append("<br />");
             corpoEmailAbertura.append("<strong>Prioridade: </strong>");
             corpoEmailAbertura.append(obj.getPrioridade());
             corpoEmailAbertura.append("<br />");
@@ -378,7 +382,7 @@ public class CadOsBean implements Serializable {
         setIniFecha(null);
         setFimAbert(null);
         setFimFecha(null);
-        
+
         setIniAbertOs(null);
         setIniFechaOs(null);
         setFimAbertOs(null);
