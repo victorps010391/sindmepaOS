@@ -23,9 +23,11 @@ class CadCartegoriaFachada extends CadCategoria{
             $sql = "select id_categoria, desc_categoria from  $this->tabela where usu_categoria = 'E'; ";
             $stm = DB::prepare($sql);
             $stm->execute();
-            return $stm->fetchAll();
+            $item = $stm->fetchAll();
+            return $item;
         } catch (Exception $e){
             echo 'Exceção capturada: '.  $e->getMessage(). "\n";
         }
     }
+    
 }

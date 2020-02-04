@@ -17,7 +17,7 @@ require_once '../entidade/Endereco.php';
 class CadExternoFachada extends CadExterno {
 
     protected $tabela = 'cad_externo';
-	public $cadExternoId;
+    public $cadExternoId;
     
     public function findUnit($id) {
         $sql = "select * from  $this->tabela where id = :id";
@@ -77,7 +77,7 @@ class CadExternoFachada extends CadExterno {
         return $stm->execute();
     }
 	
-	function getCadExternoId() {
+    function getCadExternoId() {
         return $this->cadExternoId;
     }
 
