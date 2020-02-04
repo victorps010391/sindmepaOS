@@ -62,19 +62,29 @@ class CadOsFachada extends CadOs {
         return $stm->fetchAll();
     }
 
+    public function carregaNumOs(){
+        $sql = "select retorna_novo_nr_os() nr_os;";
+        $stm = DB::prepare($sql);
+        $stm->execute();
+        $item = $stm->fetch(); 
+        //var_dump($item);
+        return  $item->nr_os;  
+    
+    }
+   
     public function insertCadOs() {
         $sql = "INSERT INTO cad_os(
                         nr_os, categ_os, setor_respon_os, func_respon_os, setor_abert_os, 
                         func_abert_os, hist_os, obs_os, sit_os, tipo_envio_os, dt_abert_os, 
                         dt_fecha_os, dt_ult_atu_os, func_ult_atu_os, desc_finalizacao_os, 
                         func_finali_os)
-                VALUES (retorna_novo_nr_os(), :catOs, :setorResp, :funcResp, :setorAbertura, 
+                VALUES (:nrOs, :catOs, :setorResp, :funcResp, :setorAbertura, 
                         :funcAbertura, :histOs, :obsOs, :sitOs, :tipoEnvio, current_timestamp, 
                         :dtFecha, current_timestamp, :funcUltAtu, :descFinalizacao, 
                         :funcFinaliza);
                         ";
         $stm = DB::prepare($sql);
-        //$stm->bindParam(':nrOs', $this->nrOs);
+        $stm->bindParam(':nrOs', $this->nrOs);
         $stm->bindParam(':catOs', $this->categOs);
         $stm->bindParam(':setorResp', $this->setorResponOs);
         $stm->bindParam(':funcResp', $this->funcResponOs);

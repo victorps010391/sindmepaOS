@@ -82,6 +82,9 @@ spl_autoload_register(function($classe) {
 
                     $cadExterno->insertCadExterno();
 
+                    $prot = $cadOs->carregaNumOs();
+
+                    $cadOs->setNrOs($prot);
                     $cadOs->setCategOs($_POST['categoria']);
                     $cadOs->setSetorResponOs('4');
                     $cadOs->setFuncResponOs('999');
@@ -92,6 +95,8 @@ spl_autoload_register(function($classe) {
                     $cadOs->setTipoEnvioOs('E');
 
                     $cadOs->insertCadOs();
+
+                    $det = $cadOs->detalhes($prot);
 
                     // Inclui o arquivo class.phpmailer.php localizado na mesma pasta do arquivo php 
                     include "../fachada/phpmailer/PHPMailerAutoload.php";
@@ -115,28 +120,31 @@ spl_autoload_register(function($classe) {
                     $mail->Subject = "Protocolo Aberto";
 
 // Corpo do email 
-                    $mail->Body = '<p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;">SindmepaProtocol informa,<br />' .
-                            "Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />" .
-                            "<strong>Número do protocolo: </strong>' " .
-                            "<br />" .
-                            "<strong>Categoria: </strong>" . $cadOs->getCategOs() .
-                            "<br />" .
-                            "<strong>Setor Responsável: </strong>" .
-                            "<br />" .
-                            "<strong>Prioridade: </strong>" .
-                            "<br />" .
-                            "<strong>Solicitação: </strong>" .
-                            "<br />" .
-                            "<strong>Data de Abertura: </strong>" .
-                            "<br />" .
-                            "<br /><br />" .
-                            "<i>Email Enviado automaticamente pelo sistema" .
-                            "<br />" .
-                            "Data:" .
-                            "<br />" .
-                            "Softbean ©" .
-                            "</i></p>"
-                    ;
+                    foreach ($det as $det) {
+
+                        $mail->Body = '<p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;">SindmepaProtocol informa,<br />' .
+                                "Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />" .
+                                "<strong>Número do protocolo: </strong> " . $det->os .
+                                "<br />" .
+                                "<strong>Categoria: </strong>" . $det->categoria .
+                                "<br />" .
+                                "<strong>Setor Responsável: </strong>" . $det->setor_responsavel .
+                                "<br />" .
+                                "<strong>Prioridade: </strong>" . $det->prioridade .
+                                "<br />" .
+                                "<strong>Solicitação: </strong>" . $det->historico .
+                                "<br />" .
+                                "<strong>Data de Abertura: </strong>" . $det->data_hora_abert .
+                                "<br />" .
+                                "<br /><br />" .
+                                "<i>Email Enviado automaticamente pelo sistema" .
+                                "<br />" .
+                                "Data:" .
+                                "<br />" .
+                                "Softbean ©" .
+                                "</i></p>"
+                        ;
+                    }
 // Opcional: Anexos 
 // $mail->AddAttachment("/home/usuario/public_html/documento.pdf", "documento.pdf"); 
 // Envia o e-mail 
@@ -149,6 +157,8 @@ spl_autoload_register(function($classe) {
                         echo "Houve um erro enviando o email: " . $mail->ErrorInfo;
                     }
                 }
+
+                echo 'OS: ' . $cadOs->carregaNumOs();
                 ?>
                 <form method="POST">
 
@@ -158,9 +168,9 @@ spl_autoload_register(function($classe) {
                                 <label for="ex2">Selecione a categoria desejada: </label>
                                 <select class="form-control" name="categoria" id="categoria" onchange="cadastrarcategoria()">
                                     <option value="SELECIONE"></option>
-<?php foreach ($cadCategoria->listaCategoria() as $key => $value) { ?>
+                                    <?php foreach ($cadCategoria->listaCategoria() as $key => $value) { ?>
                                         <option value="<?php echo $value->id_categoria; ?>">
-    <?php echo $value->desc_categoria; ?>
+                                            <?php echo $value->desc_categoria; ?>
                                         </option>
                                     <?php } ?> 
                                 </select>
@@ -169,7 +179,7 @@ spl_autoload_register(function($classe) {
                     </div>
                     <!-- OUTRO FORM -->
                     <div id="cadastrarcategoria" style="display: none;">
-<?php include './forms/formAssocieSe.php'; ?>
+                        <?php include './forms/formAssocieSe.php'; ?>
                     </div>
                     <!-- OUTRO FORM -->
                     <div id="outra" style="display: none;">
