@@ -71,9 +71,9 @@
                     Protocolos 
                 </f:facet>
 
-                <p:column>
+                <p:column style="width: 50px">
                     <f:facet name="header">
-                        <h:outputText value="Nr. do Protocolo"/>
+                        <h:outputText value="Protocolo"/>
                     </f:facet>
                     <h:outputText value="#{item.get('os')}"/>
                 </p:column>
@@ -132,7 +132,8 @@
                     <f:facet name="header">
                         <h:outputText value="Notas"/>
                     </f:facet>
-                    <p:commandButton value="Visualizar" 
+                    <p:commandButton icon="ui-icon ui-icon-comment" 
+                                     title="Visualizar Notas"
                                      actionListener="#{cadOsBean.pesquisarNota(item.get('os'))}" 
                                      update="@form"/>
                 </p:column>
