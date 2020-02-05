@@ -33,9 +33,9 @@ public class MailUtil implements Serializable {
         email.setStartTLSEnabled(true);
         email.setSSLOnConnect(true);
 
-        email.setAuthenticator(new DefaultAuthenticator("sindmepa", "H0moS@piensCasado"));
+        email.setAuthenticator(new DefaultAuthenticator("sindmepa@sindmepa.org.br", "H0moS@piensCasado"));
         try {
-            email.setFrom("victorps91@gmail.com");
+            email.setFrom("sindmepa@sindmepa.org.br");
 
             email.setSubject(assunto);
             email.addTo(destinatario);

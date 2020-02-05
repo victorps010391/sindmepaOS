@@ -17,15 +17,15 @@
                 <label for="ex3">Nome completo</label>
                 <input class="form-control" id="ex3" type="text" name="nome">
             </div>
-        </div>
+        </div> 
         <div class="form-group row">
             <div class="col-sm-6">
                 <label for="ex1">Solicitação:</label>
                 <textarea class="form-control" id="ex1" type="text" name="historico"></textarea>
             </div>
             <div class="col-sm-6">
-                <label for="ex1">Observação:</label>
-                <textarea class="form-control" id="ex1" type="text" name="observacao"></textarea>
+                <label for="ex2">Observação:</label>
+                <textarea class="form-control" id="ex2" type="text" name="observacao"></textarea>
             </div>
         </div>
         <button type="submit" class="btn btn-success" name="enviar">Enviar</button>

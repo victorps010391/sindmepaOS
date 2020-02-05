@@ -85,7 +85,7 @@ spl_autoload_register(function($classe) {
                     $prot = $cadOs->carregaNumOs();
 
                     $cadOs->setNrOs($prot);
-                    $cadOs->setCategOs($_POST['categoria']);
+                    $cadOs->setCategOs($_POST['catOs']);
                     $cadOs->setSetorResponOs('4');
                     $cadOs->setFuncResponOs('999');
                     $cadOs->setSetorAbertOs('0');
@@ -139,7 +139,7 @@ spl_autoload_register(function($classe) {
                                 "<br /><br />" .
                                 "<i>Email Enviado automaticamente pelo sistema" .
                                 "<br />" .
-                                "Data:" .
+                                "Data:" . $det->data_hora_abert .
                                 "<br />" .
                                 "Softbean ©" .
                                 "</i></p>"
@@ -156,9 +156,7 @@ spl_autoload_register(function($classe) {
                     } else {
                         echo "Houve um erro enviando o email: " . $mail->ErrorInfo;
                     }
-                }
-
-                echo 'OS: ' . $cadOs->carregaNumOs();
+                }               
                 ?>
                 <form method="POST">
 
@@ -166,7 +164,7 @@ spl_autoload_register(function($classe) {
                         <div class="form-group row">
                             <div class="col-sm-4">
                                 <label for="ex2">Selecione a categoria desejada: </label>
-                                <select class="form-control" name="categoria" id="categoria" onchange="cadastrarcategoria()">
+                                <select class="form-control" name="catOs" id="cat" onchange="cadastrarcategoria()">
                                     <option value="SELECIONE"></option>
                                     <?php foreach ($cadCategoria->listaCategoria() as $key => $value) { ?>
                                         <option value="<?php echo $value->id_categoria; ?>">

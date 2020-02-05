@@ -1,5 +1,5 @@
 function cadastrarcategoria() {
-    var categoria = document.getElementById("categoria").value;
+    var categoria = document.getElementById("cat").value;
 
     if (categoria === '0') {
         document.getElementById("cadastrarcategoria").style.display = "block";
