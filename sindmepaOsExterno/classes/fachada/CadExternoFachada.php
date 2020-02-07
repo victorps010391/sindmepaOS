@@ -18,9 +18,9 @@ class CadExternoFachada extends CadExterno {
 
     protected $tabela = 'cad_externo';
     public $cadExternoId;
-    
-    public function findUnit($id) {
-        $sql = "select * from  $this->tabela where id = :id";
+
+    public function findCPF($id) {
+        $sql = "select * from  $this->tabela where cpf_ext = :id";
         $stm = DB::prepare($sql);
         $stm->bindParam(':id', $id);
         $stm->execute();
@@ -34,7 +34,7 @@ class CadExternoFachada extends CadExterno {
         return $stm->fetchAll();
     }
 
-    public function insertCadExterno() {        
+    public function insertCadExterno() {
         $sql = "INSERT INTO cad_externo(
                         nome_ext, rg_ext, cpf_ext, sexo_ext, data_nasc_ext, crm_ext, 
                         esp_ext, email, cd_tip_pag_ext, id_end_ext, ag_ext, bc_ext, cc_ext, nr_mat_ext, cd_inst_ext, tipo_pes_ext)
@@ -60,7 +60,7 @@ class CadExternoFachada extends CadExterno {
         $stm->bindParam(':tipoPessoa', $this->tipoPssoa);
         $stm->execute();
         $this->cadExternoId = DB::lastInsertId();
-    }   
+    }
 
     public function update($id) {
         $sql = "UPDATE $this->tabela SET nome=:nome WHERE id = :id";
@@ -76,9 +76,19 @@ class CadExternoFachada extends CadExterno {
         $stm->bindParam(':id', $id);
         return $stm->execute();
     }
-	
+
     function getCadExternoId() {
         return $this->cadExternoId;
+    }
+    
+    public function carregaIdExterno($cpf){
+        $sql = "select id_ext from $this->tabela where cpf_ext = :cpf;";
+        $stm = DB::prepare($sql);
+        $stm->bindParam(':cpf', $cpf);
+        $stm->execute();
+        $item = $stm->fetch(); 
+        //var_dump($item);
+        return  $item->id_ext;  
     }
 
 }
