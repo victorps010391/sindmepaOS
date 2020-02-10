@@ -13,14 +13,10 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-6">
-                <label for="ex3">Nome completo</label>
-                <input class="form-control" id="ex3" type="text" name="nome">
-            </div>
             <div class="col-sm-4">
-                <label for="ex3">CPF</label>
-                <input class="form-control" id="ex3" type="number" name="cpf">
-            </div>
+                <label for="cpfOutros">CPF</label>
+                <input class="form-control" id="cpfOutros" type="number" name="cpfOutros">
+            </div> 
         </div> 
         <div class="form-group row">
             <div class="col-sm-6">

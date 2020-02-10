@@ -38,11 +38,14 @@ spl_autoload_register(function($classe) {
                 $cadOs = new CadOsFachada();
                 $cadCategoria = new CadCartegoriaFachada();
                 $cadSetor = new CadSetorFachada();
-                $enviaEmail = new EnviaEmail();
+                // Inclui o arquivo class.phpmailer.php localizado na mesma pasta do arquivo php 
+                // Inicia a classe PHPMailer 
+                include "../fachada/phpmailer/PHPMailerAutoload.php";
+                $mail = new PHPMailer();
 
                 if (isset($_POST['enviar'])) {
 
-                    $cpfPostado = $_POST['cpf'];
+                    $cpfPostado = $_POST['cpfOutros'];
 
                     $verificaCPF = $cadExterno->findCPF($cpfPostado);
 
@@ -64,19 +67,84 @@ spl_autoload_register(function($classe) {
                         $cadOs->setSetorResponOs($_POST['setor']);
                         $cadOs->setFuncResponOs('999');
                         $cadOs->setSetorAbertOs('0');
-                        $cadOs->setFuncAbertOs($valorID);
+                        $cadOs->setFuncAbertOs($valorID->id_ext);
                         //print_r($cadOs->getFuncAbertOs());
                         $cadOs->setHistOs($_POST['historico']);
                         $cadOs->setSitOs('02');
                         $cadOs->setTipoEnvioOs('E');
 
                         $cadOs->insertCadOs();
-                    }                  
+
+                        $mail->IsSMTP();
+                        //$mail->Host = 'sindmepa.org.br'; //"";  //h38.servidorhh.com
+                        $mail->Host = 'smtp.gmail.com'; //"";  //h38.servidorhh.com
+                        $mail->Port = 587; // 587 ou 465
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'victorps91@gmail.com'; 
+                        $mail->Password = 'victor@1106';
+                        // Configurações de compatibilidade para autenticação em TLS 
+                        $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
+                        $mail->From = "raphaelaraujo075@gmail.com";
+                        $mail->FromName = "SINDMEPA";
+                        $mail->AddAddress($valorID->email);
+                        $mail->IsHTML(true);
+// Charset (opcional) 
+                        $mail->CharSet = 'UTF-8';
+// Assunto da mensagem 
+                        $mail->Subject = "Protocolo Aberto";
+
+                        $det = $cadOs->detalhes($prot);
+
+// Corpo do email 
+                        foreach ($det as $det) {
+
+                            $mail->Body = '<p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;">SindmepaProtocol informa,<br />' .
+                                    "Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />" .
+                                    "<strong>Número do protocolo: </strong> " . $det->os .
+                                    "<br />" .
+                                    "<strong>Categoria: </strong>" . $det->categoria .
+                                    "<br />" .
+                                    "<strong>Setor Responsável: </strong>" . $det->setor_responsavel .
+                                    "<br />" .
+                                    "<strong>Prioridade: </strong>" . $det->prioridade .
+                                    "<br />" .
+                                    "<strong>Solicitação: </strong>" . $det->historico .
+                                    "<br />" .
+                                    "<strong>Data de Abertura: </strong>" . $det->data_hora_abert .
+                                    "<br />" .
+                                    "<br /><br />" .
+                                    "<i>Email Enviado automaticamente pelo sistema" .
+                                    "<br />" .
+                                    "Data:" . $det->data_hora_abert .
+                                    "<br />" .
+                                    "Softbean ©" .
+                                    "</i></p>"
+                            ;
+                        }
+// Opcional: Anexos 
+// $mail->AddAttachment("/home/usuario/public_html/documento.pdf", "documento.pdf"); 
+// Envia o e-mail 
+                        $enviado = $mail->Send();
+// Exibe uma mensagem de resultado 
+                        if ($enviado) {
+                            //header("Location: http://localhost/sindmepaOsExterno/classes/view/cadastro-externo.php");
+                            echo '<div class="alert alert-success" role="alert">
+                                    <strong>SindmepaProtocol informa: </strong> Seu protocolo foi aberto com sucesso. Verifique sua caixa de e-mail e veja o número do protocolo aberto.</br>
+                                    Entre em contato conosco através do nº XXXX-XXXX para saber mais informações.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>';
+                        } else {
+                            echo "Houve um erro enviando o email: " . $mail->ErrorInfo;
+                        }
+                    }
                 }
 
                 if (isset($_POST['cadastrar'])) {
 
                     $verificaCPF = $cadExterno->findCPF($_POST['cpf']);
+
 
                     if (!empty($verificaCPF)) {
                         echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -128,6 +196,9 @@ spl_autoload_register(function($classe) {
                         $cadExterno->setNrMat($_POST['nrMat']);
 
                         $cadExterno->insertCadExterno();
+                        //var_dump($_POST);
+                        //var_dump($cadExterno);
+
 
                         $prot = $cadOs->carregaNumOs();
 
@@ -143,7 +214,71 @@ spl_autoload_register(function($classe) {
 
                         $cadOs->insertCadOs();
 
-                        $enviaEmail->enviarEmail();
+
+                        $mail->IsSMTP();
+                        //$mail->Host = 'sindmepa.org.br'; //"";  //h38.servidorhh.com
+                        $mail->Host = 'smtp.gmail.com'; //"";  //h38.servidorhh.com
+                        $mail->Port = 587; // 587 ou 465
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'victorps91@gmail.com'; //''; 
+                        $mail->Password = 'victor@1106'; //'victor@1106';
+                        // Configurações de compatibilidade para autenticação em TLS 
+                        $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
+                        //$mail->From = "sindmepa@sindmepa.org.br";
+                        $mail->From = "raphaelaraujo075@gmail.com";
+                        $mail->FromName = "SINDMEPA";
+                        $mail->AddAddress($_POST['email']);
+                        $mail->IsHTML(true);
+// Charset (opcional) 
+                        $mail->CharSet = 'UTF-8';
+// Assunto da mensagem 
+                        $mail->Subject = "Protocolo Aberto";
+
+                        $det = $cadOs->detalhes($prot);
+
+// Corpo do email 
+                        foreach ($det as $det) {
+
+                            $mail->Body = '<p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;">SindmepaProtocol informa,<br />' .
+                                    "Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />" .
+                                    "<strong>Número do protocolo: </strong> " . $det->os .
+                                    "<br />" .
+                                    "<strong>Categoria: </strong>" . $det->categoria .
+                                    "<br />" .
+                                    "<strong>Setor Responsável: </strong>" . $det->setor_responsavel .
+                                    "<br />" .
+                                    "<strong>Prioridade: </strong>" . $det->prioridade .
+                                    "<br />" .
+                                    "<strong>Solicitação: </strong>" . $det->historico .
+                                    "<br />" .
+                                    "<strong>Data de Abertura: </strong>" . $det->data_hora_abert .
+                                    "<br />" .
+                                    "<br /><br />" .
+                                    "<i>Email Enviado automaticamente pelo sistema" .
+                                    "<br />" .
+                                    "Data:" . $det->data_hora_abert .
+                                    "<br />" .
+                                    "Softbean ©" .
+                                    "</i></p>"
+                            ;
+                        }
+// Opcional: Anexos 
+// $mail->AddAttachment("/home/usuario/public_html/documento.pdf", "documento.pdf"); 
+// Envia o e-mail 
+                        $enviado = $mail->Send();
+// Exibe uma mensagem de resultado 
+                        if ($enviado) {
+                            //header("Location: http://localhost/sindmepaOsExterno/classes/view/cadastro-externo.php");
+                            echo '<div class="alert alert-success" role="alert">
+                                    <strong>SindmepaProtocol informa: </strong> Seu protocolo foi aberto com sucesso. Verifique sua caixa de e-mail e veja o número do protocolo aberto.</br>
+                                    Entre em contato conosco através do nº XXXX-XXXX para saber mais informações.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>';
+                        } else {
+                            echo "Houve um erro enviando o email: " . $mail->ErrorInfo;
+                        }
                     }
                 }
                 ?>
@@ -155,22 +290,22 @@ spl_autoload_register(function($classe) {
                                 <label for="ex2">Selecione a categoria desejada: </label>
                                 <select class="form-control" name="catOs" id="cat" onchange="cadastrarcategoria()">
                                     <option value="SELECIONE"></option>
-<?php foreach ($cadCategoria->listaCategoria() as $key => $value) { ?>
+                                    <?php foreach ($cadCategoria->listaCategoria() as $key => $value) { ?>
                                         <option value="<?php echo $value->id_categoria; ?>">
-                                        <?php echo $value->desc_categoria; ?>
+                                            <?php echo $value->desc_categoria; ?>
                                         </option>
-                                        <?php } ?> 
+                                    <?php } ?> 
                                 </select>
                             </div>
                         </div>    
                     </div>
                     <!-- ASSOCIE-SE FORM -->
                     <div id="cadastrarcategoria" style="display: none;">
-<?php include './forms/formAssocieSe.php'; ?>
+                        <?php include './forms/formAssocieSe.php'; ?>
                     </div>
                     <!-- OUTRO FORM -->
                     <div id="outra" style="display: none;">
-<?php include './forms/formOutros.php'; ?>
+                        <?php include './forms/formOutros.php'; ?>
                     </div>
                 </form><!-- fim form -->
 

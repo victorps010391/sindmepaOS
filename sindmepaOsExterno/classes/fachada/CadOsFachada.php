@@ -62,16 +62,15 @@ class CadOsFachada extends CadOs {
         return $stm->fetchAll();
     }
 
-    public function carregaNumOs(){
+    public function carregaNumOs() {
         $sql = "select retorna_novo_nr_os() nr_os;";
         $stm = DB::prepare($sql);
         $stm->execute();
-        $item = $stm->fetch(); 
+        $item = $stm->fetch();
         //var_dump($item);
-        return  $item->nr_os;  
-    
+        return $item->nr_os;
     }
-   
+
     public function insertCadOs() {
         $sql = "INSERT INTO cad_os(
                         nr_os, categ_os, setor_respon_os, func_respon_os, setor_abert_os, 

@@ -16,10 +16,12 @@ require_once '../fachada/CadOsFachada.php';
 
 class EnviaEmail {
 
+    public $prot, $det;
+    
     public function enviarEmail() {
         $cadOs = new CadOsFachada();
                 
-        $det = $cadOs->detalhes($prot);
+       // $this->det = $cadOs->detalhes($this->prot);
         // Inclui o arquivo class.phpmailer.php localizado na mesma pasta do arquivo php 
         // Inicia a classe PHPMailer 
         $mail = new PHPMailer();
@@ -40,7 +42,7 @@ class EnviaEmail {
 // Assunto da mensagem 
         $mail->Subject = "Protocolo Aberto";
         
-        $det = $cadOs->detalhes($prot);
+       $this->det = $cadOs->detalhes($this->prot);
 
 // Corpo do email 
         foreach ($det as $det) {

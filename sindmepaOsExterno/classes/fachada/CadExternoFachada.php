@@ -35,7 +35,7 @@ class CadExternoFachada extends CadExterno {
     }
 
     public function insertCadExterno() {
-        $sql = "INSERT INTO cad_externo(
+        $sql = "INSERT INTO $this->tabela(
                         nome_ext, rg_ext, cpf_ext, sexo_ext, data_nasc_ext, crm_ext, 
                         esp_ext, email, cd_tip_pag_ext, id_end_ext, ag_ext, bc_ext, cc_ext, nr_mat_ext, cd_inst_ext, tipo_pes_ext)
                 VALUES (:nome, :rg, :cpf, :sexo, :dtNascimento, :crm, :especialidade, 
@@ -82,13 +82,14 @@ class CadExternoFachada extends CadExterno {
     }
     
     public function carregaIdExterno($cpf){
-        $sql = "select id_ext from $this->tabela where cpf_ext = :cpf;";
+        $sql = "select id_ext, email from $this->tabela where cpf_ext = :cpf;";
         $stm = DB::prepare($sql);
         $stm->bindParam(':cpf', $cpf);
         $stm->execute();
         $item = $stm->fetch(); 
         //var_dump($item);
-        return  $item->id_ext;  
+        //return  $item->id_ext;  
+        return  $item;  
     }
 
 }
