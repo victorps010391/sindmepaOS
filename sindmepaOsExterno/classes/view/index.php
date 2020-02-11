@@ -1,6 +1,6 @@
 <?php
 spl_autoload_register(function($classe) {
-    include '../fachada/' . $classe . '.php';
+    include '../fachada/' . $classe . '.php'; 
 });
 ?>
 
@@ -80,12 +80,12 @@ spl_autoload_register(function($classe) {
                                             data-target="#infoOs" 
                                             onclick="">Detalhes</button> 
                                     <input name="nrOs" id="nrOs" type="hidden" class="form-control"  value="<?= $consulta->os ?>"> 
-<!--                                    <button type="submit" 
-                                            class="btn btn-primary"  
-                                            data-toggle="modal" 
-                                            data-target="#cadNotaModal" 
-                                            onclick="">Criar Nota</button> 
-                                    <input name="nrOsNota" id="nrOsNota" type="hidden" class="form-control"  value="< ?= $consulta->os ?>"> </td>  -->
+                                    <!--                                    <button type="submit" 
+                                                                                class="btn btn-primary"  
+                                                                                data-toggle="modal" 
+                                                                                data-target="#cadNotaModal" 
+                                                                                onclick="">Criar Nota</button> 
+                                                                        <input name="nrOsNota" id="nrOsNota" type="hidden" class="form-control"  value="< ?= $consulta->os ?>"> </td>  -->
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -107,15 +107,15 @@ spl_autoload_register(function($classe) {
                     <tbody>
                         <? php foreach ($consultaNota as $consultaNota): ?>
                             <tr>
-                                <td><?= $consultaNota->os_nota ?></td>                                        
-                                <td><?= $consultaNota->data_hora_regi ?></td>                           
-                                <td><?= $consultaNota->historico ?></td>                                                                                                                                     
+                                <td><? = $consultaNota->os_nota ?></td>                                        
+                                <td><? = $consultaNota->data_hora_regi ?></td>                           
+                                <td><? = $consultaNota->historico ?></td>                                                                                                                                     
                             </tr>
                         <? php endforeach; ?>
                     </tbody>
                 </table>-->
             <? php else: ?>
-                <!--<h5 class="text-center text-primary">Sem notas cadastradas.</h5>-->
+            <!--<h5 class="text-center text-primary">Sem notas cadastradas.</h5>-->
             <? php endif; ?>
         </div>        
         <div class="modal fade" id="infoOs" tabindex="-1" role="dialog" aria-labelledby="TituloModalLongoExemplo" aria-hidden="true">
@@ -226,38 +226,38 @@ spl_autoload_register(function($classe) {
             </div>
         </div>       
 
-<!--        <div class="modal fade" id="cadNotaModal" tabindex="-1" role="dialog" aria-labelledby="TituloModalLongoExemplo" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="TituloModalLongoExemplo"><strong>Cadastrar Nota</strong></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>                   
-                    <div class="modal-body">
-                        <form>                            
-                            <div class="form-group row">
-                                <label for="protoId" class="col-sm-2 col-form-label"><strong>Protocolo: </strong> </label>
-                                <div class="col-sm-10">
-                                    <input id="protoId" name="protoId" value="< ?= $protocolo ?>" type="text" readonly class="form-control-plaintext">
-                                </div>
+        <!--        <div class="modal fade" id="cadNotaModal" tabindex="-1" role="dialog" aria-labelledby="TituloModalLongoExemplo" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="TituloModalLongoExemplo"><strong>Cadastrar Nota</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>                   
+                            <div class="modal-body">
+                                <form>                            
+                                    <div class="form-group row">
+                                        <label for="protoId" class="col-sm-2 col-form-label"><strong>Protocolo: </strong> </label>
+                                        <div class="col-sm-10">
+                                            <input id="protoId" name="protoId" value="< ?= $protocolo ?>" type="text" readonly class="form-control-plaintext">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="solNota" class="col-sm-3 col-form-label"><strong>Nota:  </strong> </label>
+                                        <div class="col-sm-10">                                        
+                                            <textarea name="solNota" id="solNota" class="form-control"  name="staticHist" rows="3" ></textarea>
+                                        </div>
+                                    </div> 
+                                </form>
+                            </div>                     
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" data-dismiss="modal">Salvar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                             </div>
-                            <div class="form-group row">
-                                <label for="solNota" class="col-sm-3 col-form-label"><strong>Nota:  </strong> </label>
-                                <div class="col-sm-10">                                        
-                                    <textarea name="solNota" id="solNota" class="form-control"  name="staticHist" rows="3" ></textarea>
-                                </div>
-                            </div> 
-                        </form>
-                    </div>                     
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Salvar</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>  -->
+                </div>  -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="../../js/bootstrap.min.js"></script>
     </body>

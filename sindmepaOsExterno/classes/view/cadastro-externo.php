@@ -43,6 +43,10 @@ spl_autoload_register(function($classe) {
                 include "../fachada/phpmailer/PHPMailerAutoload.php";
                 $mail = new PHPMailer();
 
+                //inclui a classe util
+                include '../util/utilPhp.php';
+                $util = new utilPhp();
+
                 if (isset($_POST['enviar'])) {
 
                     $cpfPostado = $_POST['cpfOutros'];
@@ -80,7 +84,7 @@ spl_autoload_register(function($classe) {
                         $mail->Host = 'smtp.gmail.com'; //"";  //h38.servidorhh.com
                         $mail->Port = 587; // 587 ou 465
                         $mail->SMTPAuth = true;
-                        $mail->Username = 'victorps91@gmail.com'; 
+                        $mail->Username = 'victorps91@gmail.com';
                         $mail->Password = 'victor@1106';
                         // Configurações de compatibilidade para autenticação em TLS 
                         $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
@@ -141,144 +145,155 @@ spl_autoload_register(function($classe) {
                     }
                 }
 
+
+
                 if (isset($_POST['cadastrar'])) {
 
-                    $verificaCPF = $cadExterno->findCPF($_POST['cpf']);
+                    if ($util->validaCPF($_POST['cpf'])) {
 
+                        $verificaCPF = $cadExterno->findCPF($_POST['cpf']);
 
-                    if (!empty($verificaCPF)) {
-                        echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        if (!empty($verificaCPF)) {
+                            echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
                                     <strong>SindmepaProtocol informa: </strong> Você já possui protocolo aberto para Associação.</br>
                                     Entre em contato conosco através do nº XXXX-XXXX para saber mais informações.
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                       <span aria-hidden="true">&times;</span>
                                     </button>
                                   </div>';
-                    } else {
+                        } else {
 
-                        $nomeEndereco = $_POST['endereco'];
-                        $cep = $_POST['cep'];
-                        $numero = $_POST['numero'];
-                        $bairro = $_POST['bairro'];
-                        $estado = $_POST['estado'];
-                        $cidade = $_POST['cidade'];
-                        $telComercial = $_POST['telComercial'];
-                        $celular = $_POST['celular'];
-                        $whatsapp = $_POST['whatsapp'];
+                            $nomeEndereco = $_POST['endereco'];
+                            $cep = $_POST['cep'];
+                            $numero = $_POST['numero'];
+                            $bairro = $_POST['bairro'];
+                            $estado = $_POST['estado'];
+                            $cidade = $_POST['cidade'];
+                            $telComercial = $_POST['telComercial'];
+                            $celular = $_POST['celular'];
+                            $whatsapp = $_POST['whatsapp'];
 
-                        $endereco->setNomeEnd($nomeEndereco);
-                        $endereco->setCepEnd($cep);
-                        $endereco->setNmEnd($numero);
-                        $endereco->setBairroEnd($bairro);
-                        $endereco->setEstEnd($estado);
-                        $endereco->setCidEnd($cidade);
-                        $endereco->setTelComEnd($telComercial);
-                        $endereco->setCelEnd($celular);
-                        $endereco->setWtpEnd($whatsapp);
+                            $endereco->setNomeEnd($nomeEndereco);
+                            $endereco->setCepEnd($cep);
+                            $endereco->setNmEnd($numero);
+                            $endereco->setBairroEnd($bairro);
+                            $endereco->setEstEnd($estado);
+                            $endereco->setCidEnd($cidade);
+                            $endereco->setTelComEnd($telComercial);
+                            $endereco->setCelEnd($celular);
+                            $endereco->setWtpEnd($whatsapp);
 
-                        $endereco->insertEndereco();
+                            $endereco->insertEndereco();
 
-                        $cadExterno->setNome($_POST['nome']);
-                        $cadExterno->setRg($_POST['rg']);
-                        $cadExterno->setCpf($_POST['cpf']);
-                        $cadExterno->setSexo($_POST['sexo']);
-                        $cadExterno->setDataNasc($_POST['dtNascimento']);
-                        $cadExterno->setCrm($_POST['crm']);
-                        $cadExterno->setEsp($_POST['especialidade']);
-                        $cadExterno->setEmail($_POST['email']);
-                        $cadExterno->setCdTipPag($_POST['categoria']);
-                        $cadExterno->setIdEnd($endereco->getEnderecoId());
-                        $cadExterno->setTipoPssoa('E');
-                        $cadExterno->setAg($_POST['ag']);
-                        $cadExterno->setBc($_POST['bc']);
-                        $cadExterno->setCc($_POST['cc']);
-                        $cadExterno->setCdInstituicao($_POST['instituicao']);
-                        $cadExterno->setNrMat($_POST['nrMat']);
+                            $cadExterno->setNome($_POST['nome']);
+                            $cadExterno->setRg($_POST['rg']);
+                            $cadExterno->setCpf($_POST['cpf']);
+                            $cadExterno->setSexo($_POST['sexo']);
+                            $cadExterno->setDataNasc($_POST['dtNascimento']);
+                            $cadExterno->setCrm($_POST['crm']);
+                            $cadExterno->setEsp($_POST['especialidade']);
+                            $cadExterno->setEmail($_POST['email']);
+                            $cadExterno->setCdTipPag($_POST['categoria']);
+                            $cadExterno->setIdEnd($endereco->getEnderecoId());
+                            $cadExterno->setTipoPssoa('E');
+                            $cadExterno->setAg($_POST['ag']);
+                            $cadExterno->setBc($_POST['bc']);
+                            $cadExterno->setCc($_POST['cc']);
+                            $cadExterno->setCdInstituicao($_POST['instituicao']);
+                            $cadExterno->setNrMat($_POST['nrMat']);
 
-                        $cadExterno->insertCadExterno();
-                        //var_dump($_POST);
-                        //var_dump($cadExterno);
-
-
-                        $prot = $cadOs->carregaNumOs();
-
-                        $cadOs->setNrOs($prot);
-                        $cadOs->setCategOs($_POST['catOs']);
-                        $cadOs->setSetorResponOs('4');
-                        $cadOs->setFuncResponOs('999');
-                        $cadOs->setSetorAbertOs('0');
-                        $cadOs->setFuncAbertOs($cadExterno->getCadExternoId());
-                        $cadOs->setHistOs('Externo');
-                        $cadOs->setSitOs('02');
-                        $cadOs->setTipoEnvioOs('E');
-
-                        $cadOs->insertCadOs();
+                            $cadExterno->insertCadExterno();
+                            //var_dump($_POST);
+                            //var_dump($cadExterno);
 
 
-                        $mail->IsSMTP();
-                        //$mail->Host = 'sindmepa.org.br'; //"";  //h38.servidorhh.com
-                        $mail->Host = 'smtp.gmail.com'; //"";  //h38.servidorhh.com
-                        $mail->Port = 587; // 587 ou 465
-                        $mail->SMTPAuth = true;
-                        $mail->Username = 'victorps91@gmail.com'; //''; 
-                        $mail->Password = 'victor@1106'; //'victor@1106';
-                        // Configurações de compatibilidade para autenticação em TLS 
-                        $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
-                        //$mail->From = "sindmepa@sindmepa.org.br";
-                        $mail->From = "raphaelaraujo075@gmail.com";
-                        $mail->FromName = "SINDMEPA";
-                        $mail->AddAddress($_POST['email']);
-                        $mail->IsHTML(true);
+                            $prot = $cadOs->carregaNumOs();
+
+                            $cadOs->setNrOs($prot);
+                            $cadOs->setCategOs($_POST['catOs']);
+                            $cadOs->setSetorResponOs('4');
+                            $cadOs->setFuncResponOs('999');
+                            $cadOs->setSetorAbertOs('0');
+                            $cadOs->setFuncAbertOs($cadExterno->getCadExternoId());
+                            $cadOs->setHistOs('Externo');
+                            $cadOs->setSitOs('02');
+                            $cadOs->setTipoEnvioOs('E');
+
+                            $cadOs->insertCadOs();
+
+
+                            $mail->IsSMTP();
+                            //$mail->Host = 'sindmepa.org.br'; //"";  //h38.servidorhh.com
+                            $mail->Host = 'smtp.gmail.com'; //"";  //h38.servidorhh.com
+                            $mail->Port = 587; // 587 ou 465
+                            $mail->SMTPAuth = true;
+                            $mail->Username = 'victorps91@gmail.com'; //''; 
+                            $mail->Password = 'victor@1106'; //'victor@1106';
+                            // Configurações de compatibilidade para autenticação em TLS 
+                            $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
+                            //$mail->From = "sindmepa@sindmepa.org.br";
+                            $mail->From = "raphaelaraujo075@gmail.com";
+                            $mail->FromName = "SINDMEPA";
+                            $mail->AddAddress($_POST['email']);
+                            $mail->IsHTML(true);
 // Charset (opcional) 
-                        $mail->CharSet = 'UTF-8';
+                            $mail->CharSet = 'UTF-8';
 // Assunto da mensagem 
-                        $mail->Subject = "Protocolo Aberto";
+                            $mail->Subject = "Protocolo Aberto";
 
-                        $det = $cadOs->detalhes($prot);
+                            $det = $cadOs->detalhes($prot);
 
 // Corpo do email 
-                        foreach ($det as $det) {
+                            foreach ($det as $det) {
 
-                            $mail->Body = '<p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;">SindmepaProtocol informa,<br />' .
-                                    "Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />" .
-                                    "<strong>Número do protocolo: </strong> " . $det->os .
-                                    "<br />" .
-                                    "<strong>Categoria: </strong>" . $det->categoria .
-                                    "<br />" .
-                                    "<strong>Setor Responsável: </strong>" . $det->setor_responsavel .
-                                    "<br />" .
-                                    "<strong>Prioridade: </strong>" . $det->prioridade .
-                                    "<br />" .
-                                    "<strong>Solicitação: </strong>" . $det->historico .
-                                    "<br />" .
-                                    "<strong>Data de Abertura: </strong>" . $det->data_hora_abert .
-                                    "<br />" .
-                                    "<br /><br />" .
-                                    "<i>Email Enviado automaticamente pelo sistema" .
-                                    "<br />" .
-                                    "Data:" . $det->data_hora_abert .
-                                    "<br />" .
-                                    "Softbean ©" .
-                                    "</i></p>"
-                            ;
-                        }
+                                $mail->Body = '<p style="font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: normal;">SindmepaProtocol informa,<br />' .
+                                        "Seu protocolo foi enviado para atendimento com sucesso para nossa central com as seguintes informações: <br /><br />" .
+                                        "<strong>Número do protocolo: </strong> " . $det->os .
+                                        "<br />" .
+                                        "<strong>Categoria: </strong>" . $det->categoria .
+                                        "<br />" .
+                                        "<strong>Setor Responsável: </strong>" . $det->setor_responsavel .
+                                        "<br />" .
+                                        "<strong>Prioridade: </strong>" . $det->prioridade .
+                                        "<br />" .
+                                        "<strong>Solicitação: </strong>" . $det->historico .
+                                        "<br />" .
+                                        "<strong>Data de Abertura: </strong>" . $det->data_hora_abert .
+                                        "<br />" .
+                                        "<br /><br />" .
+                                        "<i>Email Enviado automaticamente pelo sistema" .
+                                        "<br />" .
+                                        "Data:" . $det->data_hora_abert .
+                                        "<br />" .
+                                        "Softbean ©" .
+                                        "</i></p>"
+                                ;
+                            }
 // Opcional: Anexos 
 // $mail->AddAttachment("/home/usuario/public_html/documento.pdf", "documento.pdf"); 
 // Envia o e-mail 
-                        $enviado = $mail->Send();
+                            $enviado = $mail->Send();
 // Exibe uma mensagem de resultado 
-                        if ($enviado) {
-                            //header("Location: http://localhost/sindmepaOsExterno/classes/view/cadastro-externo.php");
-                            echo '<div class="alert alert-success" role="alert">
+                            if ($enviado) {
+                                //header("Location: http://localhost/sindmepaOsExterno/classes/view/cadastro-externo.php");
+                                echo '<div class="alert alert-success" role="alert">
                                     <strong>SindmepaProtocol informa: </strong> Seu protocolo foi aberto com sucesso. Verifique sua caixa de e-mail e veja o número do protocolo aberto.</br>
                                     Entre em contato conosco através do nº XXXX-XXXX para saber mais informações.
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                       <span aria-hidden="true">&times;</span>
                                     </button>
                                   </div>';
-                        } else {
-                            echo "Houve um erro enviando o email: " . $mail->ErrorInfo;
+                            } else {
+                                echo "Houve um erro enviando o email: " . $mail->ErrorInfo;
+                            }
                         }
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">
+                                 <strong>SindmepaProtocol informa: </strong> O CPF informado é inválido.                                 
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                   <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>';
                     }
                 }
                 ?>
