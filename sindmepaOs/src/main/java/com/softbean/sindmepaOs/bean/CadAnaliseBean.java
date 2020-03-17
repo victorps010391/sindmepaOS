@@ -326,13 +326,13 @@ public class CadAnaliseBean implements Serializable {
             getObjOs().setDescFinalizacaoOs(getDescFinal());
             getObjOs().setSitOs(getSitFinal());
             if (osControle.alterarOsControle(getObjOs())) {
-                context.executeScript("PF('dlResolvOs').hide()");
+                context.executeScript("PF('dlResolvOs').hide();");
                 analise(getObjOs().getNrOs());
                 disparaEmailAtendimentoFinalizado(getCadExternoObj().getEmail(), getDescFinal());
-                limparFinalização();
+                limparFinalOs();
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Protocolo: " + getObjOs().getNrOs() + " finalizado com sucesso."));
             } else {
-                limparFinalização();
+                limparFinalOs();
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar protocolo: " + getObjOs().getNrOs() + "."));
             }
 
@@ -568,6 +568,12 @@ public class CadAnaliseBean implements Serializable {
         setGridTarefa(null);
     }
 
+    public void limparFinalOs() {
+        setListarFinalizacao(null);
+        setSitFinal(null);
+        setDescFinal(null);
+    }
+
     public void limparFinalização() {
         PrimeFaces context = PrimeFaces.current();
         try {
@@ -577,6 +583,7 @@ public class CadAnaliseBean implements Serializable {
                 setDescFinal(null);
                 context.executeScript("PF('dlResolvOs').show()");
                 context.ajax().update(":frmDlResolvOs");
+
             } else {
                 context.executeScript("PF('dlValida').show()");
             }

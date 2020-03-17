@@ -147,7 +147,7 @@ public class CadExternoBean implements Serializable {
                     getCadOs().setFuncAbertOs(getCadExterno().getIdExt());
                     getCadOs().setFuncResponOs(999);
                     getCadOs().setFuncUltAtuOs(999);
-                    getCadOs().setHistOs("Protocolo enviado via atendimento externo");
+                    getCadOs().setHistOs("Pedido de Associação");
                     getCadOs().setObsOs(null);
                     getCadOs().setSitOs("02");
                     getCadOs().setTipEnvioOs("E");

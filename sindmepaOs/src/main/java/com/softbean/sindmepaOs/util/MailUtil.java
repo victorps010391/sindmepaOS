@@ -27,15 +27,15 @@ public class MailUtil implements Serializable {
 
     public void enviar(String assunto, String destinatario, String corpo) {
         HtmlEmail email = new HtmlEmail();
-        email.setHostName("smtp.gmail.com");
+        email.setHostName("sindmepa.org.br");
         email.setSslSmtpPort("587");
         email.setStartTLSRequired(true);
         email.setStartTLSEnabled(true);
         email.setSSLOnConnect(true);
 
-        email.setAuthenticator(new DefaultAuthenticator("victorps91@gmail.com", "victor@1106"));
+        email.setAuthenticator(new DefaultAuthenticator("sindmepa@sindmepa.org.br", "H0moS@piensCasado"));
         try {
-            email.setFrom("victorps91@gmail.com");
+            email.setFrom("sindmepa@sindmepa.org.br");
 
             email.setSubject(assunto);
             email.addTo(destinatario);

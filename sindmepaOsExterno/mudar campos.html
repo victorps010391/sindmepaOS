@@ -1,0 +1,28 @@
+<script>
+function cadastrarInstituicao() {
+    var instituicao = document.getElementById("instituicao").value;
+
+    if (instituicao === '01') {
+        document.getElementById("cadastrarInstituicao").style.display = "block";
+		document.getElementById("outra").style.display = "none";
+    } else {
+        document.getElementById("cadastrarInstituicao").style.display = "none";
+		document.getElementById("outra").style.display = "block";
+    }
+}
+</script>
+
+<label for="instituicao">A unidade pertence a qual instituição?</label>
+<select name="instituicao" id="instituicao" onchange="cadastrarInstituicao()">
+    <option>---</option>
+    <option value="2">Instituição 2</option>
+    <option value="3">Instituição 3</option>
+    <option id="01" value="01">ASSOCIE-SE</option>
+</select><br>
+
+<div id="cadastrarInstituicao" style="display: none;">
+ASSOCIE-SE
+</div>
+<div id="outra" style="display: none;">
+Outra
+</div>

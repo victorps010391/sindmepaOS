@@ -24,6 +24,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.primefaces.PrimeFaces;
+
 /**
  *
  * @author admin
@@ -384,13 +385,13 @@ public class CadTarefaBean implements Serializable {
                     getObjCadOs().setFuncUltAtuOs(loginBean.getUsuario().getCadFuncionarioPK().getCdFunc());
                     osControle.alterarOsControle(getObjCadOs());
                 }
-                limparFinalização();
-                context.executeScript("PF('dlResolvOs').hide()");
+                limparFinalTarefa();
+                context.executeScript("PF('dlResolvTarefa').hide()");
                 visualizar(getObjCadTarefa().getCadTarefaPK().getNrOsTarefa(), getObjCadTarefa().getCadTarefaPK().getSeqTarefa());
                 analiseTarefa(getObjCadTarefa().getCadTarefaPK().getNrOsTarefa(), getObjCadTarefa().getCadTarefaPK().getSeqTarefa());
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "SindmepaProtocol Informa:", "Tarefa finalizada com sucesso."));
             } else {
-                limparFinalização();
+                limparFinalTarefa();
                 mensagem.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "SindmepaProtocol Informa:", "Erro ao finalizar tarefa."));
             }
         } catch (Exception e) {
@@ -431,6 +432,12 @@ public class CadTarefaBean implements Serializable {
 //            e.printStackTrace();
 //        }
 //    }
+    public void limparFinalTarefa() {
+        setListarFinalizacao(null);
+        setSitFinal(null);
+        setDescFinal(null);
+    }
+
     public void limparFinalização() {
         PrimeFaces context = PrimeFaces.current();
         try {
@@ -438,8 +445,8 @@ public class CadTarefaBean implements Serializable {
                 setListarFinalizacao(null);
                 setSitFinal(null);
                 setDescFinal(null);
-                context.executeScript("PF('dlResolvOs').show()");
-                context.ajax().update(":frmDlResolvOs");
+                context.executeScript("PF('dlResolvTarefa').show()");
+                context.ajax().update(":frmDlResolvTarefa");
             } else {
                 context.executeScript("PF('dlValida').show()");
             }
